@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas experiment 1</title>
+	<script type="text/javascript">
+		function onLoad() {
+			var context1 = document.getElementById("canvas1").getContext('2d');
+			var context2 = document.getElementById("canvas2").getContext('2d');
+	
+			context1.fillStyle= "rgba(255,0,0,.5)";
+			context1.fillRect(20, 20, 40, 40);
+
+			context2.fillStyle = "rgba(0,255,0,.5)";
+			context2.fillRect(40, 40, 40, 40);
+		}
+	</script>
+	<style>
+		#canvasContainer {
+			border: 1px solid black;
+			position: relative;
+			width: 400px;
+			height: 300px;
+		}
+		#canvas1 {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+		}
+		#canvas2 {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 2;
+		}
+	</style>
+</head>
+<body onload="onLoad()">
+	<h1>what happens when two canvases live on top of each other?</h1>
+	<div id="canvasContainer">
+		<canvas id="canvas1" width="400" height="300"></canvas>
+		<canvas id="canvas2" width="400" height="300"></canvas>
+	</div>
+	<h2>they do the right thing, nice :)</h2>
+</body>
+</html>
+
+
