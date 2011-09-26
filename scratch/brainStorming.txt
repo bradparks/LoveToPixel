@@ -1,0 +1,95 @@
+LTP.LayerManager = function LayerManager(width, height) {
+	this._width = width;
+	this._height = height;
+};
+
+LTP.LayerManager.prototype = {
+	get width() {
+		return this._width;
+	},
+	get height() {
+		return this._height;
+	},
+	get count() {
+	},
+	get activeLayer() {
+	},
+	get composite() {
+	},
+	get layerInfo() {
+	},
+	addNewLayer: function(name) {
+	},
+	deleteLayer: function(index) {
+	},
+	moveLayer: function(from, to) {
+	},
+	mergeDown: function(index) {
+	},
+	flatten: function() {
+	}
+};
+
+LTP = {
+	init: function() {
+	}
+}
+
+wanted features
+================
+-- main paint window takes up entire window with the exception of the color strip at the top
+
+-- color strip, shows the user's color palette. first ten colors are slightly separated and can be accessed by hitting the corresponding number.
+		The currently selected color is highlighted with a white border
+
+-- brush strip, like the color strip but brushes
+
+-- status bar at bottom showing
+	-- current brush
+	-- current color
+	-- file size
+	-- pixel location
+	-- save status
+	-- file name
+	-- zoom state
+	-- layer state
+
+
+
+
+key commands
+	b -- show the brush strip
+	b, while brush strip showing -- advance to next brush to the right
+	shift-b, while brush strip showing -- advance to next brush to the left
+	shift-b, while brush strip not showing -- show the brush strip
+	<num> -- select the brush in the <num> spot when brush strip is showing
+	b<num> -- select the brush in the <num> spot when brush strip not showing
+	y -- favorite the current brush when brush strip is showing
+
+	c -- show the color strip
+	c, while color strip showing -- advance to the next color to the right
+	shift-c, while color strip showing -- advance to the next color to the right
+	shift-c, while color strip not showing -- show the color strip
+	<num> -- select the color in the <num> spot when color strip is showing
+	c<num> -- select the color in the <num> spot when the color strip is not showing
+	y -- favorite the current color when color strip is showing
+
+	? -- invoke help (also can click the help link, only link in entire app)
+
+	mc -- bring up the color manager
+	mb -- bring up the brush manager
+	s -- save image
+	shift-s -- save snapshot of image
+
+	z -- zoom in
+	shift-z -- zoom out
+
+	g -- toggle grid on/off
+
+	l -- invoke layer manager
+
+	f -- toggle on/off fill bucket tool
+
+	e -- toggle on/off eye dropper tool
+
+
