@@ -215,4 +215,5 @@ key commands
 
 	e -- toggle on/off eye dropper tool
 
+    <space> -- while space is held down, zoom to 100%
 
