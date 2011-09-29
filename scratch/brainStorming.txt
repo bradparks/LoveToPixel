@@ -54,6 +54,16 @@ LTP.Painter.prototype = {
     }
 }
 
+LTP.KeyListener = function(callbacks) {
+    function _onKeyDown(e) {
+        if(callbacks.hasOwnProperty(e.charCode)) {
+            if(typeof callbacks[e.charCode] === 'function') {
+                callbacks[e.charCode].call(callbacks.scope);
+            }
+        }
+    }
+    document.addEventListener('keydown', _onKeyDown, false); 
+}
 
 LTP.App = function() {
 }
@@ -67,6 +77,9 @@ LTP.App.prototype = {
         this._layerDialog = new LTP.LayerDialog();
         this._imageDisplay = new LTP.ImageDisplay(this._createImageDisplayContainer(domElementHook));
 
+        this.keyboardCallbacks.scope = this;
+        this._keyListener = new LTP.KeyListener(this.keyboardCallbacks);
+
         new LTP.CreateNewDialog().show(function(settings) {
             this._statusBar.setName(settings.name);
             this._statusBar.setSize(settings.size);
@@ -77,8 +90,57 @@ LTP.App.prototype = {
     },
 
     _hookIntoLayerManager: function(layerManager) {
+    },
+
+    keyboardCallbacks : {
+        g: function() {
+            this._painter.toggleGrid();
+        },
+    
+        z: function(shift) {
+            var action = shift ? "zoomOut" : "zoomIn";
+            this._painter[action].call(this._painter);
+            this._imageDisplay[action].call(this._imageDisplay);
+        },
+
+        q: function(shift) {
+            var tool = this._toolbar.leftToolChange(shift);
+            this._painter.setLeftTool(tool);
+        },
+
+        w: function(shift) {
+            var tool = this._toolbar.rightToolChange(shift);
+            this._painter.setRightTool(tool);
+        }
     }
 }
+
+tool = {
+    brush: this._currentBrush,
+    color: this._currentColor,
+    paint: function(xy, canvas) {
+    }
+}
+
+LTP.PaintTool = function(color, brush) {
+};
+
+LTP.PaintTool.prototype.perform = function(canvas, position) {
+}
+
+LTP.FillTool = function(color) {
+};
+LTP.FillTool.prototype.perform = function(canvas, position) {
+}
+
+LTP.EyeTool = function(callback) {
+    this._callback = callback;
+}
+
+LTP.EyeTool.prototype.perform = function(canvas, position) {
+    var color = this._getColor(canvas, position);
+    this._callback(color);
+};
 
 
 
@@ -122,18 +184,23 @@ key commands
 	b<num> -- select the brush in the <num> spot when brush strip not showing
 	y -- favorite the current brush when brush strip is showing
 
-	c -- show the color strip
-	c, while color strip showing -- advance to the next color to the right
-	shift-c, while color strip showing -- advance to the next color to the right
-	shift-c, while color strip not showing -- show the color strip
+    q = left
+    w = right
+
+	q/w -- show the color strip
+	q/w, while color strip showing -- advance to the next color to the right
+	shift-q/w, while color strip showing -- advance to the next color to the right
+	shift-q/w, while color strip not showing -- show the color strip
 	<num> -- select the color in the <num> spot when color strip is showing
-	c<num> -- select the color in the <num> spot when the color strip is not showing
+	q/w<num> -- select the color in the <num> spot when the color strip is not showing
 	y -- favorite the current color when color strip is showing
 
 	? -- invoke help (also can click the help link, only link in entire app)
 
 	mc -- bring up the color manager
 	mb -- bring up the brush manager
+
+    // is there any difference between saving and snapshotting?
 	s -- save image
 	shift-s -- save snapshot of image
 
