@@ -35,6 +35,62 @@ LTP = {
 	}
 }
 
+LTP.Painter = function() {
+}
+
+LTP.Painter.prototype = {
+    set activeCanvas(canvas) {
+        this.unhook(this._activeCanvas);
+        this.hook(canvas);
+        this._activeCanvas = canvas;
+    },
+    set leftTool(tool) {
+    },
+    set rightTool(tool) {
+    },
+    set zoom(zoom) {
+    },
+    set mode(mode) {
+    }
+}
+
+
+LTP.App = function() {
+}
+
+LTP.App.prototype = {
+    init: function(domElementHook) {
+
+        this._toolbar = new LTP.Toolbar(this._createToolbarContainer(domElementHook));
+        this._painter = new LTP.Painter(this._createPainterContainer(domElementHook));
+        this._statusBar = new LTP.StatusBar(this._createStatusBarContainer(domElementHook));
+        this._layerDialog = new LTP.LayerDialog();
+        this._imageDisplay = new LTP.ImageDisplay(this._createImageDisplayContainer(domElementHook));
+
+        new LTP.CreateNewDialog().show(function(settings) {
+            this._statusBar.setName(settings.name);
+            this._statusBar.setSize(settings.size);
+            this._layerManager = new LTP.LayerManager(settings.size);
+            this._hookIntoLayerManager(this._layerManager);
+            this._painter.activeCanvas = this._layerManager.activeLayer;
+        });
+    },
+
+    _hookIntoLayerManager: function(layerManager) {
+    }
+}
+
+
+
+$(function() {
+    new(LTP.App).init($('body'));
+});
+
+
+
+
+
+
 wanted features
 ================
 -- main paint window takes up entire window with the exception of the color strip at the top
