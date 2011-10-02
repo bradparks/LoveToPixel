@@ -12,11 +12,58 @@
 	};
 
 	LTP.BrushTool.prototype = {
-		perform: function bt_perform(context, position) {
+		perform: function bt_perform(context, startPoint, endPoint) {
 			context.save();
 			context.fillStyle = this._color;
-			context.fillRect(position.x, position.y, this._size, this._size);
+
+			if(startPoint.equals(endPoint)) {
+				this._placePoint(context, startPoint);
+			} else {
+				while(!(startPoint.equals(endPoint))) {
+					this._placePoint(context, startPoint);
+					startPoint = this._moveTowards(startPoint, endPoint);
+				}
+			}
+			this._placePoint(context, endPoint);
 			context.restore();
+		},
+
+		_placePoint: function bt_placePoint(context, point) {
+			context.fillRect(point.x, point.y, this._size, this._size);
+		},
+
+		_moveTowards: function bt_moveTowards(start, finish) {
+			if(start.equals(finish)) {
+				return p(start.x, start.y);
+			}
+
+			var horizontalDistance = finish.x - start.x;
+			var absHd = Math.abs(horizontalDistance);
+
+			var verticalDistance = finish.y - start.y;
+			var absVd = Math.abs(verticalDistance);
+
+			var x, y;
+
+			if(absHd > absVd) {
+				y = start.y;
+				// need to move horizontally
+				if(horizontalDistance < 0) {
+					x = start.x - 1;
+				} else {
+					x = start.x + 1;
+				}
+			} else {
+				// need to move vertically
+				x = start.x;
+				if(verticalDistance < 0) {
+					y = start.y - 1;
+				} else {
+					y = start.y + 1;
+				}
+			}
+
+			return p(x,y);
 		}
 	};
 })();

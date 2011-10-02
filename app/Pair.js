@@ -16,6 +16,15 @@
 		},
 		get y() {
 			return this._b;
+		},
+		equals: function p_equals(other) {
+			if(other) {
+				return (other === this) || 
+					(other._a === this._a && other._b == this._b) ||
+					(other.x === this._a && other.y == this._b) ||
+					(other.width == this._a && other.height == this._b);
+			} 
+			return false;
 		}
 	};
 

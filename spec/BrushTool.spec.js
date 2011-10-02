@@ -6,7 +6,7 @@ describe("BrushTool", function() {
 	});
 
 	describe("performing", function() {
-		it("should paint into the context", function() {
+		it("should paint into the context: simple, start and end are the same", function() {
 			var canvasWidth = 3;
 			var canvasHeight = 3;
 			var canvas = document.createElement('canvas');
@@ -15,8 +15,9 @@ describe("BrushTool", function() {
 			var context = canvas.getContext('2d');
 
 			var brush = new LTP.BrushTool('red', canvasWidth - 1);
-
-			brush.perform(context, p(1,1));
+			
+			var point = p(1,1);
+			brush.perform(context, point, point);
 
 			// [b][b][b]
 			// [b][r][r]

@@ -28,6 +28,52 @@ describe("Pair", function() {
 		});
 	});
 
+	describe("equals", function() {
+		it("should be equal to itself", function() {
+			var pair = new LTP.Pair(3, 4);
+
+			expect(pair.equals(pair)).toEqual(true);
+		});
+
+		it("should equal another pair with the same points", function() {
+			var pair1 = new LTP.Pair(3,5);
+			var pair2 = new LTP.Pair(3,5);
+
+			expect(pair1.equals(pair2)).toEqual(true);
+		});
+
+		it("should not be equal to another pair with different points", function() {
+			var pair1 = new LTP.Pair(3,5);
+			var pair2 = new LTP.Pair(4,9);
+
+			expect(pair1.equals(pair2)).toEqual(false);
+		});
+
+		it("should not be equal to null", function() {
+			var pair1 = new LTP.Pair(3,4);
+
+			expect(pair1.equals(null)).toEqual(false);
+		});
+
+		it("should not be equal to undefined", function() {
+			var pair1 = new LTP.Pair(3,4);
+
+			expect(pair1.equals(undefined)).toEqual(false);
+		});
+
+		it("should be equal to an equivalent point object", function() {
+			var pair1 = new LTP.Pair(3,4);
+
+			expect(pair1.equals({ x: 3, y: 4})).toEqual(true);
+		});
+
+		it("should be equal to an equivalent size object", function() {
+			var pair1 = new LTP.Pair(3,4);
+
+			expect(pair1.equals({ width: 3, height: 4})).toEqual(true);
+		});
+	});
+
 	describe("utility functions", function() {
 		it("LTP.s should create a pair object", function() {
 			var w = 44;

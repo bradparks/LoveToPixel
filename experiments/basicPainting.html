@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>spike 1</title>
+	<style>
+		canvas { border: 1px solid black; background-color: 'grey' }
+	</style>
+</head>
+<body>
+	<script type="text/javascript" src="../app/util.js"></script>
+	<script type="text/javascript" src="../app/Pair.js"></script>
+	<script type="text/javascript" src="../app/KeyListener.js"></script>
+	<script type="text/javascript" src="../app/LayerManager.js"></script>
+	<script type="text/javascript" src="../app/BrushTool.js"></script>
+	<script type="text/javascript" src="../app/Painter.js"></script>
+	<script type="text/javascript" src="../app/LTP.js"></script>
+
+	<script type="text/javascript">
+		var imageSize = s(640,480);
+		var layerManager = new LTP.LayerManager(imageSize);
+		var painter = new LTP.Painter();
+		var leftBrush = new LTP.BrushTool('red', 10);
+		var rightBrush = new LTP.BrushTool('white', 10);
+
+		painter.activeCanvas = layerManager.activeLayer;
+		painter.leftTool = leftBrush;
+		painter.rightTool = rightBrush;
+
+		var body = document.getElementsByTagName('body')[0];
+		body.appendChild(layerManager.activeLayer);
+	</script>
+</body>
+</html>
+
+	
