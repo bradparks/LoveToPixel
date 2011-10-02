@@ -53,8 +53,16 @@
 		addNewLayer: function lm_addNewLayer(name) {
 			this._layers.push(this._createLayer(name || "unnamed layer"));
 			this._activeLayerIndex = this._layers.length - 1;
+			this._updateZIndices();
 
 			return this.activeLayer;
+		},
+
+		moveLayer: function lm_moveLayer(fromIndex, toIndex) {
+			var temp = this._layers[toIndex];
+			this._layers[toIndex] = this._layers[fromIndex];
+			this._layers[fromIndex] = temp;
+			this._updateZIndices();
 		},
 
 		deleteLayer: function lm_deleteLayer(index) {
@@ -73,6 +81,7 @@
 			}
 
 			this.activeLayer.isVisible = true;
+			this._updateZIndices();
 
 			return { deleted: deletedLayer, active: this.activeLayer };
 		},
@@ -99,12 +108,14 @@
 			canvas.height = this.size.height;
 
 			var context = canvas.getContext('2d');
-			context.save();
-			context.fillColor = "rgba(0,0,0,0)";
-			context.fillRect(0, 0, this.size.width, this.size.height);
-			context.restore();
 
 			return canvas;
+		},
+		
+		_updateZIndices: function() {
+			for(var i = 0; i < this._layers.length; ++i) {
+				this._layers[i].style.zIndex = i;
+			}
 		}
 	};
 })();
