@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas experiment 1</title>
+	<script type="text/javascript">
+		function onLoad() {
+			var canvas1 = document.getElementById("canvas1");
+			var canvas2 = document.getElementById("canvas2");
+
+			var context1 = canvas1.getContext('2d');
+			var context2 = canvas2.getContext('2d');
+	
+			context1.fillStyle= "rgba(255,0,0,1)";
+			context1.fillRect(20, 20, 40, 40);
+
+			context2.fillStyle = "rgba(0,255,0,1)";
+			context2.fillRect(40, 40, 40, 40);
+
+			var outputContext = document.getElementById('outputCanvas').getContext('2d');
+
+			outputContext.drawImage(canvas1, 0, 0);
+			outputContext.drawImage(canvas2, 0, 0);
+		}
+	</script>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body onload="onLoad()">
+	<h1>Compositing two canvases together</h1>
+	<div id="canvasContainer">
+		<h2>canvas1</h2>
+		<canvas id="canvas1" width="100" height="100"></canvas>
+		<h2>canvas2</h2>
+		<canvas id="canvas2" width="100" height="100"></canvas>
+		<h2>composited</h2>
+		<canvas id="outputCanvas" width="100" height="100"></canvas>
+	</div>
+</body>
+</html>
+
+

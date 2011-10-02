@@ -18,6 +18,8 @@ LTP.LayerManager.prototype = {
 	},
 	get layerInfo() {
 	},
+	get layers() {
+	},
 	addNewLayer: function(name) {
 	},
 	deleteLayer: function(index) {
