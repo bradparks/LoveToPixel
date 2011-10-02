@@ -73,6 +73,14 @@ describe("LayerManager", function() {
 				expect(imageData.data[i]).toEqual(0);
 			}
 		});
+
+		it("should create a new layer that is CSS'd correctly", function() {
+			var layer = layerManager.addNewLayer('new layer');
+
+			expect(layer.style.position).toEqual('absolute');
+			expect(layer.style.top).toEqual('0px');
+			expect(layer.style.left).toEqual('0px');
+		});
 	});
 
 	describe("changing active layer", function() {

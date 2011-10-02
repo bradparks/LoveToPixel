@@ -18,8 +18,8 @@
 	}
 
 	LTP.LayerManager = function LayerManager(size) {
-		if(!(size instanceof LTP.Size)) {
-			throw new Error("LayerManager: must be constructed with a Size");
+		if(!(size instanceof LTP.Pair)) {
+			throw new Error("LayerManager: must be constructed with a Pair");
 		}
 		this._size = size;
 
@@ -106,6 +106,9 @@
 
 			canvas.width = this.size.width;
 			canvas.height = this.size.height;
+			canvas.style.position = "absolute";
+			canvas.style.top = 0;
+			canvas.style.left = 0;
 
 			var context = canvas.getContext('2d');
 
