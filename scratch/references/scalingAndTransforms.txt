@@ -1,0 +1,2 @@
+Nice demo showing zooming via the mouse scrollwheel towards the mouse cursor
+http://www.dominicpettifer.co.uk/Files/Mosaic/MosaicTest.html
