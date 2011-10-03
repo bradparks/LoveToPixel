@@ -15,6 +15,7 @@
 		perform: function bt_perform(context, startPoint, endPoint) {
 			context.save();
 			context.fillStyle = this._color;
+			endPoint = startPoint;
 
 			if(startPoint.equals(endPoint)) {
 				this._placePoint(context, startPoint);
@@ -29,7 +30,7 @@
 		},
 
 		_placePoint: function bt_placePoint(context, point) {
-			context.fillRect(point.x, point.y, this._size, this._size);
+			context.fillRect(point.x - this._size, point.y - this._size, this._size, this._size);
 		},
 
 		_moveTowards: function bt_moveTowards(start, finish) {
@@ -53,7 +54,7 @@
 				} else {
 					x = start.x + 1;
 				}
-			} else {
+			} else  if(absHd < absVd) {
 				// need to move vertically
 				x = start.x;
 				if(verticalDistance < 0) {
@@ -61,8 +62,19 @@
 				} else {
 					y = start.y + 1;
 				}
+			} else {
+				// need to move both
+				if(horizontalDistance < 0) {
+					x = start.x - 1;
+				} else {
+					x = start.x + 1;
+				}
+				if(verticalDistance < 0) {
+					y = start.y - 1;
+				} else {
+					y = start.y + 1;
+				}
 			}
-
 			return p(x,y);
 		}
 	};
