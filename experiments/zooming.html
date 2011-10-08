@@ -4,10 +4,12 @@
 <head>
 	<title>zooming exploration</title>
 	<style>
-		canvas { border: 1px solid black; background-color: 'grey'; zoom: 200%; }
+		canvas { border: 1px solid black; background-color: 'grey'; zoom: 100%; }
 	</style>
 </head>
 <body>
+	<h1>hit 'z' to toggle 200% zoom on and off</h1>
+	<div id="container"></div>
 	<script type="text/javascript" src="../app/util.js"></script>
 	<script type="text/javascript" src="../app/Pair.js"></script>
 	<script type="text/javascript" src="../app/KeyListener.js"></script>
@@ -18,6 +20,8 @@
 	<script type="text/javascript" src="../app/LTP.js"></script>
 
 	<script type="text/javascript">
+		var zoomed = false;
+
 		var imageSize = s(800,800);
 		var layerManager = new LTP.LayerManager(imageSize);
 		var pointTransformer = new LTP.PointTransformer();
@@ -25,14 +29,30 @@
 		var leftBrush = new LTP.BrushTool('orange', 30);
 		var rightBrush = new LTP.BrushTool('blue', 4);
 
-		pointTransformer.zoom = 2;
+		var keyListenerConfig = {
+			callbacks: {
+				z: function(shift) {
+					if(!zoomed) {
+						layerManager.activeLayer.style.zoom = "200%";
+						pointTransformer.zoom = 2;
+						zoomed = true;
+					} else {
+						layerManager.activeLayer.style.zoom = "100%";
+						pointTransformer.zoom = 1;
+						zoomed = false;
+					}
+				}
+			}
+		};
+
+		var keyListener = new LTP.KeyListener(keyListenerConfig);
 
 		painter.activeCanvas = layerManager.activeLayer;
 		painter.leftTool = leftBrush;
 		painter.rightTool = rightBrush;
 
-		var body = document.getElementsByTagName('body')[0];
-		body.appendChild(layerManager.activeLayer);
+		var container = document.getElementById("container");
+		container.appendChild(layerManager.activeLayer);
 	</script>
 </body>
 </html>
