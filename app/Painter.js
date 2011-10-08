@@ -1,10 +1,16 @@
 (function() {
-	LTP.Painter = function() {
+	LTP.Painter = function(pointTransformer) {
+		if(!pointTransformer) {
+			throw new Error("LTP.Painter: pointTransformer is required");
+		}
+
 		this._toolState = [
 			{ down: false, lastPoint: undefined, tool: undefined }, // 0 -- almost always left
 			{ down: false, lastPoint: undefined, tool: undefined }, // 1 -- usually right, sometimes middle?
 			{ down: false, lastPoint: undefined, tool: undefined }  // 2 -- sometimes right, usually middle?
 		];
+	
+		this._pointTransformer = pointTransformer;
 	};
 	
 	LTP.Painter.prototype = {
@@ -35,19 +41,10 @@
 			canvas[prefix + 'EventListener']('mouseup', LTP.util.bind(this._onMouseUp, this), false);
 			canvas[prefix + 'EventListener']('contextmenu', LTP.util.bind(this._onContextMenu, this), false);
 		},
-		_transform: function(point) {
-			var zoom = 2;
-			var restore = 1 / zoom;
-			var xOffset = window.pageXOffset * restore;
-			var yOffset = window.pageYOffset * restore;
-
-			return p(point.x * restore + xOffset, point.y * restore + yOffset);
-		},
 		_onMouseDown: function p_onMouseDown(e) {
 			e.preventDefault();
 			var toolState = this._toolState[e.button];
-			var currentPoint = p(e.x, e.y);
-			currentPoint = this._transform(currentPoint);
+			var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
 
 			if(toolState) {
 				toolState.down = true;
@@ -59,8 +56,7 @@
 		_onMouseMove: function p_onMouseMove(e) {
 			e.preventDefault();
 			var toolState = this._toolState[e.button];
-			var currentPoint = p(e.clientX, e.clientY);
-			currentPoint = this._transform(currentPoint);
+			var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
 
 			if(toolState && toolState.down) {
 				var lastPoint = toolState.lastPoint || currentPoint;

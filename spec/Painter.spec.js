@@ -1,8 +1,18 @@
 describe("Painter", function() {
+	var mockPointTransformer = {
+		transform: function() {}
+	};
+
+	describe("construction", function() {
+		it("should throw if not given a pointTransformer", function() {
+			expect(LTP.Painter).toThrow();
+		});
+	});
+
 	describe("set activeCanvas", function() {
 		var painter = null;
 		beforeEach(function() {
-			painter = new LTP.Painter();
+			painter = new LTP.Painter(mockPointTransformer);
 		});
 
 		it("should add event listeners to the canvas", function() {

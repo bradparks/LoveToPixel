@@ -13,15 +13,19 @@
 	<script type="text/javascript" src="../app/KeyListener.js"></script>
 	<script type="text/javascript" src="../app/LayerManager.js"></script>
 	<script type="text/javascript" src="../app/BrushTool.js"></script>
+	<script type="text/javascript" src="../app/PointTransformer.js"></script>
 	<script type="text/javascript" src="../app/Painter.js"></script>
 	<script type="text/javascript" src="../app/LTP.js"></script>
 
 	<script type="text/javascript">
 		var imageSize = s(800,800);
 		var layerManager = new LTP.LayerManager(imageSize);
-		var painter = new LTP.Painter();
+		var pointTransformer = new LTP.PointTransformer();
+		var painter = new LTP.Painter(pointTransformer);
 		var leftBrush = new LTP.BrushTool('orange', 30);
 		var rightBrush = new LTP.BrushTool('blue', 4);
+
+		pointTransformer.zoom = 2;
 
 		painter.activeCanvas = layerManager.activeLayer;
 		painter.leftTool = leftBrush;
