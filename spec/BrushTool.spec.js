@@ -16,14 +16,14 @@ describe("BrushTool", function() {
 
 			var brush = new LTP.BrushTool('red', canvasWidth - 1);
 			
-			var point = p(1,1);
+			var point = p(2,2);
 			brush.perform(context, point, point);
 
+			// [r][r][b]
+			// [r][r][b]
 			// [b][b][b]
-			// [b][r][r]
-			// [b][r][r]
 
-			// [b][b][b][b][r][r][b][r][r]
+			// [r][r][b][r][r][b][b][b][b]
 
 			var imageData = context.getImageData(0, 0, canvasWidth, canvasHeight);
 
@@ -37,18 +37,18 @@ describe("BrushTool", function() {
 				return data;
 			}
 
-			expect(getPixelData(imageData.data, 0)).toEqual([0,0,0,0]);
-			expect(getPixelData(imageData.data, 1)).toEqual([0,0,0,0]);
+			expect(getPixelData(imageData.data, 0)).toEqual([255,0,0,255]);
+			expect(getPixelData(imageData.data, 1)).toEqual([255,0,0,255]);
 			expect(getPixelData(imageData.data, 2)).toEqual([0,0,0,0]);
-			expect(getPixelData(imageData.data, 3)).toEqual([0,0,0,0]);
 
+			expect(getPixelData(imageData.data, 3)).toEqual([255,0,0,255]);
 			expect(getPixelData(imageData.data, 4)).toEqual([255,0,0,255]);
-			expect(getPixelData(imageData.data, 5)).toEqual([255,0,0,255]);
+			expect(getPixelData(imageData.data, 5)).toEqual([0,0,0,0]);
 
 			expect(getPixelData(imageData.data, 6)).toEqual([0,0,0,0]);
 
-			expect(getPixelData(imageData.data, 7)).toEqual([255,0,0,255]);
-			expect(getPixelData(imageData.data, 8)).toEqual([255,0,0,255]);
+			expect(getPixelData(imageData.data, 7)).toEqual([0,0,0,0]);
+			expect(getPixelData(imageData.data, 8)).toEqual([0,0,0,0]);
 		});
 	});
 
