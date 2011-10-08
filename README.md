@@ -1,5 +1,5 @@
 # LoveToPixel #
-This file last updated: Oct 1, 2011
+This file last updated: Oct 8, 2011
 
 LTP is an experiment to see if I can pull off a full fledged pixel editor using JavaScript and canvas. The measure of success is if LTP ends up being a pixel editor that works so well, is responsive enough, powerful enough and enjoyable enough to use that people would seriously consider using it over a native pixel editor.
 
@@ -11,9 +11,10 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * easily set/change the left and right brushes
 * grid overlay
 * zoom in/out
-* hold spacebar to temporarily zoom to 100% (once you release the spacebar, it returns to whatever zoom you were at)
-* Save images in a intermediate format (maintain layers primarily)
+* hold the 'a' key to temporarily zoom to 100% (once you release 'a', it returns to whatever zoom you were at)
+* Save images in an intermediate format (maintain layers primarily)
 * Save images as pngs
+* unlimited, or at least very deep, undo/redo
 
 ## Future Features ##
 * Animation support
@@ -22,9 +23,5 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 
 
 # So far... #
-I did some brainstorming and experimenting, and have come up with a general plan. So now I'm starting to implement the actual app. You can see what is coming to life in specs/ (tests) and app/ (app code).
-
-So far I have a layer manager under way, some utilities, a basic key listener, and some utility stuff.
-
-## As of this writing, LTP is not even close to being usable, but I'm shooting for an initial MVP of it ##
+I'm building the components of the app in an exploritory way. The experiments/ directory contains the components pieced together to accomplish an intermediate goal. The zooming.html and overlaying.html experiments show some initial functionality.
 
