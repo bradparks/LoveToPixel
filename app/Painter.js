@@ -35,10 +35,19 @@
 			canvas[prefix + 'EventListener']('mouseup', LTP.util.bind(this._onMouseUp, this), false);
 			canvas[prefix + 'EventListener']('contextmenu', LTP.util.bind(this._onContextMenu, this), false);
 		},
+		_transform: function(point) {
+			var zoom = 2;
+			var restore = 1 / zoom;
+			var xOffset = window.pageXOffset * restore;
+			var yOffset = window.pageYOffset * restore;
+
+			return p(point.x * restore + xOffset, point.y * restore + yOffset);
+		},
 		_onMouseDown: function p_onMouseDown(e) {
 			e.preventDefault();
 			var toolState = this._toolState[e.button];
-			var currentPoint = p(e.clientX, e.clientY);
+			var currentPoint = p(e.x, e.y);
+			currentPoint = this._transform(currentPoint);
 
 			if(toolState) {
 				toolState.down = true;
@@ -51,6 +60,7 @@
 			e.preventDefault();
 			var toolState = this._toolState[e.button];
 			var currentPoint = p(e.clientX, e.clientY);
+			currentPoint = this._transform(currentPoint);
 
 			if(toolState && toolState.down) {
 				var lastPoint = toolState.lastPoint || currentPoint;
