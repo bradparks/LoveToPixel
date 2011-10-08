@@ -51,6 +51,5 @@ describe("BrushTool", function() {
 			expect(getPixelData(imageData.data, 8)).toEqual([0,0,0,0]);
 		});
 	});
-
 });
 

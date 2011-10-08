@@ -12,6 +12,21 @@
 	};
 
 	LTP.BrushTool.prototype = {
+		overlay: function bt_overlay(context, point) {
+			context.save();
+
+			if(this._size < 3) {
+				context.fillStyle = 'rgba(255, 0, 0, .5)';
+				this._placePoint(context, point);
+			} else {
+				context.strokeStyle = 'gray';
+				context.lineWidth = 1;
+				this._placePoint(context, point, true);
+			}
+
+			context.restore();
+		},
+
 		perform: function bt_perform(context, startPoint, endPoint) {
 			context.save();
 			context.fillStyle = this._color;
@@ -29,8 +44,10 @@
 			context.restore();
 		},
 
-		_placePoint: function bt_placePoint(context, point) {
-			context.fillRect(point.x - this._size, point.y - this._size, this._size, this._size);
+		_placePoint: function bt_placePoint(context, point, stroke) {
+			var method = stroke ? context.strokeRect : context.fillRect;
+
+			method.call(context, point.x - this._size, point.y - this._size, this._size, this._size);
 		},
 
 		_moveTowards: function bt_moveTowards(start, finish) {

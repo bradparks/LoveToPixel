@@ -1,51 +1,91 @@
 describe("Painter", function() {
+	var mockSize = p(10,10);
 	var mockPointTransformer = {
 		transform: function() {}
 	};
 
 	describe("construction", function() {
+		it("should throw if not given a size", function() {
+			var fn = function() {
+				new LTP.Painter(null, mockPaintTransformer);
+			};
+
+			expect(fn).toThrow();
+		});
+
 		it("should throw if not given a pointTransformer", function() {
-			expect(LTP.Painter).toThrow();
+			var fn = function() {
+				new LTP.Painter(p(1,1), null);
+			};
+			expect(fn).toThrow();
+		});
+
+		it("should create an overlay", function() {
+			var width = 20;
+			var height = 30;
+
+			var size = p(width, height);
+
+			var painter = new LTP.Painter(size, mockPointTransformer);
+
+			var overlay = painter.overlay;
+
+			expect(overlay).toBeDefined();
+			expect(overlay.width).toEqual(width);
+			expect(overlay.height).toEqual(height);
 		});
 	});
 
-	describe("set activeCanvas", function() {
-		var painter = null;
-		beforeEach(function() {
-			painter = new LTP.Painter(mockPointTransformer);
-		});
-
-		it("should add event listeners to the canvas", function() {
-			var canvas = {
-				addEventListener: function() {}
+	describe("painting", function() {
+		it("should invoke the tool on mouse down", function() {
+			var tool = {
+				perform: function() {},
+				overlay: function() {}
 			};
 
-			spyOn(canvas, "addEventListener");
-
+			var painter = new LTP.Painter(p(20,20), mockPointTransformer);
+			var canvas = document.createElement('canvas');
+			canvas.width = 20;
+			canvas.height = 20;
 			painter.activeCanvas = canvas;
 
-			expect(canvas.addEventListener).toHaveBeenCalled();
-		});
+			painter.leftTool = tool;
 
-		it("should remove event listeners when switching canvases", function() {
-			var firstCanvas = {
-				addEventListener: function() {},
-				removeEventListener: function() {}
-			},
-			secondCanvas = {
-				addEventListener: function() {}
+			var e = {
+				preventDefault: function() {},
+				button: 0,
+				clientX : 10,
+				clientY: 10
 			};
 
-			spyOn(firstCanvas, "addEventListener");
-			spyOn(firstCanvas, "removeEventListener");
-			spyOn(secondCanvas, "addEventListener");
+			spyOn(e, "preventDefault");
+			spyOn(tool, "perform");
+			spyOn(tool, "overlay");
+			
+			painter._onMouseDown(e);
 
-			painter.activeCanvas = firstCanvas;
-			painter.activeCanvas = secondCanvas;
+			expect(e.preventDefault).toHaveBeenCalled();
+			expect(tool.perform).toHaveBeenCalled();
+			expect(tool.overlay).toHaveBeenCalled();
+		});	
 
-			expect(firstCanvas.addEventListener).toHaveBeenCalled();
-			expect(firstCanvas.removeEventListener).toHaveBeenCalled();
-			expect(secondCanvas.addEventListener).toHaveBeenCalled();
+		it("should completely prevent the context menu", function() {
+			var painter = new LTP.Painter(mockSize, mockPointTransformer);
+			
+			var e = {
+				preventDefault: function() {},
+				stopPropagation: function() {}
+			};
+
+			spyOn(e, "preventDefault");
+			spyOn(e, "stopPropagation");
+
+			var result = painter._onContextMenu(e);
+
+			expect(result).toBe(false);
+
+			expect(e.preventDefault).toHaveBeenCalled();
+			expect(e.stopPropagation).toHaveBeenCalled();
 		});
 	});
 

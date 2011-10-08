@@ -20,7 +20,7 @@
 		var imageSize = s(1000,800);
 		var layerManager = new LTP.LayerManager(imageSize);
 		var pointTransformer = new LTP.PointTransformer();
-		var painter = new LTP.Painter(pointTransformer);
+		var painter = new LTP.Painter(imageSize, pointTransformer);
 		var leftBrush = new LTP.BrushTool('orange', 30);
 		var rightBrush = new LTP.BrushTool('blue', 4);
 
