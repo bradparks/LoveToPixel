@@ -3,6 +3,10 @@
 <head>
 	<title>spike 1</title>
 	<style>
+		body, html {
+			margin: 0;
+			padding: 0;
+		}
 		canvas { border: 1px solid black; background-color: 'grey' }
 	</style>
 </head>
@@ -28,8 +32,13 @@
 		painter.leftTool = leftBrush;
 		painter.rightTool = rightBrush;
 
+		var overlay = painter.overlay;
+		overlay.style.zIndex = 5;
+		overlay.style.position = "absolute";
+
 		var body = document.getElementsByTagName('body')[0];
 		body.appendChild(layerManager.activeLayer);
+		body.appendChild(overlay);
 	</script>
 </body>
 </html>
