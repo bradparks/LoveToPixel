@@ -3,6 +3,11 @@ describe("BrushTool", function() {
 		it("should throw an error if no color or brush specified", function() {
 			expect(LTP.BrushTool).toThrow();
 		});
+
+		it("should report it causes change", function() {
+			var brush = new LTP.BrushTool('red', 3);
+			expect(brush.causesChange).toBe(true);
+		});
 	});
 
 	describe("performing", function() {
@@ -77,6 +82,21 @@ describe("BrushTool", function() {
 			expect(bounds.y).toEqual(0);
 			expect(bounds.width).toEqual(x);
 			expect(bounds.height).toEqual(y);
+		});
+
+		it("should return an empty bounds if x or y are negative", function() {
+			var emptyRect = new LTP.Rectangle();
+
+			var brush = new LTP.BrushTool('red', 4);
+
+			var bounds = brush.getBoundsAt(p(-3, 20));
+			expect(bounds.equals(emptyRect)).toBe(true);
+
+			bounds = brush.getBoundsAt(p(40, -10));
+			expect(bounds.equals(emptyRect)).toBe(true);
+
+			bounds = brush.getBoundsAt(p(-20, -30));
+			expect(bounds.equals(emptyRect)).toBe(true);
 		});
 	});
 });

@@ -12,6 +12,9 @@
 	};
 
 	LTP.BrushTool.prototype = {
+		get causesChange() {
+			return true;
+		},
 		overlay: function bt_overlay(context, point) {
 			context.save();
 
@@ -28,6 +31,11 @@
 		},
 
 		getBoundsAt: function bt_getBoundsAt(point) {
+			// if x or y are negative, then outside of the canvas and should return an empty bounds
+			if(point.x < 0 || point.y < 0) {
+				return r(0,0,0,0);
+			}
+
 			// if the point is close enough to the edge that the brush doesn't
 			// fit, then need to clip it to the bounds of the canvas
 

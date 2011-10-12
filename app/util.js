@@ -29,6 +29,22 @@
 			return function() {
 				fn.apply(scope, arguments);
 			}
+		},
+
+		canvas: function(size, styles) {
+			var canvas = document.createElement('canvas');
+			canvas.width = size.width;
+			canvas.height = size.height;
+
+			if(styles) {
+				for(var style in styles) {
+					if(styles.hasOwnProperty(style)) {
+						canvas.style[style] = styles[style];
+					}
+				}
+			}
+
+			return canvas;
 		}
 	};
 	

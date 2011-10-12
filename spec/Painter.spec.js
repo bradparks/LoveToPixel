@@ -40,7 +40,8 @@ describe("Painter", function() {
 		it("should invoke the tool on mouse down", function() {
 			var tool = {
 				perform: function() {},
-				overlay: function() {}
+				overlay: function() {},
+				getBoundsAt: function() { return r(1,2,4,5); }
 			};
 
 			var painter = new LTP.Painter(p(20,20), mockPointTransformer);

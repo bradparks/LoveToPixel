@@ -13,9 +13,10 @@
 
 	LTP.KeyListener.prototype._onKeyDown = function kl_onKeyDown(e) {
 		var character = String.fromCharCode(e.charCode);
+		character = character.toLowerCase();
 	
 		if(typeof this._callbacks[character] === 'function') {
-			this._callbacks[character].call(this._scope);
+			this._callbacks[character].call(this._scope, e.shiftKey);
 		}
 	} 
 })();

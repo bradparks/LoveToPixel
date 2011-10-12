@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>overlaying exploration</title>
+	<title>Undo and Redo</title>
 	<style>
 		body, html {
 			margin: 0;
@@ -18,11 +18,12 @@
 	</style>
 </head>
 <body>
-	<h1>Should show the cursor overlay</h1>
+	<h1>u: undo, &lt;shift&gt; u: redo</h1>
 	<div id="container"></div>
 	<script type="text/javascript" src="../app/util.js"></script>
 	<script type="text/javascript" src="../app/Rectangle.js"></script>
 	<script type="text/javascript" src="../app/Pair.js"></script>
+	<script type="text/javascript" src="../app/BoundingBoxBuilder.js"></script>
 	<script type="text/javascript" src="../app/KeyListener.js"></script>
 	<script type="text/javascript" src="../app/LayerManager.js"></script>
 	<script type="text/javascript" src="../app/BrushTool.js"></script>
@@ -44,14 +45,27 @@
 
 		var container = document.getElementById("container");
 
-		painter.overlay.style.position = "absolute";
-		painter.overlay.style.top = 0;
-		painter.overlay.style.left = 0;
 		painter.overlay.style.zIndex = 5;
+		painter.scratch.style.zIndex = 4;
 		layerManager.activeLayer.style.zIndex = 3;
 
 		container.appendChild(layerManager.activeLayer);
 		container.appendChild(painter.overlay);
+		container.appendChild(painter.scratch);
+
+		var keyListenerConfig = {
+			callbacks: {
+				u: function(shift) {
+					if(shift) {
+						painter.redo();
+					} else {
+						painter.undo();
+					}
+				}
+			}
+		};
+
+		var keyListener = new LTP.KeyListener(keyListenerConfig);
 	</script>
 </body>
 </html>
