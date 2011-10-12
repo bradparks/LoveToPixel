@@ -27,6 +27,19 @@
 			context.restore();
 		},
 
+		getBoundsAt: function bt_getBoundsAt(point) {
+			// if the point is close enough to the edge that the brush doesn't
+			// fit, then need to clip it to the bounds of the canvas
+
+			var x = Math.max(0, point.x - this._size);
+			var y = Math.max(0, point.y - this._size);
+
+			var width = point.x >= this._size ? this._size : point.x;
+			var height = point.y >= this._size ? this._size : point.y;
+
+			return r(x, y, width, height);
+		},
+
 		perform: function bt_perform(context, startPoint, endPoint) {
 			context.save();
 			context.fillStyle = this._color;

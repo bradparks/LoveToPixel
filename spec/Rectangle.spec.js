@@ -1,29 +1,52 @@
 describe("Rectangle", function() {
 	describe("construction", function() {
-		it("should throw if missing constructor arguments", function() {
-			var noArgs = function() {
-				new LTP.Rectangle();
+		it("should set any missing arguments to zero", function() {
+			var rect = new LTP.Rectangle();
+
+			expect(rect.x).toBe(0);
+			expect(rect.y).toBe(0);
+			expect(rect.width).toBe(0);
+			expect(rect.height).toBe(0);
+
+			var x = 3;
+			var rect2 = new LTP.Rectangle(x);
+			expect(rect2.x).toEqual(x);
+			expect(rect2.y).toBe(0);
+			expect(rect2.width).toBe(0);
+			expect(rect2.height).toBe(0);
+
+			var y = 4;
+			var rect3 = new LTP.Rectangle(undefined, y);
+			expect(rect3.x).toBe(0);
+			expect(rect3.y).toEqual(y);
+			expect(rect3.width).toBe(0);
+			expect(rect3.height).toBe(0);
+		});
+
+		it("should throw if given negative parameters", function() {
+			var negX = function() {
+				new LTP.Rectangle(-3);
 			};
 
-			expect(noArgs).toThrow();
+			expect(negX).toThrow();
 
-			var justX = function() {
-				new LTP.Rectangle(1);
+			var negY = function() {
+				new LTP.Rectangle(4, -6);
 			};
 
-			expect(justX).toThrow();
+			expect(negY).toThrow();
 
-			var justXY = function() {
-				new LTP.Rectangle(1,2);
+			var negW = function() {
+				new LTP.Rectangle(4, 7, -9);
 			};
 
-			expect(justXY).toThrow();
+			expect(negW).toThrow();
 
-			var justXYW = function() {
-				new LTP.Rectangle(1,2,3);
+			var negH = function() {
+				new LTP.Rectangle(3,4,5,-6);
 			};
 
-			expect(justXYW).toThrow();
+			expect(negH).toThrow();
 		});
 
 		it("should set its properties", function() {

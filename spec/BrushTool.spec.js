@@ -51,5 +51,33 @@ describe("BrushTool", function() {
 			expect(getPixelData(imageData.data, 8)).toEqual([0,0,0,0]);
 		});
 	});
+
+	describe("getBoundsAt", function() {
+		it("should return the bounds", function() {
+			var size = 4;
+			var brush = new LTP.BrushTool('red', size);
+
+			var x = 10, y = 20;
+			var bounds = brush.getBoundsAt(p(x, y));
+
+			expect(bounds.x).toEqual(x - size);
+			expect(bounds.y).toEqual(y - size);
+			expect(bounds.width).toEqual(size);
+			expect(bounds.height).toEqual(size);
+		});
+
+		it("should clip the bounds", function() {
+			var size = 10;
+			var brush = new LTP.BrushTool('red', size);
+
+			var x = 3, y = 4;
+			var bounds = brush.getBoundsAt(p(x, y));
+
+			expect(bounds.x).toEqual(0);
+			expect(bounds.y).toEqual(0);
+			expect(bounds.width).toEqual(x);
+			expect(bounds.height).toEqual(y);
+		});
+	});
 });
 

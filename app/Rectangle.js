@@ -1,25 +1,13 @@
 (function() {
 	LTP.Rectangle = function Rectangle(x, y, width, height) {
-		if(typeof x === 'undefined') {
-			throw new Error("Rectangle: x is required");
-		}
+		this._x = x || 0;
+		this._y = y || 0;
+		this._width = width || 0;
+		this._height = height || 0;
 
-		if(typeof y === 'undefined') {
-			throw new Error("Rectangle: y is required");
+		if(this._x < 0 || this._y < 0 || this._width < 0 || this._height < 0) {
+			throw new Error("Rectangle: negative values not allowed");
 		}
-		
-		if(typeof width === 'undefined') {
-			throw new Error("Rectangle: width is required");
-		}
-
-		if(typeof height === 'undefined') {
-			throw new Error("Rectangle: height is required");
-		}
-
-		this._x = x;
-		this._y = y;
-		this._width = width;
-		this._height = height;
 	};
 
 	LTP.Rectangle.prototype = {
