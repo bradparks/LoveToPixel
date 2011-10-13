@@ -8,12 +8,19 @@
 			padding: 0
 		}
 
-		canvas { border: 1px solid black; background-color: 'grey'; zoom: 100%; cursor: none; }
+		canvas { border: 1px solid black; zoom: 100%; cursor: none; }
 
 		#container {
 			position: absolute;
 			top: 0;
 			left: 0;
+		}
+
+		h1 {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 100;
 		}
 	</style>
 </head>
@@ -35,9 +42,15 @@
 		var imageSize = s(800,800);
 		var layerManager = new LTP.LayerManager(imageSize);
 		var pointTransformer = new LTP.PointTransformer();
-		var painter = new LTP.Painter(imageSize, pointTransformer);
+		 painter = new LTP.Painter(imageSize, pointTransformer);
 		var leftBrush = new LTP.BrushTool('orange', 30);
 		var rightBrush = new LTP.BrushTool('blue', 4);
+
+		var activeLayerContext = layerManager.activeLayer.getContext('2d');
+		activeLayerContext.save();
+		activeLayerContext.fillStyle = 'white';
+		activeLayerContext.fillRect(0, 0, 800, 800);
+		activeLayerContext.restore();
 
 		painter.activeCanvas = layerManager.activeLayer;
 		painter.leftTool = leftBrush;

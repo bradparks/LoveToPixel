@@ -23,6 +23,8 @@
 		this._scratch = LTP.util.canvas(this._size, { position: 'absolute', top: 0, left: 0 });
 
 		this._clear(this._overlay);
+		this._clear(this._scratch);
+
 		this._hook(this._overlay);
 
 		this._undoRedoStates = [];
@@ -71,6 +73,7 @@
 		_onMouseDown: function p_onMouseDown(e) {
 			e.preventDefault();
 			this._clear(this._overlay);
+			this._pruneUndoRedoStates();
 
 			var toolState = this._toolState[e.button];
 			var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
@@ -97,22 +100,16 @@
 			e.preventDefault();
 			var toolState = this._toolState[e.button];
 			
-			if(!toolState.down) {
-				toolState = this._lastToolState;
-			}
-
 			var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
 
-			if(toolState) {
-				if (toolState.down) {
-					var lastPoint = toolState.lastPoint || currentPoint;
-					toolState.tool.perform(this._scratch.getContext('2d'), lastPoint, currentPoint);
-					toolState.lastPoint = currentPoint;
+			if(toolState && toolState.down) {
+				var lastPoint = toolState.lastPoint || currentPoint;
+				toolState.tool.perform(this._scratch.getContext('2d'), lastPoint, currentPoint);
+				toolState.lastPoint = currentPoint;
 
-					// TODO: it's technically possible this isn't capturing the whole bounding box
-					this._currentBoundingBox.append(toolState.tool.getBoundsAt(currentPoint));
-					this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
-				} 
+				// TODO: it's technically possible this isn't capturing the whole bounding box
+				this._currentBoundingBox.append(toolState.tool.getBoundsAt(currentPoint));
+				this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
 			}
 
 			this._doOverlay(currentPoint);
@@ -156,6 +153,11 @@
 			}
 		},
 
+		_pruneUndoRedoStates: function() {
+			this._undoRedoStates = this._undoRedoStates.slice(0, this._currentUndoRedoStateIndex + 1);
+			this._currentUndoredoStateIndex = this._undoRedoStates.length - 1;
+		},
+
 		_finishUndoRedo: function(tool, point) {
 			this._currentBoundingBox.append(tool.getBoundsAt(point));
 				
@@ -183,7 +185,13 @@
 		},
 
 		_createClip: function(canvas, boundingBox) {
-			return canvas.getContext('2d').getImageData(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
+			//return canvas.getContext('2d').getImageData(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
+
+			var clipCanvas = LTP.util.canvas(boundingBox);
+
+			clipCanvas.getContext('2d').drawImage(canvas, boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height, 0, 0, boundingBox.width, boundingBox.height);
+
+			return clipCanvas;
 		},
 
 		_applyClip: function(destination, source, boundingBox) {
