@@ -1,5 +1,5 @@
 # LoveToPixel #
-This file last updated: Oct 8, 2011
+This file last updated: Oct 12, 2011
 
 LTP is an experiment to see if I can pull off a full fledged pixel editor using JavaScript and canvas. The measure of success is if LTP ends up being a pixel editor that works so well, is responsive enough, powerful enough and enjoyable enough to use that people would seriously consider using it over a native pixel editor.
 
@@ -24,4 +24,8 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 
 # So far... #
 I'm building the components of the app in an exploritory way. The experiments/ directory contains the components pieced together to accomplish an intermediate goal. The zooming.html and overlaying.html experiments show some initial functionality.
+
+# License ... #
+I'm not sure what kind of license I'm going to use for LTP ultimately. For now I have chosen GPL 3, but that is (very) likely to change once this project solidifies. See the COPYING file for more info
+
 
