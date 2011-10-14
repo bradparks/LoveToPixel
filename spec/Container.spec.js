@@ -52,6 +52,21 @@ describe("Container", function() {
 				expect(overlay.style.left).toBe('0px');
 			});
 		});
+
+		describe("setting scratch", function() {
+			it("should set the scratch's zindex to one above its layer", function() {
+				var layerZindex = 10;
+				var layer = document.createElement('canvas');
+				layer.style.zIndex = layerZindex;
+
+				var scratch = document.createElement('canvas');
+				
+				container.addLayer(layer);
+				container.setScratchForLayer(scratch, layer);
+
+				expect(scratch.style.zIndex).toEqual((layerZindex + 1).toString());
+			});
+		});
 	});
 
 });
