@@ -73,7 +73,5 @@ describe("Grid", function() {
 			expect(context.lineTo).toHaveBeenCalled();
 		});
 	});
-
-
-
 });
+
