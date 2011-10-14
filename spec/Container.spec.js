@@ -53,6 +53,19 @@ describe("Container", function() {
 			});
 		});
 
+		describe("grid", function() {
+			it("should add the grid with a high zindex but below the overlay", function() {
+				var grid = document.createElement('canvas');
+				var overlay = document.createElement('canvas');
+
+				container.grid = grid;
+				container.overlay = overlay;
+
+				expect(grid.style.zIndex > 1000).toBe(true);
+				expect(overlay.style.zIndex > grid.style.zIndex).toBe(true);
+			});
+		});
+
 		describe("setting scratch", function() {
 			it("should set the scratch's zindex to one above its layer", function() {
 				var layerZindex = 10;

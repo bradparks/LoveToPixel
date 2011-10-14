@@ -1,4 +1,7 @@
 (function() {
+	var overlayIndex = 2000;
+	var gridIndex = 1999;
+
 	LTP.Container = function Container(containingElement) {	
 		if(!containingElement) {
 			throw new Error("Container: containingElement is required");
@@ -24,7 +27,12 @@
 
 		set overlay(overlay) {
 			this.addLayer(overlay);
-			overlay.style.zIndex = 2000;
+			overlay.style.zIndex = overlayIndex;
+		},
+
+		set grid(grid) {
+			this.addLayer(grid);
+			grid.style.zIndex = gridIndex;
 		},
 
 		setScratchForLayer: function c_setScratchForLayer(scratch, layer) {		
