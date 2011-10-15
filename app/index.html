@@ -43,7 +43,7 @@
 			painter.leftTool = new LTP.BrushTool(color, 20);
 		});
 
-		var grid = new LTP.Grid(imageSize, 'gray', 20);
+		var grid = new LTP.Grid(imageSize, 'gray', 5);
 
 		container.addLayer(layerManager.activeLayer);
 		painter.activeCanvas = layerManager.activeLayer;
@@ -52,6 +52,8 @@
 		container.setScratchForLayer(painter.scratch, layerManager.activeLayer);
 		
 		var zoomLevels = [.25, .5, 1, 1.5, 2, 4];
+		var gridLevels = [5, 10, 15, 20, 20000];
+		var currentGridIndex = 0;
 		var currentZoomIndex = 2;
 		var colors = [
 			'red',
@@ -78,7 +80,8 @@
 					painter.redo();
 				},
 				g: function() {
-					grid.visible = !grid.visible;
+					grid.cellSize = gridLevels[currentGridIndex];
+					currentGridIndex  = (currentGridIndex + 1) % gridLevels.length;
 				},
 				i: function() {
 					if(this.overrideActive) {

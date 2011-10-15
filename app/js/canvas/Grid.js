@@ -53,6 +53,7 @@
 
 			context.save();
 			context.strokeStyle = color;
+			context.beginPath();
 			for(var x = 0.5; x < canvas.width; x += cellSize) {
 				context.moveTo(x, 0);
 				context.lineTo(x, canvas.height);
@@ -66,6 +67,7 @@
 			// outer border too
 			context.strokeRect(0, 0, canvas.width, canvas.height);
 
+			context.closePath();
 			context.stroke();
 			context.restore();
 		}
