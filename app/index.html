@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>LoveToPixel -- Alpha</title>
+	<link rel="stylesheet" href="ltp.css" />
+	<script type="text/javascript" src="../app/js/util.js"></script>
+
+	<script type="text/javascript" src="../app/js/geometry/PointTransformer.js"></script>
+	<script type="text/javascript" src="../app/js/geometry/Rectangle.js"></script>
+	<script type="text/javascript" src="../app/js/geometry/Pair.js"></script>
+	<script type="text/javascript" src="../app/js/geometry/BoundingBoxBuilder.js"></script>
+
+	<script type="text/javascript" src="../app/js/tools/BrushTool.js"></script>
+	<script type="text/javascript" src="../app/js/tools/EyeDropperTool.js"></script>
+
+	<script type="text/javascript" src="../app/js/canvas/Container.js"></script>
+	<script type="text/javascript" src="../app/js/canvas/Painter.js"></script>
+	<script type="text/javascript" src="../app/js/canvas/LayerManager.js"></script>
+	<script type="text/javascript" src="../app/js/canvas/Grid.js"></script>
+
+	<script type="text/javascript" src="../app/js/KeyListener.js"></script>
+	<script type="text/javascript" src="../app/js/LTP.js"></script>
+</head>
+<body>
+	<div id="containerElement"></div>
+	<script type="text/javascript">
+		var imageSize = s(800,600);
+
+		var layerManager = new LTP.LayerManager(imageSize, 'white');
+		var container = new LTP.Container(document.getElementById('containerElement'));
+
+		var pointTransformer = new LTP.PointTransformer();
+		var painter = new LTP.Painter(imageSize, pointTransformer);
+		painter.leftTool = new LTP.BrushTool('green', 20);
+		painter.rightTool = new LTP.BrushTool('white', 80);
+
+		var grid = new LTP.Grid(imageSize, 'gray', 20);
+
+		container.addLayer(layerManager.activeLayer);
+		painter.activeCanvas = layerManager.activeLayer;
+		container.overlay = painter.overlay;
+		container.grid = grid.canvas;
+		container.setScratchForLayer(painter.scratch, layerManager.activeLayer);
+		
+		var zoomLevels = [.25, .5, 1, 1.5, 2, 4];
+		var currentZoomIndex = 2;
+		var colors = [
+			'red',
+			'rgba(200, 200, 0, .1)',
+			'blue',
+			'green',
+			'orange',
+			'purple',
+			'black',
+			'gray'
+		];
+
+		var keyListenerConfig = {
+			callbacks : {
+				z: function() {
+					currentZoomIndex = (currentZoomIndex + 1) % zoomLevels.length;
+					container.zoomTo(zoomLevels[currentZoomIndex]);
+					pointTransformer.zoom = zoomLevels[currentZoomIndex];
+				},
+				u: function() {
+					painter.undo();
+				},
+				r: function() {
+					painter.redo();
+				},
+				g: function() {
+					grid.visible = !grid.visible;
+				}
+			}
+		};
+
+		for(var i = 0; i < colors.length; ++i) {
+			keyListenerConfig.callbacks[(i+1).toString()] = (function(i) {
+				return function() {
+					painter.leftTool = new LTP.BrushTool(colors[i], 20);
+				}
+			})(i);
+		}
+
+		var keyListener = new LTP.KeyListener(keyListenerConfig);
+		
+	</script>
+</body>
+</html>
+
+	

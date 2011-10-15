@@ -63,6 +63,9 @@
 				context.lineTo(canvas.width, y);
 			}
 
+			// outer border too
+			context.strokeRect(0, 0, canvas.width, canvas.height);
+
 			context.stroke();
 			context.restore();
 		}

@@ -76,7 +76,7 @@
 			this._pruneUndoRedoStates();
 
 			var toolState = this._toolState[e.button];
-			var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
+			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 
 
 			if(toolState) {
@@ -100,7 +100,7 @@
 			e.preventDefault();
 			var toolState = this._toolState[e.button];
 			
-			var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
+			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 
 			if(toolState && toolState.down) {
 				var lastPoint = toolState.lastPoint || currentPoint;
@@ -128,7 +128,7 @@
 				toolState.down = false;
 				toolState.lastPoint = null;
 
-				var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
+				var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 				this._finishUndoRedo(toolState.tool, currentPoint);
 			}
 		},
@@ -148,7 +148,7 @@
 			}
 
 			if(activeToolState) {
-				var currentPoint = this._pointTransformer.transform(p(e.clientX, e.clientY));
+				var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 				this._finishUndoRedo(this._lastToolState.tool, currentPoint);
 			}
 		},

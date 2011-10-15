@@ -17,7 +17,7 @@
 		});
 	}
 
-	LTP.LayerManager = function LayerManager(size) {
+	LTP.LayerManager = function LayerManager(size, backgroundColor) {
 		if(!(size instanceof LTP.Pair)) {
 			throw new Error("LayerManager: must be constructed with a Pair");
 		}
@@ -25,7 +25,9 @@
 
 		this._layers = [];
 
-		this._layers.push(this._createLayer(this.BaseLayerName));
+		var backgroundLayer = this._createLayer(this.BaseLayerName, backgroundColor);
+
+		this._layers.push(backgroundLayer);
 		this._activeLayerIndex = 0;
 	};
 
@@ -99,7 +101,7 @@
 		},
 
 		// "gentleman" privates
-		_createLayer: function(name) {
+		_createLayer: function(name, bgcolor) {
 			var canvas = document.createElement('canvas');
 			canvasToLayer(canvas);
 			canvas.layerName = name;
@@ -110,7 +112,13 @@
 			canvas.style.top = 0;
 			canvas.style.left = 0;
 
-			var context = canvas.getContext('2d');
+			if(bgcolor) {
+				var context = canvas.getContext('2d');
+				context.save();
+				context.fillStyle = bgcolor;
+				context.fillRect(0, 0, this.size.width, this.size.height);
+				context.restore();
+			}
 
 			return canvas;
 		},
