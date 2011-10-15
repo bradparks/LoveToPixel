@@ -52,6 +52,34 @@ describe("Container", function() {
 				expect(overlay.style.left).toBe('0px');
 			});
 		});
+
+		describe("grid", function() {
+			it("should add the grid with a high zindex but below the overlay", function() {
+				var grid = document.createElement('canvas');
+				var overlay = document.createElement('canvas');
+
+				container.grid = grid;
+				container.overlay = overlay;
+
+				expect(grid.style.zIndex > 1000).toBe(true);
+				expect(overlay.style.zIndex > grid.style.zIndex).toBe(true);
+			});
+		});
+
+		describe("setting scratch", function() {
+			it("should set the scratch's zindex to one above its layer", function() {
+				var layerZindex = 10;
+				var layer = document.createElement('canvas');
+				layer.style.zIndex = layerZindex;
+
+				var scratch = document.createElement('canvas');
+				
+				container.addLayer(layer);
+				container.setScratchForLayer(scratch, layer);
+
+				expect(scratch.style.zIndex).toEqual((layerZindex + 1).toString());
+			});
+		});
 	});
 
 });

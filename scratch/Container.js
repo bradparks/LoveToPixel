@@ -3,7 +3,7 @@ function Container(containingElement) {
 
 addLayer(layer)
 
-setScratchForActiveLayer(scratch)
+setScratchForActiveLayer(layer, scratch)
 
 setOverlay(overlay)
 
