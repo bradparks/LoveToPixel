@@ -25,6 +25,10 @@
 <body>
 	<div id="containerElement"></div>
 	<script type="text/javascript">
+		if(navigator.userAgent.indexOf('WebKit') < 0) {
+			alert('so far LoveToPixel only works on Chrome and Safari');
+		}
+
 		var imageSize = s(800,600);
 
 		var layerManager = new LTP.LayerManager(imageSize, 'white');
