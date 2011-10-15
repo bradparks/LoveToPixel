@@ -15,6 +15,9 @@
 	LTP.Container.prototype = {
 		zoomTo: function c_zoomTo(zoom) {
 			this._containingElement.style.zoom = (zoom * 100).toString() + '%';
+			//for(var i = 0; i < this._layers.length; ++i) {
+				//this._layers[i].getContext('2d').scale(zoom, zoom);
+			//}
 		},
 
 		addLayer: function c_addLayer(layer) {
