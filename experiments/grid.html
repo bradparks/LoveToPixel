@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grid</title>
+	<style>
+		body, html {
+			margin: 0;
+			padding: 0
+		}
+
+		canvas { border: 1px solid black; zoom: 100%; cursor: none; }
+
+		#container {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		h1 {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 100;
+		}
+	</style>
+</head>
+<body>
+	<h1>u: undo, &lt;shift&gt; u: redo</h1>
+	<div id="container"></div>
+	<script type="text/javascript" src="../app/util.js"></script>
+	<script type="text/javascript" src="../app/Rectangle.js"></script>
+	<script type="text/javascript" src="../app/Pair.js"></script>
+	<script type="text/javascript" src="../app/BoundingBoxBuilder.js"></script>
+	<script type="text/javascript" src="../app/KeyListener.js"></script>
+	<script type="text/javascript" src="../app/LayerManager.js"></script>
+	<script type="text/javascript" src="../app/BrushTool.js"></script>
+	<script type="text/javascript" src="../app/PointTransformer.js"></script>
+	<script type="text/javascript" src="../app/Painter.js"></script>
+	<script type="text/javascript" src="../app/Grid.js"></script>
+	<script type="text/javascript" src="../app/LTP.js"></script>
+
+	<script type="text/javascript">
+		var imageSize = s(800,800);
+		var layerManager = new LTP.LayerManager(imageSize);
+		var pointTransformer = new LTP.PointTransformer();
+		 painter = new LTP.Painter(imageSize, pointTransformer);
+		var leftBrush = new LTP.BrushTool('orange', 30);
+		var rightBrush = new LTP.BrushTool('blue', 4);
+
+		var activeLayerContext = layerManager.activeLayer.getContext('2d');
+		activeLayerContext.save();
+		activeLayerContext.fillStyle = 'white';
+		activeLayerContext.fillRect(0, 0, 800, 800);
+		activeLayerContext.restore();
+
+		painter.activeCanvas = layerManager.activeLayer;
+		painter.leftTool = leftBrush;
+		painter.rightTool = rightBrush;
+
+		var container = document.getElementById("container");
+
+		painter.overlay.style.zIndex = 6;
+		painter.scratch.style.zIndex = 4;
+		layerManager.activeLayer.style.zIndex = 3;
+
+		var grid = new LTP.Grid(imageSize, 'rgba(0,0,255,.5)', 20);
+		grid.canvas.style.zIndex = 5;
+		grid.canvas.style.position = 'absolute';
+
+		container.appendChild(layerManager.activeLayer);
+		container.appendChild(painter.overlay);
+		container.appendChild(painter.scratch);
+		container.appendChild(grid.canvas);
+
+		var keyListenerConfig = {
+			callbacks: {
+				u: function(shift) {
+					if(shift) {
+						painter.redo();
+					} else {
+						painter.undo();
+					}
+				},
+				g: function(shift) {
+					grid.visible = !grid.visible;
+				}
+			}
+		};
+
+		var keyListener = new LTP.KeyListener(keyListenerConfig);
+	</script>
+</body>
+</html>
+
+	

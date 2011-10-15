@@ -73,5 +73,21 @@ describe("Grid", function() {
 			expect(context.lineTo).toHaveBeenCalled();
 		});
 	});
+
+	describe("visibility", function() {
+		it("should show and hide the grid based on its visibility property", function() {
+			var grid = new LTP.Grid(s(2,2), 'red', 1);
+
+			grid.visible = false;
+
+			expect(grid.canvas.style.display).toBe('none');
+			expect(grid.visible).toBe(false);
+
+			grid.visible = true;
+
+			expect(grid.canvas.style.display).toBe('');
+			expect(grid.visible).toBe(true);
+		});
+	});
 });
 

@@ -34,6 +34,18 @@
 			return this._canvas;
 		},
 
+		set visible(visible) {
+			if(visible) {
+				this._canvas.style.display = '';
+			} else {
+				this._canvas.style.display = 'none'
+			}
+		},
+
+		get visible() {
+			return this._canvas.style.display === '';
+		},
+
 		_paintGrid: function(canvas, cellSize, color) {
 			var context = canvas.getContext('2d');
 
