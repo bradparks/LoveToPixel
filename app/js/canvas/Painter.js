@@ -8,13 +8,11 @@
 			throw new Error("LTP.Painter: pointTransformer is required");
 		}
 
-		this._toolState = [
-			{ down: false, lastPoint: undefined, tool: undefined }, // 0 -- almost always left
-			{ down: false, lastPoint: undefined, tool: undefined }, // 1 -- usually right, sometimes middle?
-			{ down: false, lastPoint: undefined, tool: undefined }  // 2 -- sometimes right, usually middle?
-		];
+		this._overrideToolState = { down: false, lastPoint: undefined, tool: undefined, active: false };
+		this._leftToolState = { down: false, lastPoint: undefined, tool: undefined };
+		this._rightToolState = { down: false, lastPoint: undefined, tool: undefined };
 
-		this._lastToolState = this._toolState[0];
+		this._lastToolState = this._leftToolState;
 	
 		this._size = size;
 		this._pointTransformer = pointTransformer;
@@ -46,12 +44,41 @@
 		},
 
 		set leftTool(tool) {
-			this._toolState[0].tool = tool;
+			this._leftToolState.tool = tool;
+		},
+
+		get leftTool() {
+			if(this._overrideToolState.active) {
+				return this._overrideToolState.tool;
+			} else {
+				return this._leftToolState.tool;
+			}
 		},
 
 		set rightTool(tool) {
-			this._toolState[1].tool = tool;
-			this._toolState[2].tool = tool;
+			this._rightToolState.tool = tool;
+		},
+
+		get rightTool() {
+			if(this._overrideToolState.active) {
+				return this._overrideToolState.tool;
+			} else {
+				return this._rightToolState.tool;
+			}
+		},
+
+		pushOverrideTool: function(overrideTool) {
+			this._overrideToolState.tool = overrideTool;
+			this._overrideToolState.active = true;
+			this._lastToolState = this._overrideToolState;
+			this._doOverlay();
+		},
+
+		popOverrideTool: function() {
+			delete this._overrideToolState.tool;
+			this._overrideToolState.active = false;
+			this._lastToolState = this._leftToolState;
+			this._doOverlay();
 		},
 
 		_hook: function p_hook(canvas) {
@@ -70,25 +97,44 @@
 			canvas[prefix + 'EventListener']('contextmenu', LTP.util.bind(this._onContextMenu, this), false);
 		},
 
+		_getToolStateForButton: function(button) {
+			if(this._overrideToolState.active) {
+				return this._overrideToolState;
+			}
+
+			if(button === 0) {
+				return this._leftToolState;
+			}
+
+			return this._rightToolState;
+		},
+
 		_onMouseDown: function p_onMouseDown(e) {
 			e.preventDefault();
 			this._clear(this._overlay);
-			this._pruneUndoRedoStates();
 
-			var toolState = this._toolState[e.button];
+
+			var toolState = this._getToolStateForButton(e.button);
 			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
-
+	
+			if(toolState.tool.causesChange) {
+				this._pruneUndoRedoStates();
+			}
 
 			if(toolState) {
 				toolState.down = true;
 				var lastPoint = toolState.lastPoint || currentPoint;
 				
-				toolState.tool.perform(this._scratch.getContext('2d'), lastPoint, currentPoint);
+				var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
+
+				toolState.tool.perform(canvas.getContext('2d'), lastPoint, currentPoint);
 				
 				toolState.lastPoint = currentPoint;
 				
-				this._currentBoundingBox = new LTP.BoundingBoxBuilder(toolState.tool.getBoundsAt(currentPoint));
-				this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
+				if(toolState.tool.causesChange) {
+					this._currentBoundingBox = new LTP.BoundingBoxBuilder(toolState.tool.getBoundsAt(currentPoint));
+					this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
+				}
 
 				this._lastToolState = toolState;
 			}
@@ -98,7 +144,8 @@
 
 		_onMouseMove: function p_onMouseMove(e) {
 			e.preventDefault();
-			var toolState = this._toolState[e.button];
+
+			var toolState = this._getToolStateForButton(e.button);
 			
 			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 
@@ -107,29 +154,39 @@
 				toolState.tool.perform(this._scratch.getContext('2d'), lastPoint, currentPoint);
 				toolState.lastPoint = currentPoint;
 
-				// TODO: it's technically possible this isn't capturing the whole bounding box
-				this._currentBoundingBox.append(toolState.tool.getBoundsAt(currentPoint));
-				this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
+				if(toolState.tool.causesChange) {
+					this._currentBoundingBox.append(toolState.tool.getBoundsAt(currentPoint));
+					this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
+				}
 			}
 
 			this._doOverlay(currentPoint);
 		},
 
 		_doOverlay: function p_doOverlay(point) {
-				this._clear(this._overlay);
-				this._lastToolState.tool.overlay(this._overlay.getContext('2d'), point);
+				var point = point || this._lastOverlayPoint;
+
+				if(point) {
+					this._clear(this._overlay);
+					this._lastToolState.tool.overlay(this._overlay.getContext('2d'), point);
+					this._lastOverlayPoint = point;
+				}
 		},
 
 		_onMouseUp: function p_onMouseUp(e) {
 			e.preventDefault();
 
-			var toolState = this._toolState[e.button];
+			var toolState = this._getToolStateForButton(e.button);
+
 			if(toolState) {
 				toolState.down = false;
 				toolState.lastPoint = null;
 
 				var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
-				this._finishUndoRedo(toolState.tool, currentPoint);
+
+				if(toolState.tool.causesChange) {
+					this._finishUndoRedo(toolState.tool, currentPoint);
+				}
 			}
 		},
 
@@ -138,18 +195,29 @@
 
 			var activeToolState = null;
 
-			for(var i = 0; i < this._toolState.length; ++i) {
-				if(this._toolState[i].down) {
-					activeToolState = this._toolState[i];
+			var toolStates = [
+				this._leftToolState,
+				this._rightToolState,
+				this._overrideToolState
+			];
+
+			for(var i = 0; i < toolStates.length; ++i) {
+				var toolState = toolStates[i];
+
+				if(toolState.down) {
+					activeToolState = toolState;
 				}
 
-				this._toolState[i].down = false;
-				this._toolState[i].lastPoint = null;
+				toolState.down = false;
+				toolState.lastPoint = null;
 			}
 
 			if(activeToolState) {
 				var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
-				this._finishUndoRedo(this._lastToolState.tool, currentPoint);
+
+				if(activeToolState.tool.causesChange) {
+					this._finishUndoRedo(this._lastToolState.tool, currentPoint);
+				}
 			}
 		},
 
@@ -185,8 +253,6 @@
 		},
 
 		_createClip: function(canvas, boundingBox) {
-			//return canvas.getContext('2d').getImageData(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
-
 			var clipCanvas = LTP.util.canvas(boundingBox);
 
 			clipCanvas.getContext('2d').drawImage(canvas, boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height, 0, 0, boundingBox.width, boundingBox.height);

@@ -1,7 +1,7 @@
 describe("Painter", function() {
 	var mockSize = p(10,10);
 	var mockPointTransformer = {
-		transform: function() {}
+		transform: function(point) { return point; }
 	};
 
 	describe("construction", function() {
@@ -90,6 +90,26 @@ describe("Painter", function() {
 		});
 	});
 
+	describe("tool management", function() {
+		it("should properly handle an override tool", function() {
+			var painter = new LTP.Painter(s(20, 20), mockPointTransformer);
 
+			var tool1 = { id: 'tool1' };
+			var tool2 = { id: 'tool2' };
+
+			painter.leftTool = tool1;
+			expect(painter.leftTool).toEqual(tool1);
+
+			painter.pushOverrideTool(tool2);
+
+			expect(painter.leftTool).toEqual(tool2);
+			expect(painter.rightTool).toEqual(tool2);
+
+			painter.popOverrideTool();
+
+			expect(painter.leftTool).toEqual(tool1);
+			expect(painter.rightTool).not.toBeDefined();
+		});
+	});
 });
 

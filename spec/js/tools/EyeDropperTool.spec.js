@@ -9,7 +9,6 @@ describe("EyeDropperTool", function() {
 
 	describe("performing", function() {
 		it("should sample the clicked on color", function() {
-			// TODO: it should fire a sampled event too, test for that
 			var colorString = 'rgb(128,100,100);';
 
 			var canvas = document.createElement("canvas");
@@ -27,6 +26,30 @@ describe("EyeDropperTool", function() {
 			expect(eye.sampledColor).toEqual(colorString);
 		});
 
+		it("should call the callback upon sampling", function() {
+			var callbackCalled = false;
+			var colorString = 'rgb(128,100,100);';
+
+			var callback = function(eyeDropper, color) {
+				expect(color).toEqual(colorString);
+				callbackCalled = true;
+			};
+
+			var canvas = document.createElement("canvas");
+			canvas.width = 2;
+			canvas.height = 2;
+			var context = canvas.getContext('2d');
+			context.fillStyle = colorString;
+			canvas.getContext('2d').fillRect(0, 0, 2, 2);
+
+			var eye = new LTP.EyeDropperTool(callback);
+
+			var point = p(1,1);
+			eye.perform(context, point, point);
+
+			expect(eye.sampledColor).toEqual(colorString);
+			expect(callbackCalled).toBe(true);
+		});
 	});
 
 });

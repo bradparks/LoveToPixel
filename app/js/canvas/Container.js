@@ -8,6 +8,7 @@
 		}
 
 		this._containingElement = containingElement;
+		this._containingElement.style.cursor = 'none';
 		this._layers = [];
 	};
 
@@ -20,6 +21,7 @@
 			layer.style.position = 'absolute';
 			layer.style.top = 0;
 			layer.style.left = 0;
+			layer.style.cursor = 'none';
 
 			this._containingElement.appendChild(layer);
 			this._layers.push(layer);

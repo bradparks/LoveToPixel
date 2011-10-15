@@ -15,6 +15,7 @@
 		get causesChange() {
 			return true;
 		},
+
 		overlay: function bt_overlay(context, point) {
 			context.save();
 
