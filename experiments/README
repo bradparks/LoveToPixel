@@ -1,0 +1,7 @@
+The files in this directory are experiments. They are basically ways to exercise and play with LTP's components without commiting to an actual app structure.
+
+These files get stale quickly. No guarantee they work as new features get added.
+
+The real app is inside the app/ directory. Any html inside of app/ is the real deal.
+
+
