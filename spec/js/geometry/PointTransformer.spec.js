@@ -46,6 +46,10 @@ describe("PointTransformer", function() {
 
 			expect(transformedPoint.x).toEqual(expectedPoint.x);
 			expect(transformedPoint.y).toEqual(expectedPoint.y);
+
+			// points should always be integers
+			expect(transformedPoint.x).toEqual(Math.round(transformedPoint.x));
+			expect(transformedPoint.y).toEqual(Math.round(transformedPoint.y));
 		});
 
 		it("should return a point accounting for scroll and zoom", function() {
@@ -68,6 +72,10 @@ describe("PointTransformer", function() {
 
 			expect(transformedPoint.x).toEqual(expectedPoint.x);
 			expect(transformedPoint.y).toEqual(expectedPoint.y);
+
+			// points should always be integers
+			expect(transformedPoint.x).toEqual(Math.round(transformedPoint.x));
+			expect(transformedPoint.y).toEqual(Math.round(transformedPoint.y));
 		});
 	});
 });

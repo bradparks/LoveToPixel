@@ -23,13 +23,15 @@
 	<script type="text/javascript" src="../app/js/LTP.js"></script>
 </head>
 <body>
-	<div id="containerElement"></div>
+	<div id="outerContainerElement">
+		<div id="containerElement"></div>
+	</div>
 	<script type="text/javascript">
 		if(navigator.userAgent.indexOf('WebKit') < 0) {
 			alert('so far LoveToPixel only works on Chrome and Safari');
 		}
 
-		var imageSize = s(800,600);
+		var imageSize = s(800, 600);
 
 		var layerManager = new LTP.LayerManager(imageSize, 'white');
 		var container = new LTP.Container(document.getElementById('containerElement'));
@@ -51,7 +53,7 @@
 		container.grid = grid.canvas;
 		container.setScratchForLayer(painter.scratch, layerManager.activeLayer);
 		
-		var zoomLevels = [.25, .5, 1, 1.5, 2, 4];
+		var zoomLevels = [.25, .5, 1, 2, 4, 8, 16, 32];
 		var gridLevels = [5, 10, 15, 20, 20000];
 		var currentGridIndex = 0;
 		var currentZoomIndex = 2;
@@ -96,6 +98,10 @@
 					container.zoomTo(1);
 					pointTransformer.zoom = 1;
 					currentZoomIndex = 2;
+				},
+				s: function() {
+					var composited = layerManager.composite();
+					window.open(composited.toDataURL('png'), 'savedImage');
 				}
 			}
 		};

@@ -261,10 +261,12 @@
 		},
 
 		_applyClip: function(destination, source, boundingBox) {
+			var destContext = destination.getContext('2d');
+
 			if(typeof source.getContext === 'function') {
-				destination.getContext('2d').drawImage(source, boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
+				destContext.drawImage(source, boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
 			} else {
-				destination.getContext('2d').putImageData(source, boundingBox.x, boundingBox.y);
+				destContext.putImageData(source, boundingBox.x, boundingBox.y);
 			}
 		},
 

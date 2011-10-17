@@ -68,8 +68,9 @@
 
 		_placePoint: function bt_placePoint(context, point, stroke) {
 			var method = stroke ? context.strokeRect : context.fillRect;
+			var strokeOffset = stroke ? 0.5 : 0;
 
-			method.call(context, point.x - this._size, point.y - this._size, this._size, this._size);
+			method.call(context, point.x - this._size + strokeOffset, point.y - this._size + strokeOffset, this._size, this._size);
 		},
 
 		_moveTowards: function bt_moveTowards(start, finish) {

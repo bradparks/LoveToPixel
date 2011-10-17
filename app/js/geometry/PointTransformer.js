@@ -15,7 +15,13 @@
 			var offsetX = this._pageOffsets.pageXOffset * factor;
 			var offsetY = this._pageOffsets.pageYOffset * factor;
 
-			return p(point.x * factor + offsetX, point.y * factor + offsetY);
+			var newX = point.x * factor + offsetX;
+			var newY = point.y * factor + offsetY;
+
+			newX = Math.round(newX);
+			newY = Math.round(newY);
+
+			return p(newX, newY);
 		}
 	};
 
