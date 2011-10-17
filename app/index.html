@@ -55,7 +55,7 @@
 		
 		var zoomLevels = [.25, .5, 1, 2, 4, 8, 16, 32];
 		var gridLevels = [5, 10, 15, 20, 20000];
-		var currentGridIndex = 0;
+		var currentGridIndex = 4;
 		var currentZoomIndex = 2;
 		var colors = [
 			'red',
@@ -67,6 +67,8 @@
 			'rgb(100, 20, 0)',
 			'gray'
 		];
+
+		grid.cellSize = gridLevels[currentGridIndex];
 
 		var keyListenerConfig = {
 			callbacks : {
@@ -82,8 +84,8 @@
 					painter.redo();
 				},
 				g: function() {
-					grid.cellSize = gridLevels[currentGridIndex];
 					currentGridIndex  = (currentGridIndex + 1) % gridLevels.length;
+					grid.cellSize = gridLevels[currentGridIndex];
 				},
 				i: function() {
 					if(this.overrideActive) {

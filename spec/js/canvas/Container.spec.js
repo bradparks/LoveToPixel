@@ -38,6 +38,23 @@ describe("Container", function() {
 				expect(layer.style.top).toBe('0px');
 				expect(layer.style.left).toBe('0px');
 			});
+
+			it("should center the layer in the container", function() {
+				containingElement.style.width = '600px';
+				containingElement.style.height = '600px';
+
+				var body = document.getElementsByTagName('body')[0];
+				body.appendChild(containingElement);
+
+				var layer = document.createElement('canvas');
+				layer.width = 400;
+				layer.height = 400;
+
+				container.addLayer(layer);
+
+				expect(layer.style.left).toBe('100px');
+				expect(layer.style.top).toBe('100px');
+			});
 		});
 
 		describe("adding the overlay", function() {

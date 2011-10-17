@@ -8,23 +8,33 @@
 		}
 
 		this._containingElement = containingElement;
-		this._containingElement.style.cursor = 'none';
+		//this._containingElement.style.cursor = 'none';
 		this._layers = [];
 	};
 
 	LTP.Container.prototype = {
 		zoomTo: function c_zoomTo(zoom) {
 			this._containingElement.style.zoom = (Math.round(zoom * 100)).toString() + '%';
+
+			for(var i = 0; i < this._layers.length; ++i) {
+				this._centerLayer(this._layers[i]);
+			}
 		},
 
 		addLayer: function c_addLayer(layer) {
 			layer.style.position = 'absolute';
-			layer.style.top = 0;
-			layer.style.left = 0;
-			layer.style.cursor = 'none';
+			this._centerLayer(layer);
 
 			this._containingElement.appendChild(layer);
 			this._layers.push(layer);
+		},
+
+		_centerLayer: function c_centerLayer(layer) {
+			var top = (this._containingElement.offsetHeight / 2 - layer.height / 2);
+			var left = (this._containingElement.offsetWidth / 2 - layer.width / 2);
+
+			layer.style.top = Math.max(0, top) + "px";
+			layer.style.left = Math.max(0, left) + "px";
 		},
 
 		set overlay(overlay) {
