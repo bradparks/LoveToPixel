@@ -26,10 +26,13 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * version control support
 * color theme creation
 * detailed brush editor
+* copy/cut/paste regions
+
 
 
 # So far... #
 I've embarked on the actual app at app/index.html. If you pull that into a WebKit browser, you should find a rough but working pixel editor with many of the above features in place. Here are the current key commands:
+
 * u - undo
 * r - redo
 * 1-9 - pick a color
