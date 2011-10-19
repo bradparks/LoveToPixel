@@ -230,6 +230,8 @@
 					this._finishUndoRedo(this._lastToolState.tool, currentPoint);
 				}
 			}
+
+			this._messageBus.publish('canvasMouseCoordinatesChanged', null);
 		},
 
 		_pruneUndoRedoStates: function() {

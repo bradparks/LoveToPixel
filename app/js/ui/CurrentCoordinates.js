@@ -5,7 +5,7 @@
 		width: 100,
 		items: {
 			xtype: 'label',
-			text: 'x: ?, y: ?'
+			text: 'x: out y: out'
 		},
 
 		constructor: function(config) {
@@ -14,7 +14,11 @@
 			this._messageBus = config.messageBus || LTP.GlobalMessageBus;
 
 			this._messageBus.subscribe('canvasMouseCoordinatesChanged', function(point) {
-				this.down('label').setText('x: ' + point.x + ', y: ' + point.y);
+				if(point) {
+					this.down('label').setText('x: ' + point.x + ', y: ' + point.y);
+				} else {
+					this.down('label').setText('x: out, y: out');
+				}
 			}, this);
 		}
 	});
