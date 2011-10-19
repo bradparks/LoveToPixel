@@ -8,16 +8,21 @@
 			return false;
 		},
 
-		get sampledColor() {
-			return this._sampledColor;
+		get sampledRgbColor() {
+			return this._sampledRgbColor;
+		},
+
+		get sampledHexColor() {
+			return this._sampledHexColor;
 		},
 		
 		perform: function(context, lastPoint, currentPoint) {
 			var pixelData = context.getImageData(currentPoint.x, currentPoint.y, 1, 1);
 
-			this._sampledColor = this._pixelToCssString(pixelData.data);
+			this._sampledRgbColor = this._pixelToRgbString(pixelData.data);
+			this._sampledHexColor = this._pixelToHexString(pixelData.data);
 
-			this._messageBus.publish('colorSampled', this._sampledColor);
+			this._messageBus.publish('colorSampled', this._sampledRgbColor, this._sampledHexColor);
 		},
 
 		overlay: function edt_overlay(context, point) {
@@ -35,9 +40,20 @@
 			context.restore();
 		},
 
-		_pixelToCssString: function(pixelData) {
+		_pixelToRgbString: function(pixelData) {
 			return 'rgb(' + pixelData[0] + ',' + pixelData[1] + ',' + pixelData[2] + ');';
-		}
+		},
+
+		_pixelToHexString: function(pixelData) {
+			function pad(s) {
+				if(s.length == 1) {
+					return '0' + s;
+				}
+				return s;
+			}
+
+			return '#' + pad(pixelData[0].toString(16)) + pad(pixelData[1].toString(16)) + pad(pixelData[2].toString(16));
+		},
 	};
 
 

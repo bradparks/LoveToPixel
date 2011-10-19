@@ -16,6 +16,8 @@
 	LTP.util.global.r = LTP.r;
 
 	LTP.GlobalMessages = [
+		'leftColorChange',
+		'rightColorChange',
 		'colorSampled'
 	];
 

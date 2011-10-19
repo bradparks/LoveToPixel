@@ -3,7 +3,11 @@
 <head>
 	<meta charset="utf-8" />
 	<title>LoveToPixel -- Alpha</title>
+	<link rel="stylesheet" href="http://extjs.cachefly.net/ext-4.0.2a/resources/css/ext-all.css" />
 	<link rel="stylesheet" href="ltp.css" />
+
+	<script type="text/javascript" src="http://extjs.cachefly.net/ext-4.0.2a/ext-all.js"></script>
+
 	<script type="text/javascript" src="../app/js/util.js"></script>
 	<script type="text/javascript" src="../app/js/MessageBus.js"></script>
 
@@ -22,11 +26,15 @@
 
 	<script type="text/javascript" src="../app/js/KeyListener.js"></script>
 	<script type="text/javascript" src="../app/js/LTP.js"></script>
+
+	<script type="text/javascript" src="../app/js/ui/CurrentColor.js"></script>
+	<script type="text/javascript" src="../app/js/ui/StatusBar.js"></script>
 </head>
 <body>
 	<div id="outerContainerElement">
 		<div id="containerElement"></div>
 	</div>
+	<div id="statusBarElement"></div>
 	<script type="text/javascript">
 		if(navigator.userAgent.indexOf('WebKit') < 0) {
 			alert('so far LoveToPixel only works on Chrome and Safari');
@@ -39,13 +47,14 @@
 
 		var pointTransformer = new LTP.PointTransformer();
 		var painter = new LTP.Painter(imageSize, pointTransformer);
-		painter.leftTool = new LTP.BrushTool('green', 20);
+		painter.leftTool = new LTP.BrushTool('red', 20);
 		painter.rightTool = new LTP.BrushTool('white', 80);
 		
 		var eyeDropperTool = new LTP.EyeDropperTool();
 		
-		LTP.GlobalMessageBus.subscribe('colorSampled', function(color) {
-			painter.leftTool = new LTP.BrushTool(color, 20);
+		LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor) {
+			painter.leftTool = new LTP.BrushTool(rgbColor, 20);
+			LTP.GlobalMessageBus.publish('leftColorChange', hexColor);
 		});
 
 		var grid = new LTP.Grid(imageSize, 'gray', 5);
@@ -115,12 +124,20 @@
 			keyListenerConfig.callbacks[(i+1).toString()] = (function(i) {
 				return function() {
 					painter.leftTool = new LTP.BrushTool(colors[i], 20);
+					LTP.GlobalMessageBus.publish('leftColorChange', colors[i]);
 				}
 			})(i);
 		}
 
 		var keyListener = new LTP.KeyListener(keyListenerConfig);
 		
+		Ext.onReady(function() {
+			Ext.create('LTP.StatusBar', {
+				renderTo: 'statusBarElement'
+			});
+			LTP.GlobalMessageBus.publish('leftColorChange', colors[0]);
+		});
+
 	</script>
 </body>
 </html>

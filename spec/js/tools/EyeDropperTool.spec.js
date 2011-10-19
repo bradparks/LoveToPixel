@@ -10,6 +10,7 @@ describe("EyeDropperTool", function() {
 	describe("performing", function() {
 		it("should sample the clicked on color", function() {
 			var colorString = 'rgb(128,100,100);';
+			var hexString = '#806464';
 
 			var canvas = document.createElement("canvas");
 			canvas.width = 2;
@@ -23,15 +24,18 @@ describe("EyeDropperTool", function() {
 			var point = p(1,1);
 			eye.perform(context, point, point);
 
-			expect(eye.sampledColor).toEqual(colorString);
+			expect(eye.sampledRgbColor).toEqual(colorString);
+			expect(eye.sampledHexColor).toEqual(hexString);
 		});
 
 		it("should publish a message upon sampling", function() {
 			var callbackCalled = false;
 			var colorString = 'rgb(128,100,100);';
+			var hexString = '#806464';
 
-			var callback = function(color) {
-				expect(color).toEqual(colorString);
+			var callback = function(rgbColor, hexColor) {
+				expect(rgbColor).toEqual(colorString);
+				expect(hexColor).toEqual(hexString);
 				callbackCalled = true;
 			};
 
@@ -50,7 +54,8 @@ describe("EyeDropperTool", function() {
 			var point = p(1,1);
 			eye.perform(context, point, point);
 
-			expect(eye.sampledColor).toEqual(colorString);
+			expect(eye.sampledRgbColor).toEqual(colorString);
+			expect(eye.sampledHexColor).toEqual(hexString);
 			expect(callbackCalled).toBe(true);
 		});
 	});
