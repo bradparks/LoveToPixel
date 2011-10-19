@@ -117,11 +117,12 @@
 			var toolState = this._getToolStateForButton(e.button);
 			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 	
-			if(toolState.tool.causesChange) {
-				this._pruneUndoRedoStates();
-			}
+			// prevent painting if switching tools
+			if(toolState && toolState == this._lastToolState) {
+				if(toolState.tool.causesChange) {
+					this._pruneUndoRedoStates();
+				}
 
-			if(toolState) {
 				toolState.down = true;
 				var lastPoint = toolState.lastPoint || currentPoint;
 				
@@ -136,6 +137,9 @@
 					this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
 				}
 
+			}
+
+			if(toolState) {
 				this._lastToolState = toolState;
 			}
 
