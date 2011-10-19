@@ -14,6 +14,9 @@
 			},
 			{
 				xtype: 'ltp.currentzoom',
+			},
+			{
+				xtype: 'ltp.currentcoordinates'
 			}
 		]
 	});

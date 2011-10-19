@@ -1,5 +1,5 @@
 (function() {
-	LTP.Painter = function(size, pointTransformer) {
+	LTP.Painter = function(size, pointTransformer, messageBus) {
 		if(!size) {
 			throw new Error("LTP.Painter: size is required");
 		}
@@ -7,6 +7,9 @@
 		if(!pointTransformer) {
 			throw new Error("LTP.Painter: pointTransformer is required");
 		}
+
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
+		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 
 		this._overrideToolState = { down: false, lastPoint: undefined, tool: undefined, active: false };
 		this._leftToolState = { down: false, lastPoint: undefined, tool: undefined };
@@ -175,23 +178,27 @@
 					this._lastToolState.tool.overlay(this._overlay.getContext('2d'), point);
 					this._lastOverlayPoint = point;
 				}
+
+				this._messageBus.publish('canvasMouseCoordinatesChanged', point);
 		},
 
 		_onMouseUp: function p_onMouseUp(e) {
 			e.preventDefault();
 
 			var toolState = this._getToolStateForButton(e.button);
+			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 
 			if(toolState) {
 				toolState.down = false;
 				toolState.lastPoint = null;
 
-				var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 
 				if(toolState.tool.causesChange) {
 					this._finishUndoRedo(toolState.tool, currentPoint);
 				}
 			}
+
+			this._doOverlay(currentPoint);
 		},
 
 		_onMouseOut: function(e) {
@@ -292,7 +299,12 @@
 		
 				this._applyClip(this._activeCanvas, state.redoClip, state.boundingBox);
 			}
+		},
+
+		_onZoomChanged: function p_onZoomChanged(newZoom) {
+			this._pointTransformer.zoom = newZoom;
 		}
+
 	};
 
 })();

@@ -111,5 +111,20 @@ describe("Painter", function() {
 			expect(painter.rightTool).not.toBeDefined();
 		});
 	});
+
+	describe("messaging", function() {
+		it("should listen to the zoomChanged message and set the point transformer accordingly", function() {
+			var pt = new LTP.PointTransformer();
+			var mb = new LTP.MessageBus(['zoomChanged']);
+
+			var painter = new LTP.Painter(s(20, 20), pt, mb);
+
+			var newZoom = 3;
+
+			mb.publish('zoomChanged', newZoom);
+
+			expect(pt.zoom).toEqual(newZoom);
+		});
+	});
 });
 

@@ -1,9 +1,6 @@
 (function() {
-	LTP.PointTransformer = function PointTransformer(pageOffsets, messageBus) {
+	LTP.PointTransformer = function PointTransformer(pageOffsets) {
 		this._pageOffsets = pageOffsets || window;
-		this._messageBus = messageBus || LTP.GlobalMessageBus;
-
-		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 	};
 
 	LTP.PointTransformer.prototype = {
@@ -25,10 +22,6 @@
 			newY = Math.round(newY);
 
 			return p(newX, newY);
-		},
-
-		_onZoomChanged: function pt_onZoomChanged(newZoom) {
-			this._zoom = newZoom;
 		}
 	};
 

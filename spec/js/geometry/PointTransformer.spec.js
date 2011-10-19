@@ -78,18 +78,5 @@ describe("PointTransformer", function() {
 			expect(transformedPoint.y).toEqual(Math.round(transformedPoint.y));
 		});
 	});
-
-	describe("receiving messages", function() {
-		it("should respond to the zoomChanged message", function() {
-			var newZoom = 3;
-			var mb = new LTP.MessageBus(['zoomChanged']);
-
-			var pointTransformer = new LTP.PointTransformer(null, mb);
-
-			mb.publish('zoomChanged', newZoom);
-
-			expect(pointTransformer.zoom).toEqual(newZoom);
-		});
-	});
 });
 
