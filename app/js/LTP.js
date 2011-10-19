@@ -18,7 +18,8 @@
 	LTP.GlobalMessages = [
 		'leftColorChange',
 		'rightColorChange',
-		'colorSampled'
+		'colorSampled',
+		'zoomChanged'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);

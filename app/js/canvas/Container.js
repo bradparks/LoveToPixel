@@ -2,14 +2,17 @@
 	var overlayIndex = 2000;
 	var gridIndex = 1999;
 
-	LTP.Container = function Container(containingElement) {	
+	LTP.Container = function Container(containingElement, messageBus) {	
 		if(!containingElement) {
 			throw new Error("Container: containingElement is required");
 		}
 
 		this._containingElement = containingElement;
-		//this._containingElement.style.cursor = 'none';
 		this._layers = [];
+
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
+
+		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 	};
 
 	LTP.Container.prototype = {
@@ -61,6 +64,10 @@
 				this.addLayer(scratch);
 				scratch.style.zIndex = layerZindex + 1;
 			}
+		},
+
+		_onZoomChanged: function c_onZoomChanged(newZoom) {
+			this.zoomTo(newZoom);
 		}
 	};
 

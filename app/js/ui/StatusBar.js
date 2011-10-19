@@ -11,6 +11,9 @@
 			{
 				xtype: 'ltp.currentcolor',
 				tool: 'right'
+			},
+			{
+				xtype: 'ltp.currentzoom',
 			}
 		]
 	});

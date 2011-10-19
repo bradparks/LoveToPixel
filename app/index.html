@@ -27,6 +27,7 @@
 	<script type="text/javascript" src="../app/js/KeyListener.js"></script>
 	<script type="text/javascript" src="../app/js/LTP.js"></script>
 
+	<script type="text/javascript" src="../app/js/ui/CurrentZoom.js"></script>
 	<script type="text/javascript" src="../app/js/ui/CurrentColor.js"></script>
 	<script type="text/javascript" src="../app/js/ui/StatusBar.js"></script>
 </head>
@@ -86,8 +87,9 @@
 			callbacks : {
 				z: function() {
 					currentZoomIndex = (currentZoomIndex + 1) % zoomLevels.length;
-					container.zoomTo(zoomLevels[currentZoomIndex]);
-					pointTransformer.zoom = zoomLevels[currentZoomIndex];
+					//container.zoomTo(zoomLevels[currentZoomIndex]);
+					//pointTransformer.zoom = zoomLevels[currentZoomIndex];
+					LTP.GlobalMessageBus.publish('zoomChanged', zoomLevels[currentZoomIndex]);
 				},
 				u: function() {
 					painter.undo();
@@ -109,8 +111,7 @@
 					}
 				},
 				a: function() {
-					container.zoomTo(1);
-					pointTransformer.zoom = 1;
+					LTP.GlobalMessageBus.publish('zoomChanged', 1);
 					currentZoomIndex = 2;
 				},
 				s: function() {

@@ -25,6 +25,19 @@ describe("Container", function() {
 				container.zoomTo(.5);
 				expect(containingElement.style.zoom).toEqual('50%');
 			});
+
+			it("should respond to the zoomChanged message", function() {
+				var newZoom = 3;
+				var mb = new LTP.MessageBus(['zoomChanged']);
+
+				container = new LTP.Container(containingElement, mb);
+
+				spyOn(container, 'zoomTo');
+
+				mb.publish('zoomChanged', newZoom);
+
+				expect(container.zoomTo).toHaveBeenCalledWith(newZoom);
+			});
 		});
 	
 		describe("adding a layer", function() {
