@@ -31,6 +31,19 @@
 			}
 		},
 
+		toArray: function(arg) {
+			// so far this only converts arguments to an array
+			// will most likely wipe out this entire class with equivalents in Ext4
+
+			var result = [];
+
+			for(var i = 0; i < arg.length; ++i) {
+				result.push(arg[i]);
+			}
+
+			return result;
+		},
+
 		canvas: function(size, styles) {
 			var canvas = document.createElement('canvas');
 			canvas.width = size.width;
