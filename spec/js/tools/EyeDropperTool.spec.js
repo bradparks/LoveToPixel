@@ -26,14 +26,17 @@ describe("EyeDropperTool", function() {
 			expect(eye.sampledColor).toEqual(colorString);
 		});
 
-		it("should call the callback upon sampling", function() {
+		it("should publish a message upon sampling", function() {
 			var callbackCalled = false;
 			var colorString = 'rgb(128,100,100);';
 
-			var callback = function(eyeDropper, color) {
+			var callback = function(color) {
 				expect(color).toEqual(colorString);
 				callbackCalled = true;
 			};
+
+			var mb = new LTP.MessageBus(['colorSampled']);
+			mb.subscribe('colorSampled', callback);
 
 			var canvas = document.createElement("canvas");
 			canvas.width = 2;
@@ -42,7 +45,7 @@ describe("EyeDropperTool", function() {
 			context.fillStyle = colorString;
 			canvas.getContext('2d').fillRect(0, 0, 2, 2);
 
-			var eye = new LTP.EyeDropperTool(callback);
+			var eye = new LTP.EyeDropperTool(mb);
 
 			var point = p(1,1);
 			eye.perform(context, point, point);

@@ -15,5 +15,11 @@
 	LTP.util.global.s = LTP.p = LTP.util.global.p = LTP.s;
 	LTP.util.global.r = LTP.r;
 
+	LTP.GlobalMessages = [
+		'colorSampled'
+	];
+
+	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);
+
 })();
 

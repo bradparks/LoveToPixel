@@ -5,6 +5,7 @@
 	<title>LoveToPixel -- Alpha</title>
 	<link rel="stylesheet" href="ltp.css" />
 	<script type="text/javascript" src="../app/js/util.js"></script>
+	<script type="text/javascript" src="../app/js/MessageBus.js"></script>
 
 	<script type="text/javascript" src="../app/js/geometry/PointTransformer.js"></script>
 	<script type="text/javascript" src="../app/js/geometry/Rectangle.js"></script>
@@ -41,7 +42,9 @@
 		painter.leftTool = new LTP.BrushTool('green', 20);
 		painter.rightTool = new LTP.BrushTool('white', 80);
 		
-		var eyeDropperTool = new LTP.EyeDropperTool(function(eyeDropper, color) {
+		var eyeDropperTool = new LTP.EyeDropperTool();
+		
+		LTP.GlobalMessageBus.subscribe('colorSampled', function(color) {
 			painter.leftTool = new LTP.BrushTool(color, 20);
 		});
 

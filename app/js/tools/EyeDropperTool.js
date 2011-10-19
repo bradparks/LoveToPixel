@@ -1,6 +1,6 @@
 (function() {
-	LTP.EyeDropperTool = function EyeDropperTool(callback) {
-		this._callback = callback;
+	LTP.EyeDropperTool = function EyeDropperTool(messageBus) {
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
 	};
 
 	LTP.EyeDropperTool.prototype = {
@@ -17,9 +17,7 @@
 
 			this._sampledColor = this._pixelToCssString(pixelData.data);
 
-			if(this._callback) {
-				this._callback(this, this._sampledColor);
-			}
+			this._messageBus.publish('colorSampled', this._sampledColor);
 		},
 
 		overlay: function edt_overlay(context, point) {
