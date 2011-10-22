@@ -127,7 +127,8 @@
 
 
 			var toolState = this._getToolStateForButton(e.button);
-			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
+			var currentPointNonTransformed = p(e.offsetX, e.offsetY);
+			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
 	
 			// prevent painting if switching tools
 			if(toolState && toolState == this._lastToolState) {
@@ -137,12 +138,22 @@
 
 				toolState.down = true;
 				var lastPoint = toolState.lastPoint || currentPoint;
+				var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
 				
 				var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
 
-				toolState.tool.perform(canvas.getContext('2d'), lastPoint, currentPoint);
+				toolState.tool.perform({
+					canvas: canvas,
+					context: canvas.getContext('2d'),
+					lastPoint: lastPoint,
+					currentPoint: currentPoint,
+					lastPointNonTransformed: lastPointNonTransformed,
+					currentPointNonTransformed: currentPointNonTransformed,
+					containerElement: this._activeCanvas.parentNode.parentNode
+				});
 				
 				toolState.lastPoint = currentPoint;
+				toolState.lastPointNonTransformed = currentPointNonTransformed;
 				
 				if(toolState.tool.causesChange) {
 					this._currentBoundingBox = new LTP.BoundingBoxBuilder(toolState.tool.getBoundsAt(currentPoint));
@@ -163,12 +174,26 @@
 
 			var toolState = this._getToolStateForButton(e.button);
 			
-			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
+			var currentPointNonTransformed = p(e.offsetX, e.offsetY);
+			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
+
+			var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
 
 			if(toolState && toolState.down) {
 				var lastPoint = toolState.lastPoint || currentPoint;
-				toolState.tool.perform(this._scratch.getContext('2d'), lastPoint, currentPoint);
+				var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
+
+				toolState.tool.perform({
+					canvas: canvas,
+					context: canvas.getContext('2d'),
+					lastPoint: lastPoint,
+					currentPoint: currentPoint,
+					lastPointNonTransformed: lastPointNonTransformed,
+					currentPointNonTransformed: currentPointNonTransformed,
+					containerElement: this._activeCanvas.parentNode.parentNode
+				});
 				toolState.lastPoint = currentPoint;
+				toolState.lastPointNonTransformed = currentPointNonTransformed;
 
 				if(toolState.tool.causesChange) {
 					this._currentBoundingBox.append(toolState.tool.getBoundsAt(currentPoint));

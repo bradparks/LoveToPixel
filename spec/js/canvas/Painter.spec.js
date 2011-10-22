@@ -66,7 +66,14 @@ describe("Painter", function() {
 			};
 
 			var painter = new LTP.Painter(p(20,20), mockPointTransformer);
+			
+			var outerDiv = document.createElement('div');
+			var innerDiv = document.createElement('div');
+			outerDiv.appendChild(innerDiv);
+
 			var canvas = document.createElement('canvas');
+			innerDiv.appendChild(canvas);
+
 			canvas.width = 20;
 			canvas.height = 20;
 			painter.activeCanvas = canvas;

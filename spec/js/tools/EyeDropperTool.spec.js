@@ -22,7 +22,15 @@ describe("EyeDropperTool", function() {
 			var eye = new LTP.EyeDropperTool();
 
 			var point = p(1,1);
-			eye.perform(context, point, point);
+			eye.perform({
+				canvas: canvas,
+				context: context,
+				lastPoint: point,
+				currentPoint: point,
+				lastPointNonTransformed: point,
+				currentPointNonTransformed: point,
+				containerElement: {}
+			});
 
 			expect(eye.sampledRgbColor).toEqual(colorString);
 			expect(eye.sampledHexColor).toEqual(hexString);
@@ -52,7 +60,15 @@ describe("EyeDropperTool", function() {
 			var eye = new LTP.EyeDropperTool(mb);
 
 			var point = p(1,1);
-			eye.perform(context, point, point);
+			eye.perform({
+				canvas: canvas,
+				context: context,
+				lastPoint: point,
+				currentPoint: point,
+				lastPointNonTransformed: point,
+				currentPointNonTransformed: point,
+				containerElement: {}
+			});
 
 			expect(eye.sampledRgbColor).toEqual(colorString);
 			expect(eye.sampledHexColor).toEqual(hexString);

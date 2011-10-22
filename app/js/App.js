@@ -68,6 +68,12 @@
 			s: function() {
 				var composited = LTP.app.layerManager.composite();
 				window.open(composited.toDataURL('png'), 'savedImage');
+			},
+			' down': function() {
+				console.log('spacebar down');
+			},
+			' up': function() {
+				console.log('spacebar up');
 			}
 		},
 

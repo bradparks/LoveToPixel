@@ -57,7 +57,11 @@
 			return r(x, y, width, height);
 		},
 
-		perform: function bt_perform(context, startPoint, endPoint) {
+		perform: function bt_perform(e) {
+			var context = e.context;
+			var startPoint = e.lastPoint;
+			var endPoint = e.currentPoint;
+
 			context.save();
 			context.fillStyle = this._color;
 			endPoint = startPoint;

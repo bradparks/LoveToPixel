@@ -16,7 +16,10 @@
 			return this._sampledHexColor;
 		},
 		
-		perform: function(context, lastPoint, currentPoint) {
+		perform: function(e) {
+			var context = e.context;
+			var currentPoint = e.currentPoint;
+
 			var pixelData = context.getImageData(currentPoint.x, currentPoint.y, 1, 1);
 
 			this._sampledRgbColor = this._pixelToRgbString(pixelData.data);

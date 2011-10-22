@@ -32,7 +32,15 @@ describe("BrushTool", function() {
 			var brush = new LTP.BrushTool(colors.red, canvasWidth - 1);
 			
 			var point = p(2,2);
-			brush.perform(context, point, point);
+			brush.perform({
+				canvas: canvas,
+				context: context,
+				lastPoint: point,
+				currentPoint: point,
+				lastPointNonTransformed: point,
+				currentPointNonTransformed: point,
+				containerElement: {}
+			});
 
 			// [r][r][b]
 			// [r][r][b]
