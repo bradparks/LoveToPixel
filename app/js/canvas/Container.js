@@ -66,6 +66,12 @@
 			}
 		},
 
+		destroy: function() {
+			this._layers = null;
+			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
+			this._messageBus = null;
+		},
+
 		_onZoomChanged: function c_onZoomChanged(newZoom) {
 			this.zoomTo(newZoom);
 		}

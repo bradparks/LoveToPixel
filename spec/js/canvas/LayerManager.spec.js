@@ -9,16 +9,7 @@ describe("LayerManager", function() {
 			var size = s(40, 50);
 			var layerManager = new LTP.LayerManager(size);
 
-			expect(layerManager.size).toEqual(size);
-		});
-
-		it("should be immutable in regards to size", function() {
-			var setSize = s(20, 30);
-			var layerManager = new LTP.LayerManager(setSize);
-
-			layerManager.size = s(22, 99);
-
-			expect(layerManager.size).toEqual(setSize);
+			expect(layerManager._size).toEqual(size);
 		});
 
 		it("should get constructed with an initial background layer", function() {
@@ -172,7 +163,7 @@ describe("LayerManager", function() {
 			
 			for(var i = 0; i < layerManager.count; ++i) {
 				var layer = layerManager.setActiveLayer(i);
-				expect(layer.style.zIndex).toEqual(i.toString());
+				expect(layer.style.zIndex).toEqual((i*3).toString());
 			}
 		});
 
@@ -184,7 +175,7 @@ describe("LayerManager", function() {
 			var targetLayerName = "targetLayer";
 			var targetLayer = layerManager.addNewLayer(targetLayerName);
 
-			expect(targetLayer.style.zIndex).toEqual('3');
+			expect(targetLayer.style.zIndex).toEqual('9');
 
 			layerManager.moveLayer(3, 2);
 			
@@ -193,8 +184,8 @@ describe("LayerManager", function() {
 
 			expect(thirdLayer.layerName).toEqual("otherLayer1");
 			expect(secondLayer.layerName).toEqual(targetLayerName);
-			expect(thirdLayer.style.zIndex).toEqual('3');
-			expect(secondLayer.style.zIndex).toEqual('2');
+			expect(thirdLayer.style.zIndex).toEqual('9');
+			expect(secondLayer.style.zIndex).toEqual('6');
 		});
 	});
 

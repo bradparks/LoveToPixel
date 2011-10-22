@@ -47,6 +47,11 @@
 			return this._canvas.style.display === '';
 		},
 
+		destroy: function() {
+			this._canvas = null;
+			this._messageBus = null;
+		},
+
 		_paintGrid: function(canvas, cellSize, color) {
 			var context = canvas.getContext('2d');
 

@@ -89,6 +89,10 @@
 			this._doOverlay();
 		},
 
+		destroy: function() {
+			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
+		},
+
 		_hook: function p_hook(canvas) {
 			this._setEventListeners(canvas, 'add');
 		},

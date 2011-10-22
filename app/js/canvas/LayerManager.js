@@ -33,12 +33,11 @@
 
 	LTP.LayerManager.prototype = {
 		BaseLayerName: "background",
-		get size() {
-			return this._size;
-		},
+
 		get count() {
 			return this._layers.length;
 		},
+
 		get activeLayer() {
 			return this._layers[this._activeLayerIndex];
 		},
@@ -100,14 +99,17 @@
 			return compositeCanvas;
 		},
 
-		// "gentleman" privates
+		destroy: function() {
+			this._layers = null;
+		},
+
 		_createLayer: function(name, bgcolor) {
 			var canvas = document.createElement('canvas');
 			canvasToLayer(canvas);
 			canvas.layerName = name;
 
-			canvas.width = this.size.width;
-			canvas.height = this.size.height;
+			canvas.width = this._size.width;
+			canvas.height = this._size.height;
 			canvas.style.position = "absolute";
 			canvas.style.top = 0;
 			canvas.style.left = 0;
@@ -116,7 +118,7 @@
 				var context = canvas.getContext('2d');
 				context.save();
 				context.fillStyle = bgcolor;
-				context.fillRect(0, 0, this.size.width, this.size.height);
+				context.fillRect(0, 0, this._size.width, this._size.height);
 				context.restore();
 			}
 
@@ -125,7 +127,7 @@
 		
 		_updateZIndices: function() {
 			for(var i = 0; i < this._layers.length; ++i) {
-				this._layers[i].style.zIndex = i;
+				this._layers[i].style.zIndex = i * 3;
 			}
 		}
 	};
