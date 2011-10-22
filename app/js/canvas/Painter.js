@@ -1,5 +1,5 @@
 (function() {
-	LTP.Painter = function(size, pointTransformer, messageBus) {
+	LTP.Painter = function(size, pointTransformer, messageBus, leftTool, rightTool) {
 		if(!size) {
 			throw new Error("LTP.Painter: size is required");
 		}
@@ -11,9 +11,12 @@
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 
-		this._overrideToolState = { down: false, lastPoint: undefined, tool: undefined, active: false };
-		this._leftToolState = { down: false, lastPoint: undefined, tool: undefined };
-		this._rightToolState = { down: false, lastPoint: undefined, tool: undefined };
+		this._overrideToolState = { down: false, active: false };
+		this._leftToolState = { down: false };
+		this._rightToolState = { down: false };
+
+		this.leftTool = leftTool || new LTP.BrushTool('#000000', 1);
+		this.rightTool = rightTool || new LTP.BrushTool('#FFFFFF', 1);
 
 		this._lastToolState = this._leftToolState;
 	
@@ -48,6 +51,7 @@
 
 		set leftTool(tool) {
 			this._leftToolState.tool = tool;
+			this._messageBus.publish('leftToolChanged', tool);
 		},
 
 		get leftTool() {
@@ -60,6 +64,7 @@
 
 		set rightTool(tool) {
 			this._rightToolState.tool = tool;
+			this._messageBus.publish('rightToolChanged', tool);
 		},
 
 		get rightTool() {

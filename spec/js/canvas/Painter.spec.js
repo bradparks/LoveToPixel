@@ -1,4 +1,5 @@
 describe("Painter", function() {
+	var messages = [ 'zoomChanged', 'leftToolChanged', 'rightToolChanged' ];
 	var mockSize = p(10,10);
 	var mockPointTransformer = {
 		transform: function(point) { return point; }
@@ -33,6 +34,26 @@ describe("Painter", function() {
 			expect(overlay).toBeDefined();
 			expect(overlay.width).toEqual(width);
 			expect(overlay.height).toEqual(height);
+		});
+
+		it("should default to 1 pixel black/white if constructed without tools specified", function() {
+			var painter = new LTP.Painter(s(3,3), mockPointTransformer);
+
+			expect(painter.leftTool.color).toBe('#000000');
+			expect(painter.leftTool.size).toBe(1);
+
+			expect(painter.rightTool.color).toBe('#FFFFFF');
+			expect(painter.rightTool.size).toBe(1);
+		});
+
+		it("should take in the left and right tools", function() {
+			var leftTool = { id: 'leftTool'};
+			var rightTool = { id: 'rightTool' };
+
+			var painter = new LTP.Painter(s(3,3), mockPointTransformer, null, leftTool, rightTool);
+
+			expect(painter.leftTool).toEqual(leftTool);
+			expect(painter.rightTool).toEqual(rightTool);
 		});
 	});
 
@@ -94,28 +115,32 @@ describe("Painter", function() {
 		it("should properly handle an override tool", function() {
 			var painter = new LTP.Painter(s(20, 20), mockPointTransformer);
 
-			var tool1 = { id: 'tool1' };
-			var tool2 = { id: 'tool2' };
+			var leftTool = { id: 'leftTool' };
+			var rightTool = { id: 'rightTool' };
+			var overrideTool = { id: 'overrideTool' };
 
-			painter.leftTool = tool1;
-			expect(painter.leftTool).toEqual(tool1);
+			painter.leftTool = leftTool;
+			expect(painter.leftTool).toEqual(leftTool);
 
-			painter.pushOverrideTool(tool2);
+			painter.rightTool = rightTool;
+			expect(painter.rightTool).toEqual(rightTool);
 
-			expect(painter.leftTool).toEqual(tool2);
-			expect(painter.rightTool).toEqual(tool2);
+			painter.pushOverrideTool(overrideTool);
+
+			expect(painter.leftTool).toEqual(overrideTool);
+			expect(painter.rightTool).toEqual(overrideTool);
 
 			painter.popOverrideTool();
 
-			expect(painter.leftTool).toEqual(tool1);
-			expect(painter.rightTool).not.toBeDefined();
+			expect(painter.leftTool).toEqual(leftTool);
+			expect(painter.rightTool).toEqual(rightTool);
 		});
 	});
 
 	describe("messaging", function() {
 		it("should listen to the zoomChanged message and set the point transformer accordingly", function() {
 			var pt = new LTP.PointTransformer();
-			var mb = new LTP.MessageBus(['zoomChanged']);
+			var mb = new LTP.MessageBus(messages);
 
 			var painter = new LTP.Painter(s(20, 20), pt, mb);
 
@@ -124,6 +149,51 @@ describe("Painter", function() {
 			mb.publish('zoomChanged', newZoom);
 
 			expect(pt.zoom).toEqual(newZoom);
+		});
+
+		it("should publish messages on tool changes", function() {
+			var callbackCount = 0;
+			var leftTool1 = { id: 'leftTool1' };
+			var leftTool2 = { id: 'leftTool2' };
+			var rightTool1 = { id: 'rightTool1' };
+			var rightTool2 = { id: 'rightTool2' };
+
+			var leftCallback1 = function(tool) {
+				expect(tool).toEqual(leftTool1);
+				callbackCount++;
+			};
+
+			var rightCallback1 = function(tool) {
+				expect(tool).toEqual(rightTool1);
+				callbackCount++;
+			};
+
+			var leftCallback2 = function(tool) {
+				expect(tool).toEqual(leftTool2);
+				callbackCount++;
+			};
+
+			var rightCallback2 = function(tool) {
+				expect(tool).toEqual(rightTool2);
+				callbackCount++;
+			};
+
+			var mb = new LTP.MessageBus(messages);
+
+			mb.subscribe('leftToolChanged', leftCallback1);
+			mb.subscribe('rightToolChanged', rightCallback1);
+
+			var painter = new LTP.Painter(s(4,4), mockPointTransformer, mb, leftTool1, rightTool1);
+
+			mb.unsubscribe('leftToolChanged', leftCallback1);
+			mb.unsubscribe('rightToolChanged', rightCallback1);
+			mb.subscribe('leftToolChanged', leftCallback2);
+			mb.subscribe('rightToolChanged', rightCallback2);
+
+			painter.leftTool = leftTool2;
+			painter.rightTool = rightTool2;
+
+			expect(callbackCount).toBe(4);
 		});
 	});
 });

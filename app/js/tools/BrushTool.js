@@ -12,6 +12,14 @@
 	};
 
 	LTP.BrushTool.prototype = {
+		get color() {
+			return this._color;
+		},
+
+		get size() {
+			return this._size;
+		},
+
 		get causesChange() {
 			return true;
 		},

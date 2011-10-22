@@ -16,12 +16,12 @@
 	LTP.util.global.r = LTP.r;
 
 	LTP.GlobalMessages = [
-		'leftColorChanged',
-		'rightColorChanged',
 		'colorSampled',
 		'zoomChanged',
 		'canvasMouseCoordinatesChanged',
-		'gridCellSizeChanged'
+		'gridCellSizeChanged',
+		'leftToolChanged',
+		'rightToolChanged'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);

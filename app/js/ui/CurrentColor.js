@@ -19,8 +19,10 @@
 
 			this._messageBus = config.messageBus || LTP.GlobalMessageBus;
 
-			this._messageBus.subscribe(config.tool + 'ColorChanged', function(color) {
-				this.down('#swatch').body.setStyle('backgroundColor', color);
+			this._messageBus.subscribe(config.tool + 'ToolChanged', function(tool) {
+				if(tool.color) {
+					this.down('#swatch').body.setStyle('backgroundColor', tool.color);
+				}
 			}, this);
 		}
 	});

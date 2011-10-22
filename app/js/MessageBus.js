@@ -49,7 +49,7 @@
 
 		publish: function mb_publish(message /* all additional args are passed into the callbacks */) {
 			if(!this._messageExists(message)) {
-				throw new Error("MessageBus.subscribe: subscribing to a nonexistant message: " + message);
+				throw new Error("MessageBus.publish: publishing a non existant message: " + message);
 			}
 
 			var subscribers = this._subscribers[message];

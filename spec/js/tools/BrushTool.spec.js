@@ -8,6 +8,16 @@ describe("BrushTool", function() {
 			var brush = new LTP.BrushTool('red', 3);
 			expect(brush.causesChange).toBe(true);
 		});
+
+		it("should have working getters", function() {
+			var color = 'blue';
+			var size = 8;
+
+			var brush = new LTP.BrushTool(color, size);
+
+			expect(brush.color).toEqual(color);
+			expect(brush.size).toEqual(size);
+		});
 	});
 
 	describe("performing", function() {

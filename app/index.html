@@ -56,7 +56,6 @@
 		
 		LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor) {
 			painter.leftTool = new LTP.BrushTool(rgbColor, 20);
-			LTP.GlobalMessageBus.publish('leftColorChanged', hexColor);
 		});
 
 		var grid = new LTP.Grid(imageSize, 'gray', 5);
@@ -126,7 +125,6 @@
 			keyListenerConfig.callbacks[(i+1).toString()] = (function(i) {
 				return function() {
 					painter.leftTool = new LTP.BrushTool(colors[i], 20);
-					LTP.GlobalMessageBus.publish('leftColorChanged', colors[i]);
 				}
 			})(i);
 		}
@@ -137,7 +135,9 @@
 			Ext.create('LTP.StatusBar', {
 				renderTo: 'statusBarElement'
 			});
-			LTP.GlobalMessageBus.publish('leftColorChanged', colors[0]);
+			//TODO: these publishings need to go away
+			LTP.GlobalMessageBus.publish('leftToolChanged', painter.leftTool);
+			LTP.GlobalMessageBus.publish('rightToolChanged', painter.rightTool);
 		});
 
 	</script>
