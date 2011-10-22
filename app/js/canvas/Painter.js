@@ -155,7 +155,6 @@
 				
 				if(toolState.tool.causesChange) {
 					this._currentBoundingBox = new LTP.BoundingBoxBuilder(toolState.tool.getBoundsAt(currentPoint));
-					this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
 				}
 
 			}

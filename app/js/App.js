@@ -69,14 +69,14 @@
 				var composited = LTP.app.layerManager.composite();
 				window.open(composited.toDataURL('png'), 'savedImage');
 			},
-			vdown: function() {
+			' down': function() {
 				if(_overrideActive) {
 					LTP.app.painter.popOverrideTool();
 				}
 				LTP.app.painter.pushOverrideTool(new LTP.PanningTool());
 				_overrideActive = true;
 			},
-			vup: function() {
+			' up': function() {
 				LTP.app.painter.popOverrideTool();
 				_overrideActive = false;
 			}

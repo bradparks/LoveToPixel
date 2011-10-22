@@ -24,14 +24,24 @@
 		_onKeyPress: function kl_onKeyPress(e) {
 			var character = String.fromCharCode(e.charCode);
 			character = character.toLowerCase();
+
+			if(character === ' ') {
+				e.preventDefault();
+			}
 		
 			if(typeof this._callbacks[character] === 'function') {
 				this._callbacks[character].call(this._scope, e.shiftKey);
 			}
+
+			return character !== ' ';
 		},
 
 		_onKeyDown: function kl_onKeyDown(e) {
 			var character = String.fromCharCode(e.keyCode).toLowerCase();
+
+			if(character === ' ') {
+				e.preventDefault();
+			}
 
 			if(!this._downKeys[character]) {
 				var callbackName = character + 'down';
@@ -42,17 +52,25 @@
 
 				this._downKeys[character] = true;
 			}
+
+			return character !== ' ';
 		},
 
 		_onKeyUp: function kl_onKeyUp(e) {
 			var character = String.fromCharCode(e.keyCode).toLowerCase();
 			var callbackName = character + 'up';
 
+			if(character === ' ') {
+				e.preventDefault();
+			}
+
 			if(typeof this._callbacks[callbackName] === 'function') {
 				this._callbacks[callbackName].call(this._scope, e.shiftKey);
 			}
 
 			this._downKeys[character] = false;
+
+			return character !== ' ' ;
 		},
 
 		destroy: function() {
