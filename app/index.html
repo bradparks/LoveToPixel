@@ -31,6 +31,8 @@
 	<script type="text/javascript" src="../app/js/ui/CurrentZoom.js"></script>
 	<script type="text/javascript" src="../app/js/ui/CurrentColor.js"></script>
 	<script type="text/javascript" src="../app/js/ui/StatusBar.js"></script>
+
+	<script type="text/javascript" src="../app/js/App.js"></script>
 </head>
 <body>
 	<div id="outerContainerElement">
@@ -42,100 +44,15 @@
 			alert('so far LoveToPixel only works on Chrome and Safari');
 		}
 
-		var imageSize = s(800, 600);
-
-		var layerManager = new LTP.LayerManager(imageSize, 'white');
-		var container = new LTP.Container(document.getElementById('containerElement'));
-
-		var pointTransformer = new LTP.PointTransformer();
-		var painter = new LTP.Painter(imageSize, pointTransformer);
-		painter.leftTool = new LTP.BrushTool('red', 20);
-		painter.rightTool = new LTP.BrushTool('white', 80);
-		
-		var eyeDropperTool = new LTP.EyeDropperTool();
-		
-		LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor) {
-			painter.leftTool = new LTP.BrushTool(rgbColor, 20);
-		});
-
-		var grid = new LTP.Grid(imageSize, 'gray', 5);
-
-		container.addLayer(layerManager.activeLayer);
-		painter.activeCanvas = layerManager.activeLayer;
-		container.overlay = painter.overlay;
-		container.grid = grid.canvas;
-		container.setScratchForLayer(painter.scratch, layerManager.activeLayer);
-		
-		var zoomLevels = [.25, .5, 1, 2, 4, 8, 16, 32];
-		var gridLevels = [5, 10, 15, 20, 20000];
-		var currentGridIndex = 4;
-		var currentZoomIndex = 2;
-		var colors = [
-			'red',
-			'#9922ff',
-			'blue',
-			'green',
-			'orange',
-			'purple',
-			'rgb(100, 20, 0)',
-			'gray'
-		];
-
-		grid.cellSize = gridLevels[currentGridIndex];
-
-		var keyListenerConfig = {
-			callbacks : {
-				z: function() {
-					currentZoomIndex = (currentZoomIndex + 1) % zoomLevels.length;
-					LTP.GlobalMessageBus.publish('zoomChanged', zoomLevels[currentZoomIndex]);
-				},
-				u: function() {
-					painter.undo();
-				},
-				r: function() {
-					painter.redo();
-				},
-				g: function() {
-					currentGridIndex  = (currentGridIndex + 1) % gridLevels.length;
-					grid.cellSize = gridLevels[currentGridIndex];
-				},
-				i: function() {
-					if(this.overrideActive) {
-						painter.popOverrideTool();
-						this.overrideActive = false;
-					} else {
-						painter.pushOverrideTool(eyeDropperTool);
-						this.overrideActive = true;
-					}
-				},
-				a: function() {
-					LTP.GlobalMessageBus.publish('zoomChanged', 1);
-					currentZoomIndex = 2;
-				},
-				s: function() {
-					var composited = layerManager.composite();
-					window.open(composited.toDataURL('png'), 'savedImage');
-				}
-			}
-		};
-
-		for(var i = 0; i < colors.length; ++i) {
-			keyListenerConfig.callbacks[(i+1).toString()] = (function(i) {
-				return function() {
-					painter.leftTool = new LTP.BrushTool(colors[i], 20);
-				}
-			})(i);
-		}
-
-		var keyListener = new LTP.KeyListener(keyListenerConfig);
-		
 		Ext.onReady(function() {
-			Ext.create('LTP.StatusBar', {
-				renderTo: 'statusBarElement'
+			LTP.app.init({
+				containerElementId: 'containerElement',
+				statusBarElementId: 'statusBarElement'
 			});
-			//TODO: these publishings need to go away
-			LTP.GlobalMessageBus.publish('leftToolChanged', painter.leftTool);
-			LTP.GlobalMessageBus.publish('rightToolChanged', painter.rightTool);
+
+			LTP.app.load({
+				imageSize: s(600, 400)
+			});
 		});
 
 	</script>
