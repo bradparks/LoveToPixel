@@ -87,8 +87,6 @@
 			callbacks : {
 				z: function() {
 					currentZoomIndex = (currentZoomIndex + 1) % zoomLevels.length;
-					//container.zoomTo(zoomLevels[currentZoomIndex]);
-					//pointTransformer.zoom = zoomLevels[currentZoomIndex];
 					LTP.GlobalMessageBus.publish('zoomChanged', zoomLevels[currentZoomIndex]);
 				},
 				u: function() {
