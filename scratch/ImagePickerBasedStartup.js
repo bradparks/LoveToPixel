@@ -50,7 +50,7 @@ LTP.load = function(project) {
 	this._destroyAll();
 	this._components = [];
 
-	this.layerManager = new LTP.LayerManager(size, 'white');
+	this.layerManager = new LTP.LayerManager(size, '#FFFFFF');
 	this._components.push(this.layerManager);
 
 	this.container = new LTP.Container(document.getElementById(this.containerContainerId));
