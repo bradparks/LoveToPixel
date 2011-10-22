@@ -20,7 +20,8 @@
 		'rightColorChanged',
 		'colorSampled',
 		'zoomChanged',
-		'canvasMouseCoordinatesChanged'
+		'canvasMouseCoordinatesChanged',
+		'gridCellSizeChanged'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);

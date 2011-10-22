@@ -72,6 +72,37 @@ describe("Grid", function() {
 
 			expect(context.lineTo).toHaveBeenCalled();
 		});
+
+		it("should publish a grid cell size changed message", function() {
+			var message = 'gridCellSizeChanged';
+			var cellSize1 = 6;
+			var cellSize2 = 3;
+			var callbackCount = 0;
+
+			var callback1 = function(cellSize) {
+				++callbackCount;
+				expect(cellSize).toEqual(cellSize1);
+			};
+
+			var mb = new LTP.MessageBus([message]);
+			mb.subscribe(message, callback1);
+
+			var grid = new LTP.Grid(s(10, 10), 'red', cellSize1, mb);
+
+			mb.unsubscribe(message, callback1);
+
+			var callback2 = function(cellSize) {
+				++callbackCount;
+				expect(cellSize).toEqual(cellSize2);
+			};
+
+			mb.subscribe(message, callback2);
+
+
+			grid.cellSize = cellSize2;
+
+			expect(callbackCount).toEqual(2);
+		});
 	});
 
 	describe("visibility", function() {

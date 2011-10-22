@@ -1,5 +1,5 @@
 (function() {
-	LTP.Grid = function Grid(canvasSize, color, cellSize) {
+	LTP.Grid = function Grid(canvasSize, color, cellSize, messageBus) {
 		if(!canvasSize) {
 			throw new Error("Grid: canvasSize is required");
 		}
@@ -7,6 +7,7 @@
 		this._canvasSize = canvasSize;
 		this._color = color || 'blue';
 		this._cellSize = cellSize || 5;
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
 		this._canvas = LTP.util.canvas(canvasSize);
 		this._paintGrid(this._canvas, this._cellSize, this._color);
@@ -70,6 +71,8 @@
 			context.closePath();
 			context.stroke();
 			context.restore();
+
+			this._messageBus.publish('gridCellSizeChanged', cellSize);
 		}
 	};
 
