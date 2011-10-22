@@ -1,5 +1,6 @@
 (function() {
 	var _zoomLevels = [.25, .5, 1, 2, 4, 8, 16, 32];
+	var _savedZoomIndex = undefined;
 	var _currentZoomIndex = 2;
 	var _gridLevels = [5, 10, 15, 20, 20000];
 	var _currentGridIndex = 4;
@@ -55,9 +56,14 @@
 					_overrideActive = true;
 				}
 			},
-			a: function() {
-				LTP.GlobalMessageBus.publish('zoomChanged', 1);
+			adown: function() {
+				_savedZoomIndex = _currentZoomIndex;
 				_currentZoomIndex = 2;
+				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
+			},
+			aup: function() {
+				_currentZoomIndex = _savedZoomIndex;
+				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
 			s: function() {
 				var composited = LTP.app.layerManager.composite();
