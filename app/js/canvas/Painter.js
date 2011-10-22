@@ -137,17 +137,15 @@
 				}
 
 				toolState.down = true;
-				var lastPoint = toolState.lastPoint || currentPoint;
-				var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
 				
 				var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
 
 				toolState.tool.perform({
 					canvas: canvas,
 					context: canvas.getContext('2d'),
-					lastPoint: lastPoint,
+					lastPoint: currentPoint,
 					currentPoint: currentPoint,
-					lastPointNonTransformed: lastPointNonTransformed,
+					lastPointNonTransformed: currentPointNonTransformed,
 					currentPointNonTransformed: currentPointNonTransformed,
 					containerElement: this._activeCanvas.parentNode.parentNode
 				});

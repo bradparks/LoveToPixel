@@ -32,7 +32,7 @@
 			context.save();
 
 			context.beginPath();
-			context.strokeStyle = 'gray';
+			context.strokeStyle = colors.gray;
 			context.moveTo(point.x - 5, point.y);
 			context.lineTo(point.x + 5, point.y);
 			context.moveTo(point.x, point.y - 5);
