@@ -5,7 +5,7 @@
 		}
 	
 		this._canvasSize = canvasSize;
-		this._color = color || '#0000FF';
+		this._color = color || colors.blue;
 		this._cellSize = cellSize || 5;
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 

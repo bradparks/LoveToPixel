@@ -15,8 +15,8 @@
 		this._leftToolState = { down: false };
 		this._rightToolState = { down: false };
 
-		this.leftTool = leftTool || new LTP.BrushTool('#000000', 1);
-		this.rightTool = rightTool || new LTP.BrushTool('#FFFFFF', 1);
+		this.leftTool = leftTool || new LTP.BrushTool(colors.black, 1);
+		this.rightTool = rightTool || new LTP.BrushTool(colors.white, 1);
 
 		this._lastToolState = this._leftToolState;
 	

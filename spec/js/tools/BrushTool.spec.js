@@ -5,12 +5,12 @@ describe("BrushTool", function() {
 		});
 
 		it("should report it causes change", function() {
-			var brush = new LTP.BrushTool('#FF0000', 3);
+			var brush = new LTP.BrushTool(colors.red, 3);
 			expect(brush.causesChange).toBe(true);
 		});
 
 		it("should have working getters", function() {
-			var color = '#0000FF';
+			var color = colors.blue;
 			var size = 8;
 
 			var brush = new LTP.BrushTool(color, size);
@@ -29,7 +29,7 @@ describe("BrushTool", function() {
 			canvas.height = canvasHeight;
 			var context = canvas.getContext('2d');
 
-			var brush = new LTP.BrushTool('#FF0000', canvasWidth - 1);
+			var brush = new LTP.BrushTool(colors.red, canvasWidth - 1);
 			
 			var point = p(2,2);
 			brush.perform(context, point, point);
@@ -70,7 +70,7 @@ describe("BrushTool", function() {
 	describe("getBoundsAt", function() {
 		it("should return the bounds", function() {
 			var size = 4;
-			var brush = new LTP.BrushTool('#FF0000', size);
+			var brush = new LTP.BrushTool(colors.red, size);
 
 			var x = 10, y = 20;
 			var bounds = brush.getBoundsAt(p(x, y));
@@ -97,7 +97,7 @@ describe("BrushTool", function() {
 		it("should return an empty bounds if x or y are negative", function() {
 			var emptyRect = new LTP.Rectangle();
 
-			var brush = new LTP.BrushTool('#FF0000', 4);
+			var brush = new LTP.BrushTool(colors.red, 4);
 
 			var bounds = brush.getBoundsAt(p(-3, 20));
 			expect(bounds.equals(emptyRect)).toBe(true);

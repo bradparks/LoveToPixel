@@ -6,15 +6,16 @@
 	var _overrideActive = false;
 
 	var _colors = [
-		'#000000',
-		'#FF0000',
-		'#9922ff',
-		'#0000FF',
-		'#00FF00',
-		'#FF5500',
-		'#8800DD',
-		'#FF7611',
-		'#777777'
+		colors.black,
+		colors.red,
+		colors.lightGray,
+		colors.blue,
+		colors.green,
+		colors.yellow,
+		colors.orange,
+		colors.purple,
+		colors.gray,
+		colors.brown
 	];
 
 	function _destroyAll(components) {
@@ -78,13 +79,13 @@
 			_destroyAll(this._components);
 			this._components = [];
 
-			this.layerManager = new LTP.LayerManager(size, '#FFFFFF');
+			this.layerManager = new LTP.LayerManager(size, colors.white);
 			this._components.push(this.layerManager);
 
 			this.container = new LTP.Container(document.getElementById(this.containerElementId));
 			this._components.push(this.container);
 
-			this.painter = new LTP.Painter(size, new LTP.PointTransformer(), null, new LTP.BrushTool('#000000', 20), new LTP.BrushTool('#FFFFFF', 50));
+			this.painter = new LTP.Painter(size, new LTP.PointTransformer(), null, new LTP.BrushTool(colors.black, 20), new LTP.BrushTool(colors.white, 50));
 			this._components.push(this.painter);
 
 			this.grid = new LTP.Grid(size, 'gray', 20000);

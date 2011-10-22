@@ -10,11 +10,11 @@ describe("Grid", function() {
 		it("should default to blue if no color given", function() {
 			var grid = new LTP.Grid(s(1,1));
 
-			expect(grid.color).toBe('#0000FF');
+			expect(grid.color).toBe(colors.blue);
 		});
 
 		it("should default to 5 if no cell size given", function() {
-			var grid = new LTP.Grid(s(1,1), '#FF0000');
+			var grid = new LTP.Grid(s(1,1), colors.red);
 
 			expect(grid.cellSize).toEqual(5);
 		});
@@ -87,7 +87,7 @@ describe("Grid", function() {
 			var mb = new LTP.MessageBus([message]);
 			mb.subscribe(message, callback1);
 
-			var grid = new LTP.Grid(s(10, 10), '#FF0000', cellSize1, mb);
+			var grid = new LTP.Grid(s(10, 10), colors.red, cellSize1, mb);
 
 			mb.unsubscribe(message, callback1);
 
@@ -107,7 +107,7 @@ describe("Grid", function() {
 
 	describe("visibility", function() {
 		it("should show and hide the grid based on its visibility property", function() {
-			var grid = new LTP.Grid(s(2,2), '#FF0000', 1);
+			var grid = new LTP.Grid(s(2,2), colors.red, 1);
 
 			grid.visible = false;
 

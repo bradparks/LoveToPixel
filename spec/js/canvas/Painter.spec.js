@@ -39,10 +39,10 @@ describe("Painter", function() {
 		it("should default to 1 pixel black/white if constructed without tools specified", function() {
 			var painter = new LTP.Painter(s(3,3), mockPointTransformer);
 
-			expect(painter.leftTool.color).toBe('#000000');
+			expect(painter.leftTool.color).toBe(colors.black);
 			expect(painter.leftTool.size).toBe(1);
 
-			expect(painter.rightTool.color).toBe('#FFFFFF');
+			expect(painter.rightTool.color).toBe(colors.white);
 			expect(painter.rightTool.size).toBe(1);
 		});
 
