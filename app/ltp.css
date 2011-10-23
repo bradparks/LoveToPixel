@@ -14,15 +14,22 @@ body, html {
 	height: 25px;
 }
 
-#outerContainerElement {
+#layerPanelElement {
 	position: absolute;
 	top: 25px;
 	left: 0;
+	width: 300px;
+}
+
+#outerContainerElement {
+	position: absolute;
+	top: 25px;
+	left: 300px;
 	right: 0;
 	bottom: 30px;
 	overflow: auto;
 	image-rendering: -webkit-optimize-contrast;
-	background-color: rgb(244, 110, 100);
+	background-color: gray;
 }
 
 #containerElement {

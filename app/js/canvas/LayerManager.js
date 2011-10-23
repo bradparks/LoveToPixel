@@ -15,6 +15,10 @@
 		canvas.__defineSetter__("isVisible", function(visible) {
 			this.style.display = visible ? "" : "none";
 		});
+
+		canvas.__defineGetter__("zIndex", function() {
+			return parseInt(this.style.zIndex, 10);
+		});
 	}
 
 	LTP.LayerManager = function LayerManager(size, backgroundColor) {
@@ -36,6 +40,10 @@
 
 		get count() {
 			return this._layers.length;
+		},
+
+		get layers() {
+			return this._layers;
 		},
 
 		get activeLayer() {

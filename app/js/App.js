@@ -102,6 +102,10 @@
 				colors: _colors,
 				renderTo: this.toolbarElementId
 			});
+
+			this.layerPanel = Ext.create('LTP.LayerPanel', {
+				renderTo: this.layerPanelElementId
+			});
 		},
 
 		load: function(project) {
@@ -154,6 +158,8 @@
 			//TODO: these publishings need to go away
 			LTP.GlobalMessageBus.publish('leftToolChanged', this.painter.leftTool);
 			LTP.GlobalMessageBus.publish('rightToolChanged', this.painter.rightTool);
+
+			this.layerPanel.load(this.layerManager);
 		}
 	};
 

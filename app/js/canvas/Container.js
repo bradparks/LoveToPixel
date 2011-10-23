@@ -24,6 +24,8 @@
 		this._containingElement.parentNode.addEventListener('mousemove', this._mouseMoveListener, false);
 
 		this._pointTransformer = new LTP.PointTransformer();
+
+		window.addEventListener("resize", LTP.util.bind(this._centerLayers, this), false);
 	};
 
 	LTP.Container.prototype = {
@@ -31,12 +33,16 @@
 			this._pointTransformer.zoom = zoom;
 			this._containingElement.style.zoom = (Math.round(zoom * 100)).toString() + '%';
 
-			for(var i = 0; i < this._layers.length; ++i) {
-				this._centerLayer(this._layers[i]);
-			}
+			this._centerLayers();
 
 			if(this._mouseCoords) {
 				this._scrollTo(this._mouseCoords);
+			}
+		},
+
+		_centerLayers: function() {
+			for(var i = 0; i < this._layers.length; ++i) {
+				this._centerLayer(this._layers[i]);
 			}
 		},
 

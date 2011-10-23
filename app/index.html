@@ -37,11 +37,13 @@
 	<script type="text/javascript" src="../app/js/ui/Swatch.js"></script>
 	<script type="text/javascript" src="../app/js/ui/Toolbar.js"></script>
 	<script type="text/javascript" src="../app/js/ui/ImageChooser.js"></script>
+	<script type="text/javascript" src="../app/js/ui/LayerPanel.js"></script>
 
 	<script type="text/javascript" src="../app/js/App.js"></script>
 </head>
 <body>
 	<div id="toolbarElement"></div>
+	<div id="layerPanelElement"></div>
 	<div id="outerContainerElement">
 		<div id="containerElement"></div>
 	</div>
@@ -55,7 +57,8 @@
 			LTP.app.init({
 				toolbarElementId: 'toolbarElement',
 				containerElementId: 'containerElement',
-				statusBarElementId: 'statusBarElement'
+				statusBarElementId: 'statusBarElement',
+				layerPanelElementId: 'layerPanelElement'
 			});
 
 			var chooser = Ext.create('LTP.ImageChooser', {
