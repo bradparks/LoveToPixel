@@ -4,6 +4,10 @@
 			throw new Error("FillTool: color is required");
 		}
 
+		if(!colors.isHexString(color)) {
+			throw new Error("FillTool: color must be a hex string");
+		}
+
 		this._color = this._colorStringToArray(color);
 	};
 
@@ -55,6 +59,10 @@
 		},
 
 		perform: function p_perform(e) {
+			if(e.imageCanvas.width !== e.context.canvas.width || e.imageCanvas.height !== e.context.canvas.height) {
+				throw new Error("FillTool.perform: source and dest canvases need to be the same size");
+			}
+
 			var sourceContext = e.imageCanvas.getContext('2d');
 
 			var sampledColor = this._sampleColorAt(sourceContext, e.currentPoint);
@@ -65,6 +73,21 @@
 		},
 
 		overlay: function p_overlay(context, point) {
+			context.save();
+
+			context.strokeStyle = colors.purple;
+
+			context.beginPath();
+
+			context.moveTo(point.x - 7, point.y - 7);
+			context.lineTo(point.x, point.y);
+			context.lineTo(point.x + 7, point.y - 7);
+			context.moveTo(point.x, point.y);
+
+			context.closePath();
+			context.stroke();
+
+			context.restore();
 		},
 		
 		getBoundsAt: function bt_getBoundsAt(point, context) {
