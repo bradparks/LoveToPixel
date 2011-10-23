@@ -142,6 +142,7 @@
 
 				toolState.tool.perform({
 					canvas: canvas,
+					imageCanvas: this._activeCanvas,
 					context: canvas.getContext('2d'),
 					lastPoint: currentPoint,
 					currentPoint: currentPoint,
@@ -182,6 +183,7 @@
 
 				toolState.tool.perform({
 					canvas: canvas,
+					imageCanvas: this._activeCanvas,
 					context: canvas.getContext('2d'),
 					lastPoint: lastPoint,
 					currentPoint: currentPoint,

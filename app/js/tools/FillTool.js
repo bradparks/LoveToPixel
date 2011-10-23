@@ -1,14 +1,3 @@
-// TODO:
-// causesChange to true
-// implement getBoundsAt
-//
-// Painter perform needs to pass in scratch and active canvas
-//
-// doesnt seem to work on one pixel regions
-//
-// algorithm for fill taken from here: http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
-//
-
 (function() {
 	LTP.FillTool = function(color) {
 		if(!color) {
@@ -24,7 +13,7 @@
 		},
 
 		get causesChange() {
-			return false;
+			return true;
 		},
 
 		_colorStringToArray: function(color) {
@@ -66,10 +55,12 @@
 		},
 
 		perform: function p_perform(e) {
-			var sampledColor = this._sampleColorAt(e.context, e.currentPoint);
+			var sourceContext = e.imageCanvas.getContext('2d');
+
+			var sampledColor = this._sampleColorAt(sourceContext, e.currentPoint);
 
 			if(!this._areSame(sampledColor, this._color)) {
-				this._fill(e.context, e.currentPoint, sampledColor, this._color);
+				this._fill(sourceContext, e.context, e.currentPoint, sampledColor, this._color);
 			}
 		},
 
@@ -77,44 +68,47 @@
 		},
 		
 		getBoundsAt: function bt_getBoundsAt(point, context) {
-			var sampledColor = this._sampleColorAt(context, point);
-			if(this._areSame(sampledColor, this._color)) {
-				return r(0, 0, 0, 0);
-			}
-
-			//return this._findBounds(context, point, sampledColor);
+			return this._lastBoundingBox;
 		},
 
-		_fill: function p_fill(context, start, sampledColor, newColor) {
-			var imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+		_fill: function p_fill(sourceContext, destContext, start, sampledColor, newColor) {
+			var imageData = sourceContext.getImageData(0, 0, sourceContext.canvas.width, sourceContext.canvas.height);
+			var destData = destContext.getImageData(0, 0, destContext.canvas.width, destContext.canvas.height);
+
+			var boundingBoxBuilder = new LTP.BoundingBoxBuilder();
 
 			function colorPixel(pixelIndex)
 			{
-  			imageData.data[pixelIndex] = newColor[0];
-  			imageData.data[pixelIndex+1] = newColor[1];
-  			imageData.data[pixelIndex+2] = newColor[2];
-  			imageData.data[pixelIndex+3] = newColor[3];
+  			destData.data[pixelIndex] = newColor[0];
+  			destData.data[pixelIndex+1] = newColor[1];
+  			destData.data[pixelIndex+2] = newColor[2];
+  			destData.data[pixelIndex+3] = newColor[3];
 			}
 
 			function isSampledColor(pixelIndex)
 			{
+				// if we've written to destData at this location we need to return false
+				if(destData.data[pixelIndex+3] !== 0) {
+					return false;
+				}
+
   			var r = imageData.data[pixelIndex];	
   			var g = imageData.data[pixelIndex+1];	
   			var b = imageData.data[pixelIndex+2];
 				var a = imageData.data[pixelIndex+3];
 			
-  			return r == sampledColor[0] && 
-					g == sampledColor[1] &&
-					b == sampledColor[2] &&
-					a == sampledColor[3];
+  			return r === sampledColor[0] && 
+					g === sampledColor[1] &&
+					b === sampledColor[2] &&
+					a === sampledColor[3];
 			}
 
 
 			var pixelStack = [[start.x, start.y]];
 
 			var newPos, x, y, pixelPos, reachLeft, reachRight;
-			var canvasWidth = context.canvas.width;
-			var canvasHeight = context.canvas.height;
+			var canvasWidth = destContext.canvas.width;
+			var canvasHeight = destContext.canvas.height;
 
 			while(pixelStack.length) {
 				newPos = pixelStack.pop();
@@ -133,6 +127,7 @@
 				while(y++ < canvasHeight-1 && isSampledColor(pixelPos))
 				{
   				colorPixel(pixelPos);
+					boundingBoxBuilder.append(r(x,y,1,1));
 
   				if(x > 0)
   				{
@@ -168,7 +163,8 @@
   				pixelPos += canvasWidth * 4;
 				}
 			}
-			context.putImageData(imageData, 0, 0);
+			destContext.putImageData(destData, 0, 0);
+			this._lastBoundingBox = boundingBoxBuilder.boundingBox;
 		}
 	};
 
