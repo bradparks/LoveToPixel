@@ -79,6 +79,14 @@
 			' up': function() {
 				LTP.app.painter.popOverrideTool();
 				_overrideActive = false;
+			},
+			k: function() {
+				if(_overrideActive) {
+					LTP.app.painter.popOverrideTool();
+				} else {
+					LTP.app.painter.pushOverrideTool(new LTP.FillTool(colors.blue));
+				}
+				_overrideActive = !_overrideActive;
 			}
 		},
 
