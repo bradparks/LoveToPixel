@@ -2,7 +2,7 @@
 	Ext.define('LTP.LayerModel', {
 		extend: 'Ext.data.Model',
 		fields: [
-			{	name: 'name' },
+			{	name: 'layerName' },
 			{ name: 'index' },
 			{ name: 'visible' },
 			{ name: 'active' },
@@ -26,7 +26,7 @@
 				store: store,
 				tpl: new Ext.XTemplate(
 					'<tpl for=".">',
-						'<div>{name}</div>',
+						'<div>{layerName}</div>',
 					'</tpl>'
 				)
 			};
@@ -42,13 +42,14 @@
 			for(var i = 0; i < layerManager.layers.length; ++i) {
 				var layer = layerManager.layers[i];
 
-				var layerModel = Ext.create('LTP.LayerModel', {
-					name: layer.layerName,
-					index: layer.zIndex,
-					visible: layer.isVisible,
-					active: layer === layerManager.activeLayer,
-					canvas: layer
-				});
+				var layerModel = Ext.create('LTP.LayerModel', {});//, {
+					//name: layer.layerName,
+					//index: layer.zIndex,
+					//visible: layer.isVisible,
+					//active: layer === layerManager.activeLayer,
+					//canvas: layer
+				//});
+				layerModel.data = layer;
 
 				store.add(layerModel);
 			}
