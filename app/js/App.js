@@ -7,6 +7,7 @@
 	var _overrideActive = false;
 
 	var _colors = [
+		colors.white,
 		colors.black,
 		colors.red,
 		colors.lightGray,

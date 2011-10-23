@@ -9,7 +9,8 @@
 		constructor: function(config) {
 			this.callParent(arguments);
 			this.style = {
-				backgroundColor: config.color
+				backgroundColor: config.color,
+				border: '1px solid black'
 			};
 
 			var me = this;
