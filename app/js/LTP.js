@@ -21,7 +21,9 @@
 		'canvasMouseCoordinatesChanged',
 		'gridCellSizeChanged',
 		'leftToolChanged',
-		'rightToolChanged'
+		'rightToolChanged',
+		'leftColorSelected',
+		'rightColorSelected'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);

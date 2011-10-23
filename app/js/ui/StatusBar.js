@@ -1,6 +1,6 @@
 (function() {
 	Ext.define('LTP.StatusBar', {
-		extend: 'Ext.panel.Panel',
+		extend: 'Ext.container.Container',
 		layout: 'hbox',
 		alias: 'widget.ltp.statusbar',
 		items: [

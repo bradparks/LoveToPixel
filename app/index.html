@@ -34,11 +34,14 @@
 	<script type="text/javascript" src="../app/js/ui/CurrentZoom.js"></script>
 	<script type="text/javascript" src="../app/js/ui/CurrentColor.js"></script>
 	<script type="text/javascript" src="../app/js/ui/StatusBar.js"></script>
+	<script type="text/javascript" src="../app/js/ui/Swatch.js"></script>
+	<script type="text/javascript" src="../app/js/ui/Toolbar.js"></script>
 	<script type="text/javascript" src="../app/js/ui/ImageChooser.js"></script>
 
 	<script type="text/javascript" src="../app/js/App.js"></script>
 </head>
 <body>
+	<div id="toolbarElement"></div>
 	<div id="outerContainerElement">
 		<div id="containerElement"></div>
 	</div>
@@ -50,6 +53,7 @@
 
 		Ext.onReady(function() {
 			LTP.app.init({
+				toolbarElementId: 'toolbarElement',
 				containerElementId: 'containerElement',
 				statusBarElementId: 'statusBarElement'
 			});

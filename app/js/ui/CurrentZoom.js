@@ -1,6 +1,6 @@
 (function() {
 	Ext.define('LTP.CurrentZoom', {
-		extend: 'Ext.panel.Panel',
+		extend: 'Ext.container.Container',
 		alias: 'widget.ltp.currentzoom',
 		width: 100,
 		items: {

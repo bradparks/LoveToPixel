@@ -6,9 +6,17 @@ body, html {
 	overflow: hidden;
 }
 
+#toolbarElement {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 25px;
+}
+
 #outerContainerElement {
 	position: absolute;
-	top: 20px;
+	top: 25px;
 	left: 0;
 	right: 0;
 	bottom: 30px;

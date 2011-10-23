@@ -1,6 +1,6 @@
 (function() {
 	Ext.define('LTP.CurrentCoordinates', {
-		extend: 'Ext.panel.Panel',
+		extend: 'Ext.container.Container',
 		alias: 'widget.ltp.currentcoordinates',
 		width: 100,
 		items: {

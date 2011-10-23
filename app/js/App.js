@@ -96,6 +96,11 @@
 			this.statusBar = Ext.create('LTP.StatusBar', {
 				renderTo: this.statusBarElementId
 			});
+
+			this.toolbar = Ext.create('LTP.Toolbar', {
+				colors: _colors,
+				renderTo: this.toolbarElementId
+			});
 		},
 
 		load: function(project) {
@@ -124,6 +129,14 @@
 
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor) {
 				this.painter.leftTool = new LTP.BrushTool(hexColor, 20);
+			}, this);
+
+			LTP.GlobalMessageBus.subscribe('leftColorSelected', function(color) {
+				this.painter.leftTool = new LTP.BrushTool(color, 20);
+			}, this);
+
+			LTP.GlobalMessageBus.subscribe('rightColorSelected', function(color) {
+				this.painter.rightTool = new LTP.BrushTool(color, 50);
 			}, this);
 
 			for(var i = 0; i < _colors.length; ++i) {
