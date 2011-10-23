@@ -107,7 +107,7 @@
 			this.layerManager = new LTP.LayerManager(size, colors.white);
 			this._components.push(this.layerManager);
 
-			this.container = new LTP.Container(document.getElementById(this.containerElementId));
+			this.container = new LTP.Container(size, document.getElementById(this.containerElementId));
 			this._components.push(this.container);
 
 			this.painter = new LTP.Painter(size, new LTP.PointTransformer(), null, new LTP.BrushTool(colors.black, 20), new LTP.BrushTool(colors.white, 50));

@@ -1,8 +1,18 @@
 describe("Container", function() {
+	var size = s(10, 20);
+
 	describe("construction", function() {
+		it("should throw if not given a size", function() {
+			var fn = function() {
+				new LTP.Container(null, document.createElement('div'));
+			}
+
+			expect(fn).toThrow();
+		});
+
 		it("should throw if not given a containing element", function() {
 			var fn = function() {
-				new LTP.Container();
+				new LTP.Container(size);
 			};
 
 			expect(fn).toThrow();
@@ -13,8 +23,11 @@ describe("Container", function() {
 		var container;
 
 		beforeEach(function() {
+			outerElement = document.createElement('div');
 			containingElement = document.createElement('div');
-			container = new LTP.Container(containingElement);
+			outerElement.appendChild(containingElement);
+
+			container = new LTP.Container(size, containingElement);
 		});
 
 		describe("zooming", function() {
@@ -30,7 +43,7 @@ describe("Container", function() {
 				var newZoom = 3;
 				var mb = new LTP.MessageBus(['zoomChanged']);
 
-				container = new LTP.Container(containingElement, mb);
+				container = new LTP.Container(s(10, 10), containingElement, mb);
 
 				spyOn(container, 'zoomTo');
 

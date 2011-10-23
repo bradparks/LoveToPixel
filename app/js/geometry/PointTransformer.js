@@ -24,5 +24,5 @@
 			return p(newX, newY);
 		}
 	};
-
 })();
+
