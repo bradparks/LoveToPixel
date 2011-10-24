@@ -10,6 +10,7 @@
 
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
+		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 
 		this._overrideToolState = { down: false, active: false };
 		this._leftToolState = { down: false };
@@ -338,6 +339,10 @@
 
 		_onZoomChanged: function p_onZoomChanged(newZoom) {
 			this._pointTransformer.zoom = newZoom;
+		},
+
+		_onActiveLayerChanged: function p_onActiveLayerChanged(newLayer) {
+			this.activeCanvas = newLayer;
 		}
 
 	};

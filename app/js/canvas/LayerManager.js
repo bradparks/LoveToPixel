@@ -16,12 +16,20 @@
 			this.style.display = visible ? "" : "none";
 		});
 
-		canvas.__defineGetter__("zIndex", function() {
+		canvas.__defineGetter__("index", function() {
 			return parseInt(this.style.zIndex, 10);
+		});
+		canvas.__defineGetter__("isActive", function() {
+			return this.layerManager.activeLayer === this;
+		});
+		canvas.__defineSetter__("isActive", function(active) {
+			if(active) {
+				this.layerManager.setActiveLayerByLayer(this);
+			}
 		});
 	}
 
-	LTP.LayerManager = function LayerManager(size, backgroundColor) {
+	LTP.LayerManager = function LayerManager(size, backgroundColor, messageBus) {
 		if(!(size instanceof LTP.Pair)) {
 			throw new Error("LayerManager: must be constructed with a Pair");
 		}
@@ -30,13 +38,26 @@
 		this._layers = [];
 
 		var backgroundLayer = this._createLayer(this.BaseLayerName, backgroundColor);
+		backgroundLayer.isBackground = true;
 
 		this._layers.push(backgroundLayer);
 		this._activeLayerIndex = 0;
+
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
+
+		this._updateZIndices();
 	};
 
 	LTP.LayerManager.prototype = {
 		BaseLayerName: "background",
+
+		dumpLayers: function() {
+			for(var i = 0; i < this._layers.length; ++i) {
+				var layer = this._layers[i];
+
+				window.open(layer.toDataURL('png'), layer.layerName + i);
+			}
+		},
 
 		get count() {
 			return this._layers.length;
@@ -56,13 +77,28 @@
 			}
 
 			this._activeLayerIndex = index;
+
+			this._messageBus.publish("activeLayerChanged", this.activeLayer);
+
 			return this.activeLayer;
 		},
 
+		setActiveLayerByLayer: function lm_setActiveLayerByLayer(layer) {
+			var index = this._layers.indexOf(layer);
+
+			if(index > -1) {
+				this.setActiveLayer(index);
+			}
+		},
+
 		addNewLayer: function lm_addNewLayer(name) {
-			this._layers.push(this._createLayer(name || "unnamed layer"));
+			this._layers.push(this._createLayer(name || "new layer " + this._layers.length ));
 			this._activeLayerIndex = this._layers.length - 1;
 			this._updateZIndices();
+
+			this._messageBus.publish("newLayerCreated", this.activeLayer);
+
+			this.setActiveLayer(this._activeLayerIndex);
 
 			return this.activeLayer;
 		},
@@ -71,6 +107,26 @@
 			var temp = this._layers[toIndex];
 			this._layers[toIndex] = this._layers[fromIndex];
 			this._layers[fromIndex] = temp;
+			this._updateZIndices();
+		},
+
+		moveLayerAhead: function(movedLayer, targetLayer) {
+			var movedIndex = this._layers.indexOf(movedLayer);
+			this._layers.splice(movedIndex, 1);
+
+			var targetIndex = this._layers.indexOf(targetLayer);
+			this._layers.splice(targetIndex + 1, 0, movedLayer);
+
+			this._updateZIndices();
+		},
+
+		moveLayerBehind: function(movedLayer, targetLayer) {
+			var movedIndex = this._layers.indexOf(movedLayer);
+			this._layers.splice(movedIndex, 1);
+
+			var targetIndex = this._layers.indexOf(targetLayer);
+			this._layers.splice(targetIndex, 0, movedLayer);
+
 			this._updateZIndices();
 		},
 
@@ -115,6 +171,7 @@
 			var canvas = document.createElement('canvas');
 			canvasToLayer(canvas);
 			canvas.layerName = name;
+			canvas.layerManager = this;
 
 			canvas.width = this._size.width;
 			canvas.height = this._size.height;

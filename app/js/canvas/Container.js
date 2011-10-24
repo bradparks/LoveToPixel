@@ -19,6 +19,8 @@
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
+		this._messageBus.subscribe('newLayerCreated', this.addLayer, this);
+		this._messageBus.subscribe('activeLayerChanged', this._setScratchForLayer, this);
 
 		this._mouseMoveListener = LTP.util.bind(this._onMouseMove, this);
 		this._containingElement.parentNode.addEventListener('mousemove', this._mouseMoveListener, false);
@@ -57,6 +59,7 @@
 
 		addLayer: function c_addLayer(layer) {
 			layer.style.position = 'absolute';
+			layer.style.cursor = 'none';
 			this._centerLayer(layer);
 
 			this._containingElement.appendChild(layer);
@@ -81,7 +84,12 @@
 			grid.style.zIndex = gridIndex;
 		},
 
-		setScratchForLayer: function c_setScratchForLayer(scratch, layer) {		
+		set scratch(scratch) {
+			this._scratch = scratch;
+			this.addLayer(scratch);
+		},
+
+		_setScratchForLayer: function c_setScratchForLayer(layer) {		
 			var layerFound = false;
 			for(var i = 0; i < this._layers.length; ++i) {
 				if(this._layers[i] === layer) {
@@ -92,8 +100,7 @@
 
 			if(layerFound) {
 				var layerZindex = parseInt(layer.style.zIndex, 10);
-				this.addLayer(scratch);
-				scratch.style.zIndex = layerZindex + 1;
+				this._scratch.style.zIndex = layerZindex + 1;
 			}
 		},
 

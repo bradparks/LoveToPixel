@@ -49,29 +49,30 @@
 	</div>
 	<div id="statusBarElement"></div>
 	<script type="text/javascript">
-		if(navigator.userAgent.indexOf('WebKit') < 0) {
-			alert('so far LoveToPixel only works on Chrome and Safari');
-		}
 
 		Ext.onReady(function() {
-			LTP.app.init({
-				toolbarElementId: 'toolbarElement',
-				containerElementId: 'containerElement',
-				statusBarElementId: 'statusBarElement',
-				layerPanelElementId: 'layerPanelElement'
-			});
-
-			var chooser = Ext.create('LTP.ImageChooser', {
-				listeners: {
-					newImage: function(size) {
-						LTP.app.load({
-							imageSize: size
-						});
+			if(navigator.userAgent.indexOf('WebKit') < 0 || !Ext.is.Desktop) {
+				alert('so far LoveToPixel only works on Chrome and Safari');
+			} else {
+				LTP.app.init({
+					toolbarElementId: 'toolbarElement',
+					containerElementId: 'containerElement',
+					statusBarElementId: 'statusBarElement',
+					layerPanelElementId: 'layerPanelElement'
+				});
+	
+				var chooser = Ext.create('LTP.ImageChooser', {
+					listeners: {
+						newImage: function(size) {
+							LTP.app.load({
+								imageSize: size
+							});
+						}
 					}
-				}
-			});
-			chooser.render('containerElement');
-			chooser.alignTo('containerElement', 'c-c');
+				});
+				chooser.render('containerElement');
+				chooser.alignTo('containerElement', 'c-c');
+			}
 		});
 
 	</script>

@@ -17,7 +17,14 @@
 		colors.orange,
 		colors.purple,
 		colors.gray,
-		colors.brown
+		colors.brown,
+		'#FF9999',
+		'#33AA11',
+		'#333333',
+		'#88AAFF',
+		'#337722',
+		
+
 	];
 
 	function _destroyAll(components) {
@@ -69,6 +76,9 @@
 			s: function() {
 				var composited = LTP.app.layerManager.composite();
 				window.open(composited.toDataURL('png'), 'savedImage');
+			},
+			d: function() {
+				LTP.app.layerManager.dumpLayers();
 			},
 			' down': function() {
 				if(_overrideActive) {
@@ -130,7 +140,10 @@
 			this.painter.activeCanvas = this.layerManager.activeLayer;
 			this.container.overlay = this.painter.overlay;
 			this.container.grid = this.grid.canvas;
-			this.container.setScratchForLayer(this.painter.scratch, this.layerManager.activeLayer);
+			this.container.scratch = this.painter.scratch;//setScratchForLayer(this.painter.scratch, this.layerManager.activeLayer);
+
+			// TODO: this is nasty
+			LTP.GlobalMessageBus.publish('activeLayerChanged', this.layerManager.activeLayer);
 
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor) {
 				this.painter.leftTool = new LTP.BrushTool(hexColor, 20);

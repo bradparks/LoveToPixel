@@ -23,7 +23,9 @@
 		'leftToolChanged',
 		'rightToolChanged',
 		'leftColorSelected',
-		'rightColorSelected'
+		'rightColorSelected',
+		'newLayerCreated',
+		'activeLayerChanged'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);
