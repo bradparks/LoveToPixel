@@ -55,6 +55,18 @@ Here are the key commands for the preview version:
 
 So far LTP only works in Chrome or Safari. All other browsers will fail. This is a temporary situation.
 
+## How to use layers ##
+Layers are modeled after most other image apps:
+
+* click 'New' to add a new layer
+* the 'V' indicates if that layer is visible or not
+* double click a layer to edit it (set visibility and change its name)
+* drag layers around to reorder them
+* the currently selected/highlighted layer is the active one, that is where you will paint into
+* so far, cannot delete layers
+* so far, cannot merge layers
+
+
 # Known Issues #
 There are many. This is very early code. Let's see here:
 
@@ -66,7 +78,7 @@ There are many. This is very early code. Let's see here:
 * right brush is always 50 pixels
 * no permanent save support
 * the fill tool always fills blue and ignores your selected colors
-
+* editing a layer in the layer view is a bit iffy when there are only a couple of layers (the UI for editing typically scrolls up out of view, add some more layers to work around this)
 
 # License ... #
 I'm not sure what kind of license I'm going to use for LTP ultimately. For now I have chosen GPL 3, but that is (very) likely to change once this project solidifies. See the COPYING file for more info. I also chose to use Ext4, which also locks me into GPL for the moment.
