@@ -46,7 +46,7 @@ Here are the key commands for the preview version:
 * s - save to a png in a new window
 * d - dump all layers to new windows (for debugging)
 * i - toggle on/off the eye dropper tool
-* spacebar - pan the image
+* hold spacebar - pan the image
 * k - paint bucket fill tool
 * left click in image -- paint with left tool
 * right click in image -- paint with right tool
