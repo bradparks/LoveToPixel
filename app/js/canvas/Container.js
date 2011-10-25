@@ -19,15 +19,16 @@
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
-		this._messageBus.subscribe('newLayerCreated', this.addLayer, this);
-		this._messageBus.subscribe('activeLayerChanged', this._setScratchForLayer, this);
+		this._messageBus.subscribe('newLayerCreated', this._onNewLayerCreated, this);
+		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 
 		this._mouseMoveListener = LTP.util.bind(this._onMouseMove, this);
 		this._containingElement.parentNode.addEventListener('mousemove', this._mouseMoveListener, false);
 
 		this._pointTransformer = new LTP.PointTransformer();
 
-		window.addEventListener("resize", LTP.util.bind(this._centerLayers, this), false);
+		this._windowResizeListener = LTP.util.bind(this._onWindowResize, this);
+		window.addEventListener("resize", this._windowResizeListener, false);
 	};
 
 	LTP.Container.prototype = {
@@ -116,8 +117,20 @@
 			this.zoomTo(newZoom);
 		},
 
+		_onNewLayerCreated: function c_onNewLayerCreated(layer) {
+			this.addLayer(layer);
+		},
+
+		_onActiveLayerChanged: function c_onActiveLayerChanged(layer) {
+			this._setScratchForLayer(layer);
+		},
+
 		_onMouseMove: function c_onMouseMove(e) {
 			this._mouseCoords = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
+		},
+
+		_onWindowResize: function c_onWindowResize() {
+			this._centerLayers();
 		}
 	};
 

@@ -1,5 +1,6 @@
 describe("Container", function() {
 	var size = s(10, 20);
+	var messages = ['zoomChanged', 'newLayerCreated', 'activeLayerChanged'];
 
 	describe("construction", function() {
 		it("should throw if not given a size", function() {
@@ -21,13 +22,16 @@ describe("Container", function() {
 	describe("operations", function() {
 		var containingElement;
 		var container;
+		var mb;
 
 		beforeEach(function() {
 			outerElement = document.createElement('div');
 			containingElement = document.createElement('div');
 			outerElement.appendChild(containingElement);
 
-			container = new LTP.Container(size, containingElement);
+			mb = new LTP.MessageBus(messages);
+
+			container = new LTP.Container(size, containingElement, mb);
 		});
 
 		describe("zooming", function() {
@@ -41,10 +45,6 @@ describe("Container", function() {
 
 			it("should respond to the zoomChanged message", function() {
 				var newZoom = 3;
-				var mb = new LTP.MessageBus(['zoomChanged']);
-
-				container = new LTP.Container(s(10, 10), containingElement, mb);
-
 				spyOn(container, 'zoomTo');
 
 				mb.publish('zoomChanged', newZoom);
@@ -117,8 +117,10 @@ describe("Container", function() {
 
 				var scratch = document.createElement('canvas');
 				
+				container.scratch = scratch;
 				container.addLayer(layer);
-				container.setScratchForLayer(scratch, layer);
+
+				mb.publish('activeLayerChanged', layer);
 
 				expect(scratch.style.zIndex).toEqual((layerZindex + 1).toString());
 			});

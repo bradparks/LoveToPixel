@@ -19,14 +19,6 @@
 		canvas.__defineGetter__("index", function() {
 			return parseInt(this.style.zIndex, 10);
 		});
-		canvas.__defineGetter__("isActive", function() {
-			return this.layerManager.activeLayer === this;
-		});
-		canvas.__defineSetter__("isActive", function(active) {
-			if(active) {
-				this.layerManager.setActiveLayerByLayer(this);
-			}
-		});
 	}
 
 	LTP.LayerManager = function LayerManager(size, backgroundColor, messageBus) {
@@ -101,13 +93,6 @@
 			this.setActiveLayer(this._activeLayerIndex);
 
 			return this.activeLayer;
-		},
-
-		moveLayer: function lm_moveLayer(fromIndex, toIndex) {
-			var temp = this._layers[toIndex];
-			this._layers[toIndex] = this._layers[fromIndex];
-			this._layers[fromIndex] = temp;
-			this._updateZIndices();
 		},
 
 		moveLayerAhead: function(movedLayer, targetLayer) {

@@ -167,26 +167,44 @@ describe("LayerManager", function() {
 			}
 		});
 
-		it("should move the layer correctly", function() {
-			for(var i = 0; i < 2; ++i) {
-				layerManager.addNewLayer("otherLayer" + i);
+		it("should move the layer after correctly", function() {
+			var layers = [];
+			for(var i = 0; i < 5; ++i) {
+				layers.push(layerManager.addNewLayer("otherLayer" + i));
 			}
 
-			var targetLayerName = "targetLayer";
-			var targetLayer = layerManager.addNewLayer(targetLayerName);
+			// layers = [ol0, ol1, ol2, ol3, ol4]
 
-			expect(targetLayer.style.zIndex).toEqual('9');
+			layerManager.moveLayerAhead(layers[0], layers[3]);
 
-			layerManager.moveLayer(3, 2);
-			
-			var thirdLayer = layerManager.setActiveLayer(3);
-			var secondLayer = layerManager.setActiveLayer(2);
+			layers = [layers[1], layers[2], layers[3], layers[0], layers[4]];
 
-			expect(thirdLayer.layerName).toEqual("otherLayer1");
-			expect(secondLayer.layerName).toEqual(targetLayerName);
-			expect(thirdLayer.style.zIndex).toEqual('9');
-			expect(secondLayer.style.zIndex).toEqual('6');
+			for(var i = 0; i < layers.length; ++i) {
+				// +1 because layerManager's layers array also contains the background
+				expect(layerManager.layers[i+1]).toEqual(layers[i]);
+				expect(layerManager.layers[i].style.zIndex).toEqual((i*3).toString());
+			}
 		});
+
+		it("should move the layer behind correctly", function() {
+			var layers = [];
+			for(var i = 0; i < 5; ++i) {
+				layers.push(layerManager.addNewLayer("otherLayer" + i));
+			}
+
+			// layers = [ol0, ol1, ol2, ol3, ol4]
+
+			layerManager.moveLayerBehind(layers[0], layers[3]);
+
+			layers = [layers[1], layers[2], layers[0], layers[3], layers[4]];
+
+			for(var i = 0; i < layers.length; ++i) {
+				// +1 because layerManager's layers array also contains the background
+				expect(layerManager.layers[i+1]).toEqual(layers[i]);
+				expect(layerManager.layers[i].style.zIndex).toEqual((i*3).toString());
+			}
+		});
+		
 	});
 
 	describe("compositing", function() {

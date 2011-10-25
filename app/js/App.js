@@ -140,7 +140,7 @@
 			this.painter.activeCanvas = this.layerManager.activeLayer;
 			this.container.overlay = this.painter.overlay;
 			this.container.grid = this.grid.canvas;
-			this.container.scratch = this.painter.scratch;//setScratchForLayer(this.painter.scratch, this.layerManager.activeLayer);
+			this.container.scratch = this.painter.scratch;
 
 			// TODO: this is nasty
 			LTP.GlobalMessageBus.publish('activeLayerChanged', this.layerManager.activeLayer);

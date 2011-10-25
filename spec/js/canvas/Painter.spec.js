@@ -1,5 +1,5 @@
 describe("Painter", function() {
-	var messages = [ 'zoomChanged', 'leftToolChanged', 'rightToolChanged' ];
+	var messages = [ 'zoomChanged', 'leftToolChanged', 'rightToolChanged', 'activeLayerChanged' ];
 	var mockSize = p(10,10);
 	var mockPointTransformer = {
 		transform: function(point) { return point; }

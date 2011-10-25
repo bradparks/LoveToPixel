@@ -85,12 +85,14 @@
 				}
 			}];
 
+			this.disabled = true;
 			this.callParent(arguments);
 		},
 
 		load: function(layerManager) {
 			this.layerManager = layerManager;
 			this._addLayersToStore(this.viewStore, layerManager);
+			this.setDisabled(false);
 		},
 
 		_selectionChange: function(selectionModel, selectedRecords, options) {
