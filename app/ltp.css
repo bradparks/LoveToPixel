@@ -17,7 +17,7 @@ body, html {
 	position: absolute;
 	top: 0;
 	left: 0;
-	bottom: 30px;
+	bottom: 0;
 	width: 200px;
 	overflow: auto;
 	background-color: black;
@@ -28,7 +28,7 @@ body, html {
 	top: 25px;
 	left: 200px;
 	right: 0;
-	bottom: 30px;
+	bottom: 20px;
 	overflow: auto;
 	image-rendering: -webkit-optimize-contrast;
 	background-color: gray;
@@ -43,8 +43,8 @@ body, html {
 #statusBarElement {
 	position: absolute;
 	bottom: 0;
-	left: 0;
+	left: 200px;
 	right: 0;
-	height: 30px;
+	height: 20px;
 }
 
