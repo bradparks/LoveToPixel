@@ -9,22 +9,24 @@ body, html {
 #toolbarElement {
 	position: absolute;
 	top: 0;
-	left: 0;
-	right: 0;
+	left: 200px;
 	height: 25px;
 }
 
 #layerPanelElement {
 	position: absolute;
-	top: 25px;
+	top: 0;
 	left: 0;
-	width: 300px;
+	bottom: 30px;
+	width: 200px;
+	overflow: auto;
+	background-color: black;
 }
 
 #outerContainerElement {
 	position: absolute;
 	top: 25px;
-	left: 300px;
+	left: 200px;
 	right: 0;
 	bottom: 30px;
 	overflow: auto;
@@ -44,10 +46,5 @@ body, html {
 	left: 0;
 	right: 0;
 	height: 30px;
-}
-
-
-canvas {
-	border: 1px solid gray;
 }
 

@@ -24,6 +24,7 @@
 			this.items = [{
 				xtype: 'grid',
 				multiSelect: false,
+				sortableColumns: false,
     		viewConfig: {
         		plugins: {
             		ptype: 'gridviewdragdrop',
@@ -47,14 +48,15 @@
 				columns: [
 					{
 						xtype: 'booleancolumn',
-						trueText: 'V',
-						falseText: '-',
-						header: 'V', 
+						trueText: '<img src="visible.png" />',
+						falseText: ' ',
+						header: '', 
 						dataIndex: 'isVisible',
 						width: 30,
 						field: {
 							xtype: 'checkboxfield'
-						}
+						},
+						menuDisabled: true
 					},
 					{
 						header: 'Name',
@@ -62,7 +64,8 @@
 						flex: 1,
 						field: {
 							xtype: 'textfield'
-						}
+						},
+						menuDisabled: true
 					}
 				],
     		selType: 'rowmodel',
