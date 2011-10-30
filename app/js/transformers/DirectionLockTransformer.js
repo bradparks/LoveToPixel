@@ -1,5 +1,9 @@
 (function() {
 	LTP.DirectionLockTransformer = function DirectionLockTransformer(direction) {
+		if(!direction) {
+			throw new Error("DirectionLockTransformer: direction is required");
+		}
+
 		this._direction = direction;
 	};
 
