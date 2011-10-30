@@ -163,7 +163,7 @@ describe("LayerManager", function() {
 			
 			for(var i = 0; i < layerManager.count; ++i) {
 				var layer = layerManager.setActiveLayer(i);
-				expect(layer.style.zIndex).toEqual((i*3).toString());
+				expect(layer.style.zIndex).toEqual(((i+1)*3).toString());
 			}
 		});
 
@@ -182,7 +182,7 @@ describe("LayerManager", function() {
 			for(var i = 0; i < layers.length; ++i) {
 				// +1 because layerManager's layers array also contains the background
 				expect(layerManager.layers[i+1]).toEqual(layers[i]);
-				expect(layerManager.layers[i].style.zIndex).toEqual((i*3).toString());
+				expect(layerManager.layers[i].style.zIndex).toEqual(((i+1)*3).toString());
 			}
 		});
 
@@ -201,7 +201,7 @@ describe("LayerManager", function() {
 			for(var i = 0; i < layers.length; ++i) {
 				// +1 because layerManager's layers array also contains the background
 				expect(layerManager.layers[i+1]).toEqual(layers[i]);
-				expect(layerManager.layers[i].style.zIndex).toEqual((i*3).toString());
+				expect(layerManager.layers[i].style.zIndex).toEqual(((i+1)*3).toString());
 			}
 		});
 		
