@@ -180,7 +180,8 @@
 					currentPoint: currentPoint,
 					lastPointNonTransformed: currentPointNonTransformed,
 					currentPointNonTransformed: currentPointNonTransformed,
-					containerElement: this._activeCanvas.parentNode.parentNode
+					containerElement: this._activeCanvas.parentNode.parentNode,
+					mouseButton: e.button
 				});
 				
 				toolState.lastPoint = currentPoint;
@@ -227,7 +228,8 @@
 					currentPoint: currentPoint,
 					lastPointNonTransformed: lastPointNonTransformed,
 					currentPointNonTransformed: currentPointNonTransformed,
-					containerElement: this._activeCanvas.parentNode.parentNode
+					containerElement: this._activeCanvas.parentNode.parentNode,
+					mouseButton: e.button
 				});
 				toolState.lastPoint = currentPoint;
 				toolState.lastPointNonTransformed = currentPointNonTransformed;

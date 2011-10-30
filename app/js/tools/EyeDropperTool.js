@@ -25,7 +25,7 @@
 			this._sampledRgbColor = this._pixelToRgbString(pixelData.data);
 			this._sampledHexColor = this._pixelToHexString(pixelData.data);
 
-			this._messageBus.publish('colorSampled', this._sampledRgbColor, this._sampledHexColor);
+			this._messageBus.publish('colorSampled', this._sampledRgbColor, this._sampledHexColor, e.mouseButton);
 		},
 
 		overlay: function edt_overlay(context, point) {

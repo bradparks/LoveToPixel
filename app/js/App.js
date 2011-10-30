@@ -174,8 +174,12 @@
 			// TODO: this is nasty
 			LTP.GlobalMessageBus.publish('activeLayerChanged', this.layerManager.activeLayer);
 
-			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor) {
-				this.painter.leftTool = new LTP.BrushTool(hexColor, 20);
+			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor, mouseButton) {
+				var prefix = mouseButton === 0 ? 'left' : 'right';
+				var size = mouseButton === 0 ? 20 : 50;
+
+				this.painter[prefix + 'Tool'] = new LTP.BrushTool(hexColor, size);
+				this.painter.popOverrideTool();
 			}, this);
 
 			LTP.GlobalMessageBus.subscribe('leftColorSelected', function(color) {
