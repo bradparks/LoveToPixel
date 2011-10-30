@@ -31,7 +31,7 @@
 				context.fillStyle = 'rgba(255, 0, 0, .5)';
 				this._placePoint(context, point);
 			} else {
-				context.strokeStyle = 'gray';
+				context.strokeStyle = 'orange';
 				context.lineWidth = 1;
 				this._placePoint(context, point, true);
 			}

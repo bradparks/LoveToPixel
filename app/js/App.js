@@ -149,7 +149,7 @@
 			_destroyAll(this._components);
 			this._components = [];
 
-			this.layerManager = new LTP.LayerManager(size, colors.white);
+			this.layerManager = new LTP.LayerManager(size);
 			this._components.push(this.layerManager);
 
 			this.container = new LTP.Container(size, document.getElementById(this.containerElementId));

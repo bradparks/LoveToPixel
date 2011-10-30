@@ -310,7 +310,8 @@
 			this._undoRedoStates.push({
 				boundingBox: boundingBox,
 				undoClip: this._createClip(this._activeCanvas, boundingBox),
-				redoClip: this._createClip(this._scratch, boundingBox)
+				redoClip: this._createClip(this._scratch, boundingBox),
+				canvas: this._activeCanvas
 			});
 
 			this._applyClip(this._activeCanvas, this._scratch, this._entireBoundingBox);
@@ -336,10 +337,13 @@
 			return clipCanvas;
 		},
 
-		_applyClip: function(destination, source, boundingBox) {
+		_applyClip: function(destination, source, boundingBox, clearFirst) {
 			var destContext = destination.getContext('2d');
 
 			if(typeof source.getContext === 'function') {
+				if(clearFirst) {
+					destContext.clearRect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
+				}
 				destContext.drawImage(source, boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
 			} else {
 				destContext.putImageData(source, boundingBox.x, boundingBox.y);
@@ -351,7 +355,7 @@
 
 				var state = this._undoRedoStates[this._currentUndoRedoStateIndex];
 
-				this._applyClip(this._activeCanvas, state.undoClip, state.boundingBox);
+				this._applyClip(state.canvas, state.undoClip, state.boundingBox, true);
 				--this._currentUndoRedoStateIndex;
 			}
 		},
@@ -362,7 +366,7 @@
 		
 				var state = this._undoRedoStates[this._currentUndoRedoStateIndex];
 		
-				this._applyClip(this._activeCanvas, state.redoClip, state.boundingBox);
+				this._applyClip(state.canvas, state.redoClip, state.boundingBox, false);
 			}
 		},
 
@@ -373,7 +377,6 @@
 		_onActiveLayerChanged: function p_onActiveLayerChanged(newLayer) {
 			this.activeCanvas = newLayer;
 		}
-
 	};
 
 })();
