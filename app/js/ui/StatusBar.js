@@ -19,6 +19,9 @@
 				xtype: 'ltp.currentcoordinates'
 			},
 			{
+				xtype: 'ltp.currentlock'
+			},
+			{
 				xtype: 'container',
 				html: '<b>LoveToPixel: extremely early code, not at all done or ready, stay tuned! </b>' + 
 					'<a href="mailto:matt.e.greer@gmail.com?subject=LTP">matt.e.greer@gmail.com</a>, ' +

@@ -25,7 +25,8 @@
 		'leftColorSelected',
 		'rightColorSelected',
 		'newLayerCreated',
-		'activeLayerChanged'
+		'activeLayerChanged',
+		'lockChanged'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);

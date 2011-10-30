@@ -110,15 +110,19 @@
 				_currentLockIndex = (_currentLockIndex + 1) % _lockDirections.length;
 
 				LTP.app.painter.adhocTransformer = new LTP.DirectionLockTransformer(direction);
+				LTP.GlobalMessageBus.publish('lockChanged', direction);
 			},
 			controlup: function() {
 				LTP.app.painter.adhocTransformer = null;
+				LTP.GlobalMessageBus.publish('lockChanged', null);
 			},
 			altdown: function() {
 				LTP.app.painter.adhocTransformer = new LTP.BrushSizeLockTransformer(20);
+				LTP.GlobalMessageBus.publish('lockChanged', 'brush');
 			},
 			altup: function() {
 				LTP.app.painter.adhocTransformer = null;
+				LTP.GlobalMessageBus.publish('lockChanged', null);
 			}
 		},
 

@@ -127,6 +127,24 @@
 			return this._rightToolState;
 		},
 
+		_doOverlay: function p_doOverlay(point) {
+				var point = point || this._lastOverlayPoint;
+
+				if(point) {
+					this._clear(this._overlay);
+					var context = this._overlay.getContext('2d');
+					this._lastToolState.tool.overlay(context, point);
+
+					if(this._adhocTransformer && this._adhocTransformer.overlay) {
+						this._adhocTransformer.overlay(context, point);
+					}
+
+					this._lastOverlayPoint = point;
+				}
+
+				this._messageBus.publish('canvasMouseCoordinatesChanged', point);
+		},
+
 		_onMouseDown: function p_onMouseDown(e) {
 			e.preventDefault();
 			this._clear(this._overlay);
@@ -186,7 +204,6 @@
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
 
 
-			var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
 
 			if(toolState && toolState.down) {
 				var lastPoint = toolState.lastPoint || currentPoint;
@@ -195,6 +212,8 @@
 				if(this._adhocTransformer) {
 					currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint);
 				}
+
+				var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
 
 				toolState.tool.perform({
 					canvas: canvas,
@@ -216,24 +235,6 @@
 			}
 
 			this._doOverlay(currentPoint);
-		},
-
-		_doOverlay: function p_doOverlay(point) {
-				var point = point || this._lastOverlayPoint;
-
-				if(point) {
-					this._clear(this._overlay);
-					var context = this._overlay.getContext('2d');
-					this._lastToolState.tool.overlay(context, point);
-
-					if(this._adhocTransformer && this._adhocTransformer.overlay) {
-						this._adhocTransformer.overlay(context, point);
-					}
-
-					this._lastOverlayPoint = point;
-				}
-
-				this._messageBus.publish('canvasMouseCoordinatesChanged', point);
 		},
 
 		_onMouseUp: function p_onMouseUp(e) {
@@ -287,6 +288,10 @@
 				if(activeToolState.tool.causesChange) {
 					this._finishUndoRedo(this._lastToolState.tool, currentPoint);
 				}
+			}
+
+			if(this._adhocTransformer && this._adhocTransformer.reset) {
+				this._adhocTransformer.reset();
 			}
 
 			this._messageBus.publish('canvasMouseCoordinatesChanged', null);
