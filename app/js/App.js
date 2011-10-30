@@ -47,6 +47,15 @@
 
 	var app = {
 		callbacks: {
+			c: function() {
+				if(!LTP.app.floatingPalette) {
+					LTP.app.floatingPalette = Ext.create('LTP.FloatingPalette', {
+						colors: _colors,
+					});
+				}
+
+				LTP.app.floatingPalette.popup();
+			},
 			z: function() {
 				_currentZoomIndex = (_currentZoomIndex + 1) % _zoomLevels.length;
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
@@ -131,11 +140,6 @@
 
 			this.statusBar = Ext.create('LTP.StatusBar', {
 				renderTo: this.statusBarElementId
-			});
-
-			this.toolbar = Ext.create('LTP.Toolbar', {
-				colors: _colors,
-				renderTo: this.toolbarElementId
 			});
 
 			this.layerPanel = Ext.create('LTP.LayerPanel', {

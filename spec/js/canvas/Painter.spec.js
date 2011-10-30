@@ -1,5 +1,14 @@
 describe("Painter", function() {
-	var messages = [ 'zoomChanged', 'leftToolChanged', 'rightToolChanged', 'activeLayerChanged' ];
+	var messages = [
+		'zoomChanged', 
+		'leftToolChanged',
+		'rightToolChanged',
+		'activeLayerChanged',
+		'leftColorSelected',
+		'rightColorSelected',
+		'canvasMouseCoordinatesChanged'
+	];
+
 	var mockSize = p(10,10);
 	var mockPointTransformer = {
 		transform: function(point) { return point; }
@@ -201,6 +210,21 @@ describe("Painter", function() {
 			painter.rightTool = rightTool2;
 
 			expect(callbackCount).toBe(4);
+		});
+
+		it("should set the current tool when a color is selected", function() {
+			var leftTool = { id: 'leftTool1' };
+			var rightTool = { id: 'rightTool1' };
+
+			var mb = new LTP.MessageBus(messages);
+
+			var painter = new LTP.Painter(s(4,4), mockPointTransformer, mb, leftTool, rightTool);
+
+			mb.publish('rightColorSelected');
+			expect(painter._lastToolState.tool).toBe(rightTool);
+
+			mb.publish('leftColorSelected');
+			expect(painter._lastToolState.tool).toBe(leftTool);
 		});
 	});
 });

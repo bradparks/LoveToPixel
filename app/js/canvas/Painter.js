@@ -11,6 +11,8 @@
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
+		this._messageBus.subscribe('leftColorSelected', this._onLeftColorSelected, this);
+		this._messageBus.subscribe('rightColorSelected', this._onRightColorSelected, this);
 
 		this._overrideToolState = { down: false, active: false };
 		this._leftToolState = { down: false };
@@ -97,6 +99,9 @@
 
 		destroy: function() {
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
+		this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
+		this._messageBus.unsubscribe('leftColorSelected', this._onLeftColorSelected);
+		this._messageBus.unsubscribe('rightColorSelected', this._onRightColorSelected);
 		},
 
 		_hook: function p_hook(canvas) {
@@ -158,8 +163,7 @@
 				currentPoint = this._adhocTransformer.transform(currentPoint, currentPoint);
 			}
 	
-			// prevent painting if switching tools
-			if(toolState && toolState == this._lastToolState) {
+			if(toolState) {
 				if(toolState.tool.causesChange) {
 					this._pruneUndoRedoStates();
 				}
@@ -376,6 +380,16 @@
 
 		_onActiveLayerChanged: function p_onActiveLayerChanged(newLayer) {
 			this.activeCanvas = newLayer;
+		},
+
+		_onLeftColorSelected: function p_onLeftColorSelected() {
+			this._lastToolState = this._leftToolState;
+			this._doOverlay();
+		},
+
+		_onRightColorSelected: function p_onRightColorSelected() {
+			this._lastToolState = this._rightToolState;
+			this._doOverlay();
 		}
 	};
 

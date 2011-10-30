@@ -8,6 +8,7 @@
 
 		constructor: function(config) {
 			this.callParent(arguments);
+			this.addEvents('click');
 			this.style = {
 				backgroundColor: config.color,
 				border: '1px solid black'
@@ -19,6 +20,7 @@
 					var leftRight = e.button === 0 ? 'left' : 'right';
 
 					LTP.GlobalMessageBus.publish(leftRight + 'ColorSelected', me.color);
+					me.fireEvent('click');
 				});
 
 				me.el.dom.addEventListener('contextmenu', function(e) {
