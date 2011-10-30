@@ -21,21 +21,17 @@
 		});
 	}
 
-	LTP.LayerManager = function LayerManager(size, backgroundColor, messageBus) {
+	LTP.LayerManager = function LayerManager(size, messageBus) {
 		if(!(size instanceof LTP.Pair)) {
 			throw new Error("LayerManager: must be constructed with a Pair");
 		}
 		this._size = size;
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
 		this._layers = [];
 
-		var backgroundLayer = this._createLayer(this.BaseLayerName, backgroundColor);
+		var backgroundLayer = this.addNewLayer(this.BaseLayerName);
 		backgroundLayer.isBackground = true;
-
-		this._layers.push(backgroundLayer);
-		this._activeLayerIndex = 0;
-
-		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
 		this._updateZIndices();
 	};
@@ -177,7 +173,7 @@
 		
 		_updateZIndices: function() {
 			for(var i = 0; i < this._layers.length; ++i) {
-				this._layers[i].style.zIndex = i * 3;
+				this._layers[i].style.zIndex = (i+1) * 3;
 			}
 		}
 	};

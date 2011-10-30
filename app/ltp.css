@@ -40,15 +40,16 @@ body, html {
 	image-rendering: -webkit-optimize-contrast;
 }
 
+#transparencyBackdropElement {
+	border: 2px solid black;
+	background-image: url(transparency.png);
+}
+
 #statusBarElement {
 	position: absolute;
 	bottom: 0;
 	left: 200px;
 	right: 0;
 	height: 20px;
-}
-
-canvas {
-	border: 1px solid black;
 }
 

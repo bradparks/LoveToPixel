@@ -29,6 +29,8 @@
 
 		this._windowResizeListener = LTP.util.bind(this._onWindowResize, this);
 		window.addEventListener("resize", this._windowResizeListener, false);
+
+		this._addTransparencyBackdrop();
 	};
 
 	LTP.Container.prototype = {
@@ -44,6 +46,7 @@
 		},
 
 		_centerLayers: function() {
+			this._centerLayer(this._backdrop);
 			for(var i = 0; i < this._layers.length; ++i) {
 				this._centerLayer(this._layers[i]);
 			}
@@ -65,6 +68,22 @@
 
 			this._containingElement.appendChild(layer);
 			this._layers.push(layer);
+		},
+
+		_addTransparencyBackdrop: function c_addTransparencyBackdrop() {
+			var backdrop = document.createElement('div');
+			backdrop.id = 'transparencyBackdropElement';
+			backdrop.style.position = 'absolute'
+			backdrop.style.cursor = 'none';
+			backdrop.style.width = this._imageSize.width + "px";
+			backdrop.style.height = this._imageSize.height + "px";
+			backdrop.width = this._imageSize.width;
+			backdrop.height = this._imageSize.height;
+
+			this._containingElement.appendChild(backdrop);
+			this._centerLayer(backdrop);
+
+			this._backdrop = backdrop;
 		},
 
 		_centerLayer: function c_centerLayer(layer) {
