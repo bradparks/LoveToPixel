@@ -31,12 +31,6 @@
             		dragText: 'Drag and drop to reorganize'
         		},
 						listeners: {
-							beforedrop: function(node, data, overModel, dropPosition, dropFunction, options) {
-								if(data.records[0].data.isBackground || (overModel.data.isBackground && dropPosition === 'after')) {
-									return false;
-								}
-								return true;
-							},
 							drop: function(node, data, overModel, dropPosition) {
 								var suffix = dropPosition === 'before' ? 'Ahead' : 'Behind';
 								me.layerManager['moveLayer' + suffix](data.records[0].data, overModel.data);

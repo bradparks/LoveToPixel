@@ -31,13 +31,12 @@
 		this._layers = [];
 
 		var backgroundLayer = this.addNewLayer(this.BaseLayerName);
-		backgroundLayer.isBackground = true;
 
 		this._updateZIndices();
 	};
 
 	LTP.LayerManager.prototype = {
-		BaseLayerName: "background",
+		BaseLayerName: "initial layer",
 
 		dumpLayers: function() {
 			for(var i = 0; i < this._layers.length; ++i) {
