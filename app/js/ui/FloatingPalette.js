@@ -13,32 +13,15 @@
 		autoRender: true,
 		floating: true,
 		layout: 'column',
+		isPopped: false,
 
-		defaults: {
-			xtype: 'ltp.swatch'
-		},
-
-		initComponent: function() {
-			var colors = this.colors || [];
-			var items = [];
-
-			for(var i = 0; i < colors.length; ++i) {
-				items.push({
-					color: colors[i],
-					listeners: {
-						click: function() {
-							this.up('panel').hide();
-						}
-					}
-				});
+		togglePopup: function() {
+			if(!this.isPopped) {
+				this.showAt(_mouseX - this.width / 2, _mouseY - this.height - 30);
+			} else {
+				this.hide();
 			}
-
-			this.items = items;
-			this.callParent(arguments);
-		},
-
-		popup: function() {
-			this.showAt(_mouseX - this.width / 2, _mouseY - this.height - 30);
+			this.isPopped = !this.isPopped;
 		}
 	},
 	function() {

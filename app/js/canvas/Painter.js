@@ -249,7 +249,7 @@
 			var toolState = this._getToolStateForButton(e.button);
 			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
 
-			if(toolState) {
+			if(toolState && toolState.down) {
 				toolState.down = false;
 				toolState.lastPoint = null;
 

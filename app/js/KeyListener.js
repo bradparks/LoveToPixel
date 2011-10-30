@@ -4,7 +4,8 @@
 		'17' : 'control',
 		'18' : 'alt',
 		'32' : 'space',
-		'91' : 'command'
+		'91' : 'command',
+		'27' : 'esc'
 	};
 
 	LTP.KeyListener = function KeyListener(config) {
@@ -33,7 +34,7 @@
 			return _specialKeys[keyCode] || String.fromCharCode(keyCode).toLowerCase();
 		},
 		_onKeyPress: function kl_onKeyPress(e) {
-			var character = String.fromCharCode(e.charCode);
+			var character =  this._getCharacter(e.keyCode); 
 			character = character.toLowerCase();
 
 			if(character === ' ') {

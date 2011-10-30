@@ -1,7 +1,7 @@
 (function() {
-	Ext.define('LTP.Swatch', {
+	Ext.define('LTP.ColorSwatch', {
 		extend: 'Ext.container.Container',
-		alias: 'widget.ltp.swatch',
+		alias: 'widget.ltp.colorswatch',
 		width: 20,
 		height: 20,
 		margin: 1,

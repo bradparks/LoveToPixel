@@ -48,13 +48,19 @@
 	var app = {
 		callbacks: {
 			c: function() {
-				if(!LTP.app.floatingPalette) {
-					LTP.app.floatingPalette = Ext.create('LTP.FloatingPalette', {
-						colors: _colors,
+				if(!LTP.app.floatingColorPalette) {
+					LTP.app.floatingColorPalette = Ext.create('LTP.FloatingColorPalette', {
+						colors: _colors
 					});
 				}
 
-				LTP.app.floatingPalette.popup();
+				LTP.app.floatingColorPalette.togglePopup();
+			},
+			escdown: function() {
+				// TODO: this should be incorporated into the palette
+				if(LTP.app.floatingColorPalette.isPopped) {
+					LTP.app.floatingColorPalette.togglePopup();
+				}
 			},
 			z: function() {
 				_currentZoomIndex = (_currentZoomIndex + 1) % _zoomLevels.length;
