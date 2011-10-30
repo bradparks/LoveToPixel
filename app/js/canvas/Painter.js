@@ -90,6 +90,11 @@
 			this._doOverlay();
 		},
 
+		set adhocTransformer(transformer) {
+			this._adhocTransformer = transformer;
+			this._doOverlay();
+		},
+
 		destroy: function() {
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
 		},
@@ -130,6 +135,10 @@
 			var toolState = this._getToolStateForButton(e.button);
 			var currentPointNonTransformed = p(e.offsetX, e.offsetY);
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
+
+			if(this._adhocTransformer) {
+				currentPoint = this._adhocTransformer.transform(currentPoint, currentPoint);
+			}
 	
 			// prevent painting if switching tools
 			if(toolState && toolState == this._lastToolState) {
@@ -176,11 +185,16 @@
 			var currentPointNonTransformed = p(e.offsetX, e.offsetY);
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
 
+
 			var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
 
 			if(toolState && toolState.down) {
 				var lastPoint = toolState.lastPoint || currentPoint;
 				var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
+
+				if(this._adhocTransformer) {
+					currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint);
+				}
 
 				toolState.tool.perform({
 					canvas: canvas,
@@ -209,7 +223,13 @@
 
 				if(point) {
 					this._clear(this._overlay);
-					this._lastToolState.tool.overlay(this._overlay.getContext('2d'), point);
+					var context = this._overlay.getContext('2d');
+					this._lastToolState.tool.overlay(context, point);
+
+					if(this._adhocTransformer && this._adhocTransformer.overlay) {
+						this._adhocTransformer.overlay(context, point);
+					}
+
 					this._lastOverlayPoint = point;
 				}
 
@@ -230,6 +250,10 @@
 				if(toolState.tool.causesChange) {
 					this._finishUndoRedo(toolState.tool, currentPoint);
 				}
+			}
+
+			if(this._adhocTransformer && this._adhocTransformer.reset) {
+				this._adhocTransformer.reset();
 			}
 
 			this._doOverlay(currentPoint);

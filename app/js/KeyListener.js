@@ -1,4 +1,12 @@
 (function() {
+	var _specialKeys = {
+		'16' : 'shift',
+		'17' : 'control',
+		'18' : 'alt',
+		'32' : 'space',
+		'91' : 'command'
+	};
+
 	LTP.KeyListener = function KeyListener(config) {
 		var me = this;
 		if(!config) {
@@ -21,6 +29,9 @@
 	};
 
 	LTP.KeyListener.prototype = {
+		_getCharacter: function(keyCode) {
+			return _specialKeys[keyCode] || String.fromCharCode(keyCode).toLowerCase();
+		},
 		_onKeyPress: function kl_onKeyPress(e) {
 			var character = String.fromCharCode(e.charCode);
 			character = character.toLowerCase();
@@ -37,7 +48,7 @@
 		},
 
 		_onKeyDown: function kl_onKeyDown(e) {
-			var character = String.fromCharCode(e.keyCode).toLowerCase();
+			var character =  this._getCharacter(e.keyCode); 
 
 			if(character === ' ') {
 				e.preventDefault();
@@ -57,7 +68,7 @@
 		},
 
 		_onKeyUp: function kl_onKeyUp(e) {
-			var character = String.fromCharCode(e.keyCode).toLowerCase();
+			var character =  this._getCharacter(e.keyCode); 
 			var callbackName = character + 'up';
 
 			if(character === ' ') {

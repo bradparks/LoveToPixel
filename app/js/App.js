@@ -6,6 +6,12 @@
 	var _currentGridIndex = 4;
 	var _overrideActive = false;
 
+	var _lockDirections = [
+		LTP.DirectionLockTransformer.directions.upDown,
+		LTP.DirectionLockTransformer.directions.leftRight
+	];
+	var _currentLockIndex = 0;
+
 	var _colors = [
 		colors.white,
 		colors.black,
@@ -80,14 +86,14 @@
 			d: function() {
 				LTP.app.layerManager.dumpLayers();
 			},
-			' down': function() {
+			spacedown: function() {
 				if(_overrideActive) {
 					LTP.app.painter.popOverrideTool();
 				}
 				LTP.app.painter.pushOverrideTool(new LTP.PanningTool());
 				_overrideActive = true;
 			},
-			' up': function() {
+			spaceup: function() {
 				LTP.app.painter.popOverrideTool();
 				_overrideActive = false;
 			},
@@ -98,6 +104,21 @@
 					LTP.app.painter.pushOverrideTool(new LTP.FillTool(colors.blue));
 				}
 				_overrideActive = !_overrideActive;
+			},
+			controldown: function() {
+				var direction = _lockDirections[_currentLockIndex];
+				_currentLockIndex = (_currentLockIndex + 1) % _lockDirections.length;
+
+				LTP.app.painter.adhocTransformer = new LTP.DirectionLockTransformer(direction);
+			},
+			controlup: function() {
+				LTP.app.painter.adhocTransformer = null;
+			},
+			altdown: function() {
+				LTP.app.painter.adhocTransformer = new LTP.BrushSizeLockTransformer(20);
+			},
+			altup: function() {
+				LTP.app.painter.adhocTransformer = null;
 			}
 		},
 
