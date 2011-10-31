@@ -33,7 +33,7 @@
 			} else {
 				context.strokeStyle = 'orange';
 				context.lineWidth = 1;
-				this._placePoint(context, point, true);
+				this._placePoint(context, point, {stroke: true});
 			}
 
 			context.restore();
@@ -78,11 +78,11 @@
 			context.restore();
 		},
 
-		_placePoint: function bt_placePoint(context, point, stroke) {
-			var method = stroke ? context.strokeRect : context.fillRect;
-			var strokeOffset = stroke ? 0.5 : 0;
+		_placePoint: function bt_placePoint(context, point, options) {
+			var method = options && options.stroke ? context.strokeRect : context.fillRect;
+			var strokeOffset = options && options.stroke ? 0.5 : 0;
 
-			method.call(context, point.x - this._size + strokeOffset, point.y - this._size + strokeOffset, this._size, this._size);
+			method.call(context, point.x - this._size - strokeOffset, point.y - this._size - strokeOffset, this._size + (2*strokeOffset), this._size + (2*strokeOffset));
 		},
 
 		_moveTowards: function bt_moveTowards(start, finish) {
