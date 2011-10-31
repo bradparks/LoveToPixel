@@ -29,9 +29,9 @@
 		'#333333',
 		'#88AAFF',
 		'#337722',
-		
-
 	];
+
+	var _sizes = [1,2,3,4,5,8,14];
 
 	function _destroyAll(components) {
 		var component;
@@ -55,6 +55,15 @@
 				}
 
 				LTP.app.floatingColorPalette.togglePopup();
+			},
+			b: function() {
+				if(!LTP.app.floatingSizePalette) {
+					LTP.app.floatingSizePalette = Ext.create('LTP.FloatingSizePalette', {
+						sizes: _sizes
+					});
+				}
+
+				LTP.app.floatingSizePalette.togglePopup();
 			},
 			escdown: function() {
 				// TODO: this should be incorporated into the palette

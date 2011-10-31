@@ -41,7 +41,7 @@ describe("KeyListener", function() {
 			// has a bug where you can't simulate key events
 			// http://groups.google.com/a/chromium.org/group/chromium-bugs/browse_thread/thread/eaa596661c2948b5
 			keyListener._onKeyPress({
-				charCode: "a".charCodeAt(0)
+				keyCode: 65 // a
 			});
 
 			expect(config.callbacks.a).toHaveBeenCalled();
@@ -59,7 +59,7 @@ describe("KeyListener", function() {
 			var keyListener = new LTP.KeyListener(config);
 
 			keyListener._onKeyDown({
-				keyCode: "a".charCodeAt(0)
+				keyCode: 65  // a
 			});
 
 			expect(config.callbacks.adown).toHaveBeenCalled();
