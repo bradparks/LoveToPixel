@@ -39,6 +39,7 @@ Here are the key commands for the preview version:
 * u - undo
 * r - redo
 * c - display the color palette, right or left click a color to pick it for the corresponding tool
+* b - display the brush size palette, so far does nothing
 * 1-9 - pick a color (for the left tool only)
 * z - zoom
 * hold a - return to 100% until a is released
@@ -80,6 +81,7 @@ There are many. This is very early code. Let's see here:
 * editing a layer in the layer view is a bit iffy when there are only a couple of layers (the UI for editing typically scrolls up out of view, add some more layers to work around this)
 * turning on the brush lock (hold down ALT while painting) is hard coded to 20 pixels
 * brushes are hard coded to 20 pixels for left brush, 50 for right.
+* changing brush sizes is not yet supported, but I am working on it (hit 'b' to see the brush size palette in its infancy)
 
 # License ... #
 I'm not sure what kind of license I'm going to use for LTP ultimately. For now I have chosen GPL 3, but that is (very) likely to change once this project solidifies. See the COPYING file for more info. I also chose to use Ext4, which also locks me into GPL for the moment.
