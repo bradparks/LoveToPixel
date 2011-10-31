@@ -137,7 +137,9 @@
 
 			for(var i = 0, l = this.count; i < l; ++i) {
 				var layer = this._layers[i];
-				compositeContext.drawImage(layer, 0, 0);
+				if(layer.isVisible) {
+					compositeContext.drawImage(layer, 0, 0);
+				}
 			}
 
 			return compositeCanvas;
