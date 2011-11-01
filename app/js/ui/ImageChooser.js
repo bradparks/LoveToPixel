@@ -1,5 +1,9 @@
 (function() {
 	function parseSizeString(sizeString) {
+		if(!sizeString) {
+			return sizeString;
+		}
+
 		var parts = sizeString.split('x');
 		return s(parseInt(parts[0], 10), parseInt(parts[1], 10));
 	}
@@ -7,7 +11,7 @@
 	Ext.define('LTP.ImageChooser', {
 		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.imagechooser',
-		layout: 'hbox',
+		//layout: 'vbox',
 
 		width: 400,
 		defaults: {
@@ -31,6 +35,10 @@
 			}
 		},
 		{
+			xtype: 'filefield',
+			label: 'existing image'
+		},
+		{
 			xtype: 'button',
 			text: 'Start',
 			handler: function() {
@@ -50,8 +58,13 @@
 		go: function() {
 			var sizeString = this.down('textfield').getValue();
 			var size = parseSizeString(sizeString); 
+			var fileList = this.down('filefield').fileInputEl.dom.files;
 
-			this.fireEvent('newImage', size);
+			this.fireEvent('newImage', {
+				imageSize: size,
+				imageFile: fileList && fileList[0]
+			});
+
 			this.close();
 		}
 	});

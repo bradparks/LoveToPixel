@@ -163,12 +163,30 @@
 		},
 
 		load: function(project) {
-			var size = project.imageSize;
+			var me = this;
+	
+			if(project.imageFile) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					var img = document.createElement('img');
+					img.onload = function() {
+						me._load(img);
+					};
+					img.src = e.target.result;
+				};
+				reader.readAsDataURL(project.imageFile);
+			} else {
+				me._load(project.imageSize);
+			}
+		},
 
+		_load: function(result) {
+			var size = p(result.width, result.height);
+			
 			_destroyAll(this._components);
 			this._components = [];
 
-			this.layerManager = new LTP.LayerManager(size);
+			this.layerManager = new LTP.LayerManager(result);
 			this._components.push(this.layerManager);
 
 			this.container = new LTP.Container(size, document.getElementById(this.containerElementId));

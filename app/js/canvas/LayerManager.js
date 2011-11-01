@@ -21,16 +21,14 @@
 		});
 	}
 
-	LTP.LayerManager = function LayerManager(size, messageBus) {
-		if(!(size instanceof LTP.Pair)) {
-			throw new Error("LayerManager: must be constructed with a Pair");
-		}
-		this._size = size;
+	LTP.LayerManager = function LayerManager(sizeOrImage, messageBus) {
+		this._size = s(sizeOrImage.width, sizeOrImage.height);
+
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
 		this._layers = [];
 
-		var backgroundLayer = this.addNewLayer(this.BaseLayerName);
+		var backgroundLayer = this.addNewLayer(this.BaseLayerName, sizeOrImage);
 
 		this._updateZIndices();
 	};
@@ -78,8 +76,8 @@
 			}
 		},
 
-		addNewLayer: function lm_addNewLayer(name) {
-			this._layers.push(this._createLayer(name || "new layer " + this._layers.length ));
+		addNewLayer: function lm_addNewLayer(name, sizeOrImage) {
+			this._layers.push(this._createLayer(name || "new layer " + this._layers.length, sizeOrImage ));
 			this._activeLayerIndex = this._layers.length - 1;
 			this._updateZIndices();
 
@@ -149,7 +147,7 @@
 			this._layers = null;
 		},
 
-		_createLayer: function(name, bgcolor) {
+		_createLayer: function(name, sizeOrImage) {
 			var canvas = document.createElement('canvas');
 			canvasToLayer(canvas);
 			canvas.layerName = name;
@@ -161,11 +159,10 @@
 			canvas.style.top = 0;
 			canvas.style.left = 0;
 
-			if(bgcolor) {
+			if(sizeOrImage && sizeOrImage.src) {
 				var context = canvas.getContext('2d');
 				context.save();
-				context.fillStyle = bgcolor;
-				context.fillRect(0, 0, this._size.width, this._size.height);
+				context.drawImage(sizeOrImage, 0, 0);
 				context.restore();
 			}
 

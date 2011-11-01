@@ -70,10 +70,8 @@
 	
 			var chooser = Ext.create('LTP.ImageChooser', {
 				listeners: {
-					newImage: function(size) {
-						LTP.app.load({
-							imageSize: size
-						});
+					newImage: function(options) {
+						LTP.app.load(options);
 					}
 				}
 			});
