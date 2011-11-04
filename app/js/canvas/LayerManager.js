@@ -21,16 +21,17 @@
 		});
 	}
 
-	LTP.LayerManager = function LayerManager(sizeOrImage, messageBus) {
-		this._size = s(sizeOrImage.width, sizeOrImage.height);
+	LTP.LayerManager = function LayerManager(config) {
+		this._size = config.size;
 
-		this._messageBus = messageBus || LTP.GlobalMessageBus;
+		this._messageBus = config.messageBus || LTP.GlobalMessageBus;
 
 		this._layers = [];
+		var backgroundLayer = this.addNewLayer(this.BaseLayerName, config.size);
 
-		var backgroundLayer = this.addNewLayer(this.BaseLayerName, sizeOrImage);
-
-		this._updateZIndices();
+		if(config.image) {
+			this._drawImageInto(config.image, backgroundLayer);
+		}
 	};
 
 	LTP.LayerManager.prototype = {
@@ -76,8 +77,8 @@
 			}
 		},
 
-		addNewLayer: function lm_addNewLayer(name, sizeOrImage) {
-			this._layers.push(this._createLayer(name || "new layer " + this._layers.length, sizeOrImage ));
+		addNewLayer: function lm_addNewLayer(name, size) {
+			this._layers.push(this._createLayer(name || "new layer " + this._layers.length, size));
 			this._activeLayerIndex = this._layers.length - 1;
 			this._updateZIndices();
 
@@ -147,7 +148,7 @@
 			this._layers = null;
 		},
 
-		_createLayer: function(name, sizeOrImage) {
+		_createLayer: function(name, size) {
 			var canvas = document.createElement('canvas');
 			canvasToLayer(canvas);
 			canvas.layerName = name;
@@ -159,14 +160,14 @@
 			canvas.style.top = 0;
 			canvas.style.left = 0;
 
-			if(sizeOrImage && sizeOrImage.src) {
-				var context = canvas.getContext('2d');
-				context.save();
-				context.drawImage(sizeOrImage, 0, 0);
-				context.restore();
-			}
-
 			return canvas;
+		},
+
+		_drawImageInto: function(image, layer) {
+			var context = layer.getContext('2d');
+			context.save();
+			context.drawImage(image, 0, 0);
+			context.restore();
 		},
 		
 		_updateZIndices: function() {

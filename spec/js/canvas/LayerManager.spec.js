@@ -2,19 +2,29 @@ describe("LayerManager", function() {
 	
 	describe("construction", function() {
 		it("should throw if no size provided", function() {
-			expect(LTP.LayerManager).toThrow();
+			var fn = function() {
+				new LTP.Manager({
+					size: null
+				});
+			};
+
+			expect(fn).toThrow();
 		});
 
 		it("should set to the passed in size", function() {
 			var size = s(40, 50);
-			var layerManager = new LTP.LayerManager(size);
+			var layerManager = new LTP.LayerManager({
+				size: size
+			});
 
 			expect(layerManager._size).toEqual(size);
 		});
 
 		it("should get constructed with an initial background layer", function() {
 			var size = s(12,34);
-			var layerManager = new LTP.LayerManager(size);
+			var layerManager = new LTP.LayerManager({
+				size: size
+			});
 
 			expect(layerManager.count).toEqual(1);
 
@@ -26,6 +36,27 @@ describe("LayerManager", function() {
 			expect(activeLayer.layerName).toEqual(LTP.LayerManager.prototype.BaseLayerName);
 			expect(activeLayer.isVisible).toEqual(true);
 		});
+
+		it("should create the base layer with the provided image", function() {
+			var canvas = document.createElement('canvas');
+			canvas.width = 2;
+			canvas.height = 2;
+			var context = canvas.getContext('2d');
+			context.fillStyle = 'red';
+			context.fillRect(0, 0, 2, 2);
+
+			var size = s(2, 2);
+			var layerManager = new LTP.LayerManager({
+				size: size,
+				image: canvas
+			});
+
+			var activeLayer = layerManager.activeLayer;
+			var imageData = activeLayer.getContext('2d').getImageData(0,0,2,2);
+			for(var i = 0; i < imageData.data.length; i += 4) {
+				expect(imageData.data[i]).toBe(255);
+			}
+		});
 	});
 
 	describe("layer creation", function() {
@@ -34,7 +65,9 @@ describe("LayerManager", function() {
 
 		beforeEach(function() {
 			size = s(30,40);
-			layerManager = new LTP.LayerManager(size);
+			layerManager = new LTP.LayerManager({
+				size: size
+			});
 		});
 		
 		it("should create a new layer", function() {
@@ -54,7 +87,9 @@ describe("LayerManager", function() {
 
 		it("should create a new layer that is fully transparent", function() {
 			size = s(2,2);
-			layerManager = new LTP.LayerManager(size);
+			layerManager = new LTP.LayerManager({
+				size: size
+			});
 
 			var layer = layerManager.addNewLayer('new layer');
 
@@ -79,7 +114,9 @@ describe("LayerManager", function() {
 		var layerManager = null;
 		beforeEach(function() {
 			size = s(10,20);
-			layerManager = new LTP.LayerManager(size);
+			layerManager = new LTP.LayerManager({
+				size: size
+			});
 		});
 
 		it("should change the active layer", function() {
@@ -112,7 +149,9 @@ describe("LayerManager", function() {
 		var layerManager = null;
 		beforeEach(function() {
 			size = s(10,20);
-			layerManager = new LTP.LayerManager(size);
+			layerManager = new LTP.LayerManager({
+				size: size
+			});
 		});
 
 		it("should throw an exception if attempt to delete the last layer", function() {
@@ -151,7 +190,9 @@ describe("LayerManager", function() {
 		var layerManager = null;
 		beforeEach(function() {
 			size = s(10,20);
-			layerManager = new LTP.LayerManager(size);
+			layerManager = new LTP.LayerManager({
+				size: size
+			});
 		});
 
 		it("should have the correct z-indices after adding layers", function() {
@@ -217,7 +258,9 @@ describe("LayerManager", function() {
 
 		it("should return a composited canvas", function() {
 			var size = s(3,1);
-			var layerManager = new LTP.LayerManager(size);
+			var layerManager = new LTP.LayerManager({
+				size: size
+			});
 
 			var context1 = layerManager.activeLayer.getContext('2d');
 			var context2 = layerManager.addNewLayer("layer2").getContext('2d');

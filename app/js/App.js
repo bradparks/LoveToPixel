@@ -163,30 +163,33 @@
 		},
 
 		load: function(project) {
-			var me = this;
-	
 			if(project.imageFile) {
-				var reader = new FileReader();
-				reader.onload = function(e) {
-					var img = document.createElement('img');
-					img.onload = function() {
-						me._load(img);
-					};
-					img.src = e.target.result;
-				};
-				reader.readAsDataURL(project.imageFile);
+				LTP.ImageLoader.load(project.imageFile, 
+					function(img) {
+						this._load(s(img.width, img.height), img);
+					},
+					function(errorMessage) {
+						Ext.MessageBox.alert('Error', errorMessage);
+					},
+					this);
 			} else {
-				me._load(project.imageSize);
+				this._load(project.imageSize);
 			}
 		},
 
-		_load: function(result) {
-			var size = p(result.width, result.height);
-			
+		_imageLoadError: function(msg) {
+			Ext.MessageBox.alert('Error', msg);
+		},
+
+		_load: function(size, baseImage) {
 			_destroyAll(this._components);
 			this._components = [];
 
-			this.layerManager = new LTP.LayerManager(result);
+			this.layerManager = new LTP.LayerManager({
+				size: size,
+				image: baseImage
+			});
+
 			this._components.push(this.layerManager);
 
 			this.container = new LTP.Container(size, document.getElementById(this.containerElementId));

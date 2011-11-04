@@ -11,7 +11,6 @@
 	Ext.define('LTP.ImageChooser', {
 		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.imagechooser',
-		//layout: 'vbox',
 
 		width: 400,
 		defaults: {
@@ -46,7 +45,6 @@
 				parent.go();
 			}
 		}],
-				
 
 		initComponent: function() {
 			this.callParent(arguments);
