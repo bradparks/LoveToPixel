@@ -61,9 +61,22 @@
 			if(startPoint.equals(endPoint)) {
 				this._placePoint(context, startPoint);
 			} else {
-				while(!(startPoint.equals(endPoint))) {
+				if(startPoint.x > endPoint.x) {
+					var temp = startPoint;
+					startPoint = endPoint;
+					endPoint = temp;
+				}
+
+				var slope = (endPoint.y - startPoint.y) / (endPoint.x - startPoint.x);
+		
+				var intersect = startPoint.y - slope * startPoint.x;
+
+				var arrived = false;
+				while(!arrived) {
 					this._placePoint(context, startPoint);
-					startPoint = this._moveTowards(startPoint, endPoint);
+					var result = this._moveTowards(startPoint, endPoint, slope, intersect);
+					arrived = result.arrived;
+					startPoint = result.point;
 				}
 			}
 			this._placePoint(context, endPoint);
@@ -77,49 +90,36 @@
 			method.call(context, point.x - this._size - strokeOffset, point.y - this._size - strokeOffset, this._size + (2*strokeOffset), this._size + (2*strokeOffset));
 		},
 
-		_moveTowards: function bt_moveTowards(start, finish) {
-			if(start.equals(finish)) {
-				return p(start.x, start.y);
-			}
-
-			var horizontalDistance = finish.x - start.x;
-			var absHd = Math.abs(horizontalDistance);
-
-			var verticalDistance = finish.y - start.y;
-			var absVd = Math.abs(verticalDistance);
-
-			var x, y;
-
-			if(absHd > absVd) {
-				y = start.y;
-				// need to move horizontally
-				if(horizontalDistance < 0) {
-					x = start.x - 1;
+		_moveTowards: function bt_moveTowards2(startPoint, endPoint, slope, intersect) {
+			if(slope === Infinity || slope === -Infinity) {
+				if(startPoint.y === endPoint.y) {
+					return {
+						arrived: true,
+						point: p(Math.round(startPoint.x), Math.round(startPoint.y))
+					};
 				} else {
-					x = start.x + 1;
-				}
-			} else  if(absHd < absVd) {
-				// need to move vertically
-				x = start.x;
-				if(verticalDistance < 0) {
-					y = start.y - 1;
-				} else {
-					y = start.y + 1;
-				}
-			} else {
-				// need to move both
-				if(horizontalDistance < 0) {
-					x = start.x - 1;
-				} else {
-					x = start.x + 1;
-				}
-				if(verticalDistance < 0) {
-					y = start.y - 1;
-				} else {
-					y = start.y + 1;
+					var delta = slope === Infinity ? 1 : -1;
+					return {
+						arrived: false,
+						point: p(Math.round(startPoint.x), Math.round(startPoint.y + delta))
+					};
 				}
 			}
-			return p(x,y);
+
+			if(startPoint.x === endPoint.x) {
+				return {
+					arrived: true,
+					point: p(Math.round(startPoint.x), Math.round(startPoint.y))
+				}
+			}
+
+			var x = startPoint.x + 1;
+			var y = x * slope + intersect;
+
+			return {
+				arrived: false,
+				point: p(Math.round(x), Math.round(y))
+			}
 		}
 	};
 })();
