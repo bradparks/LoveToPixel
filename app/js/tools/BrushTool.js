@@ -56,7 +56,7 @@
 
 			context.save();
 			context.fillStyle = e.color;
-			endPoint = startPoint;
+			//endPoint = startPoint;
 
 			if(startPoint.equals(endPoint)) {
 				this._placePoint(context, startPoint);
