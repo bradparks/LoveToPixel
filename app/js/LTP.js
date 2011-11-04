@@ -24,6 +24,8 @@
 		'rightToolChanged',
 		'leftColorSelected',
 		'rightColorSelected',
+		'leftSizeSelected',
+		'rightSizeSelected',
 		'newLayerCreated',
 		'activeLayerChanged',
 		'lockChanged'

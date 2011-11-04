@@ -214,6 +214,14 @@
 				this.painter.popOverrideTool();
 			}, this);
 
+			LTP.GlobalMessageBus.subscribe('leftSizeSelected', function(size) {
+				this.painter.leftTool = new LTP.BrushTool(size);	
+			}, this);
+
+			LTP.GlobalMessageBus.subscribe('rightSizeSelected', function(size) {
+				this.painter.rightTool = new LTP.BrushTool(size);	
+			}, this);
+
 			for(var i = 0; i < _colors.length; ++i) {
 				this.callbacks[(i+1).toString()] = (function(i, painter) {
 					return function() {

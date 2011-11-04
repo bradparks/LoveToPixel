@@ -11,8 +11,9 @@
 	Ext.define('LTP.ImageChooser', {
 		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.imagechooser',
-
 		width: 400,
+		layout: 'anchor',
+
 		defaults: {
 			margin: 2
 		},
@@ -35,7 +36,7 @@
 		},
 		{
 			xtype: 'filefield',
-			label: 'existing image'
+			fieldLabel: 'or existing image'
 		},
 		{
 			xtype: 'button',

@@ -18,7 +18,7 @@
 				me.el.dom.addEventListener('mousedown', function(e) {
 					var leftRight = e.button === 0 ? 'left' : 'right';
 
-					//LTP.GlobalMessageBus.publish(leftRight + 'ColorSelected', me.color);
+					LTP.GlobalMessageBus.publish(leftRight + 'SizeSelected', me.size);
 					me.fireEvent('click');
 				});
 
