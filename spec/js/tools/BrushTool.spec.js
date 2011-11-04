@@ -1,21 +1,19 @@
 describe("BrushTool", function() {
 	describe("construction", function() {
-		it("should throw an error if no color or brush specified", function() {
+		it("should throw an error if no size specified", function() {
 			expect(LTP.BrushTool).toThrow();
 		});
 
 		it("should report it causes change", function() {
-			var brush = new LTP.BrushTool(colors.red, 3);
+			var brush = new LTP.BrushTool(3);
 			expect(brush.causesChange).toBe(true);
 		});
 
 		it("should have working getters", function() {
-			var color = colors.blue;
 			var size = 8;
 
-			var brush = new LTP.BrushTool(color, size);
+			var brush = new LTP.BrushTool(size);
 
-			expect(brush.color).toEqual(color);
 			expect(brush.size).toEqual(size);
 		});
 	});
@@ -29,7 +27,7 @@ describe("BrushTool", function() {
 			canvas.height = canvasHeight;
 			var context = canvas.getContext('2d');
 
-			var brush = new LTP.BrushTool(colors.red, canvasWidth - 1);
+			var brush = new LTP.BrushTool(canvasWidth - 1);
 			
 			var point = p(2,2);
 			brush.perform({
@@ -39,7 +37,8 @@ describe("BrushTool", function() {
 				currentPoint: point,
 				lastPointNonTransformed: point,
 				currentPointNonTransformed: point,
-				containerElement: {}
+				containerElement: {},
+				color: colors.red
 			});
 
 			// [r][r][b]
@@ -78,7 +77,7 @@ describe("BrushTool", function() {
 	describe("getBoundsAt", function() {
 		it("should return the bounds", function() {
 			var size = 4;
-			var brush = new LTP.BrushTool(colors.red, size);
+			var brush = new LTP.BrushTool(size);
 
 			var x = 10, y = 20;
 			var bounds = brush.getBoundsAt(p(x, y));
@@ -91,7 +90,7 @@ describe("BrushTool", function() {
 
 		it("should clip the bounds", function() {
 			var size = 10;
-			var brush = new LTP.BrushTool('#FF0000', size);
+			var brush = new LTP.BrushTool(size);
 
 			var x = 3, y = 4;
 			var bounds = brush.getBoundsAt(p(x, y));
@@ -105,7 +104,7 @@ describe("BrushTool", function() {
 		it("should return an empty bounds if x or y are negative", function() {
 			var emptyRect = new LTP.Rectangle();
 
-			var brush = new LTP.BrushTool(colors.red, 4);
+			var brush = new LTP.BrushTool(4);
 
 			var bounds = brush.getBoundsAt(p(-3, 20));
 			expect(bounds.equals(emptyRect)).toBe(true);

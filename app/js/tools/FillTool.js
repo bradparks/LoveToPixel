@@ -1,38 +1,10 @@
 (function() {
-	LTP.FillTool = function(color) {
-		if(!color) {
-			throw new Error("FillTool: color is required");
-		}
-
-		if(!colors.isHexString(color)) {
-			throw new Error("FillTool: color must be a hex string");
-		}
-
-		this._color = this._colorStringToArray(color);
+	LTP.FillTool = function() {
 	};
 
 	LTP.FillTool.prototype = {
-		get color() {
-			return this._color;
-		},
-
 		get causesChange() {
 			return true;
-		},
-
-		_colorStringToArray: function(color) {
-			color = color.substring(1); // chop off #
-
-			var oxr = color.substring(0, 2);
-			var oxg = color.substring(2, 4);
-			var oxb = color.substring(4, 6);
-
-			return [
-				parseInt(oxr, 16),
-				parseInt(oxg, 16),
-				parseInt(oxb, 16),
-				255
-			];
 		},
 
 		_sampleColorAt: function(context, point) {
@@ -66,9 +38,10 @@
 			var sourceContext = e.imageCanvas.getContext('2d');
 
 			var sampledColor = this._sampleColorAt(sourceContext, e.currentPoint);
+			var targetColor = colors.fromHexToArray(e.color, { includeAlpha: true });
 
-			if(!this._areSame(sampledColor, this._color)) {
-				this._fill(sourceContext, e.context, e.currentPoint, sampledColor, this._color);
+			if(!this._areSame(sampledColor, targetColor)) {
+				this._fill(sourceContext, e.context, e.currentPoint, sampledColor, targetColor);
 			}
 		},
 
@@ -91,7 +64,7 @@
 		},
 		
 		getBoundsAt: function bt_getBoundsAt(point, context) {
-			return this._lastBoundingBox;
+			return this._lastBoundingBox || r(0, 0, 0, 0);
 		},
 
 		_fill: function p_fill(sourceContext, destContext, start, sampledColor, newColor) {

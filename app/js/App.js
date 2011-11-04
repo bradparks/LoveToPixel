@@ -125,7 +125,7 @@
 				if(_overrideActive) {
 					LTP.app.painter.popOverrideTool();
 				} else {
-					LTP.app.painter.pushOverrideTool(new LTP.FillTool(colors.blue));
+					LTP.app.painter.pushOverrideTool(new LTP.FillTool());
 				}
 				_overrideActive = !_overrideActive;
 			},
@@ -195,7 +195,7 @@
 			this.container = new LTP.Container(size, document.getElementById(this.containerElementId));
 			this._components.push(this.container);
 
-			this.painter = new LTP.Painter(size, new LTP.PointTransformer(), null, new LTP.BrushTool(colors.black, 20), new LTP.BrushTool(colors.white, 50));
+			this.painter = new LTP.Painter(size, new LTP.PointTransformer());
 			this._components.push(this.painter);
 
 			this.grid = new LTP.Grid(size, 'gray', 20000);
@@ -207,29 +207,17 @@
 			this.container.grid = this.grid.canvas;
 			this.container.scratch = this.painter.scratch;
 
-			// TODO: this is nasty
-			LTP.GlobalMessageBus.publish('activeLayerChanged', this.layerManager.activeLayer);
 
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor, mouseButton) {
 				var prefix = mouseButton === 0 ? 'left' : 'right';
-				var size = mouseButton === 0 ? 20 : 50;
-
-				this.painter[prefix + 'Tool'] = new LTP.BrushTool(hexColor, size);
+				LTP.GLobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
 				this.painter.popOverrideTool();
-			}, this);
-
-			LTP.GlobalMessageBus.subscribe('leftColorSelected', function(color) {
-				this.painter.leftTool = new LTP.BrushTool(color, 20);
-			}, this);
-
-			LTP.GlobalMessageBus.subscribe('rightColorSelected', function(color) {
-				this.painter.rightTool = new LTP.BrushTool(color, 50);
 			}, this);
 
 			for(var i = 0; i < _colors.length; ++i) {
 				this.callbacks[(i+1).toString()] = (function(i, painter) {
 					return function() {
-						painter.leftTool = new LTP.BrushTool(_colors[i], 20);
+						LTP.GlobalMessageBus.publish('leftColorSelected', _colors[i]);
 					}
 				})(i, this.painter);
 			}	
@@ -238,8 +226,9 @@
 			this._components.push(this.keyListener);
 
 			//TODO: these publishings need to go away
-			LTP.GlobalMessageBus.publish('leftToolChanged', this.painter.leftTool);
-			LTP.GlobalMessageBus.publish('rightToolChanged', this.painter.rightTool);
+			LTP.GlobalMessageBus.publish('activeLayerChanged', this.layerManager.activeLayer);
+			LTP.GlobalMessageBus.publish('leftColorSelected', this.painter.leftColor);
+			LTP.GlobalMessageBus.publish('rightColorSelected', this.painter.rightColor);
 
 			this.layerPanel.load(this.layerManager);
 		}

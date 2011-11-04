@@ -14,9 +14,9 @@
 
 			this._messageBus = config.messageBus || LTP.GlobalMessageBus;
 
-			this._messageBus.subscribe(config.tool + 'ToolChanged', function(tool) {
-				if(tool.color) {
-					this.el.setStyle('backgroundColor', tool.color);
+			this._messageBus.subscribe(config.tool + 'ColorSelected', function(color) {
+				if(color) {
+					this.el.setStyle('backgroundColor', color);
 				}
 			}, this);
 		}

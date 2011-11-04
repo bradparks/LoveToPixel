@@ -1,24 +1,6 @@
 describe("FillTool", function() {
-	describe("construction", function() {
-		it("should throw if no color specified", function() {
-			var fn = function() {
-				new LTP.FillTool();
-			};
-
-			expect(fn).toThrow();
-		});
-
-		it("should throw if color is not a hex string", function() {
-			var fn = function() {
-				new LTP.FillTool('red');
-			};
-
-			expect(fn).toThrow();
-		});
-	});
-
 	describe("performing", function() {
-		it("should throw if souce and dest canvases are not the same size", function() {
+		it("should throw if source and dest canvases are not the same size", function() {
 			var fn = function() {
 				var sourceCanvas = document.createElement('canvas');
 				sourceCanvas.width = 2;
@@ -28,12 +10,13 @@ describe("FillTool", function() {
 				destCanvas.width = 30;
 				destCanvas.height = 20;
 	
-				var fillTool = new LTP.FillTool('#FF0000');
+				var fillTool = new LTP.FillTool();
 	
 				fillTool.perform({
 					imageCanvas: sourceCanvas,
 					context: destCanvas.getContext('2d'),
-					currentPoint: p(1,1)
+					currentPoint: p(1,1),
+					color: colors.red
 				});
 			};
 
@@ -49,12 +32,13 @@ describe("FillTool", function() {
 			destCanvas.width = 2;
 			destCanvas.height = 2;
 
-			var fillTool = new LTP.FillTool('#FF0000');
+			var fillTool = new LTP.FillTool();
 
 			fillTool.perform({
 				imageCanvas: sourceCanvas,
 				context: destCanvas.getContext('2d'),
-				currentPoint: p(1,1)
+				currentPoint: p(1,1),
+				color: colors.red
 			});
 
 			var imageData = destCanvas.getContext('2d').getImageData(0, 0, destCanvas.width, destCanvas.height);
@@ -88,12 +72,13 @@ describe("FillTool", function() {
 			destCanvas.width = 2;
 			destCanvas.height = 2;
 
-			var fillTool = new LTP.FillTool('#FF0000');
+			var fillTool = new LTP.FillTool();
 
 			fillTool.perform({
 				imageCanvas: sourceCanvas,
 				context: destCanvas.getContext('2d'),
-				currentPoint: p(1,1)
+				currentPoint: p(1,1),
+				color: colors.red
 			});
 
 			var imageData = destCanvas.getContext('2d').getImageData(0, 0, destCanvas.width, destCanvas.height);

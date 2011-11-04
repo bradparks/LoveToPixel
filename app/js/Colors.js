@@ -29,7 +29,43 @@
 
 			// this is not a definitive answer, but good enough for current purposes
 			return parseInt(colorString.substring(1), 16) !== NaN;
-		}
+		},
+
+		fromArrayToHex: function(colorArray, options) {
+			var hexString = '#';
+
+			var count = options.includeAlpha && colorArray.length === 4 ? 4 : 3;
+
+			for(var i = 0; i < count; ++i) {
+				var hex = colorArray[i].toString(16);
+				if(hex.length < 2) {
+					hex = '0' + hex;
+				}
+				hexString += hex;
+			}
+			return hexString;
+		},
+
+		fromHexToArray: function(hexColorString, options) {
+			hexColorString = hexColorString.substring(1); // chop off #
+
+			var oxr = hexColorString.substring(0, 2);
+			var oxg = hexColorString.substring(2, 4);
+			var oxb = hexColorString.substring(4, 6);
+
+			result = [
+				parseInt(oxr, 16),
+				parseInt(oxg, 16),
+				parseInt(oxb, 16),
+			];
+
+			if(options.includeAlpha) {
+				result.push(255);
+			}
+
+			return result;
+		},
+
 	};
 
 })();

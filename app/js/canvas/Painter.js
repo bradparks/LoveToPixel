@@ -1,5 +1,5 @@
 (function() {
-	LTP.Painter = function(size, pointTransformer, messageBus, leftTool, rightTool) {
+	LTP.Painter = function(size, pointTransformer, messageBus, leftTool, rightTool, leftColor, rightColor) {
 		if(!size) {
 			throw new Error("LTP.Painter: size is required");
 		}
@@ -18,8 +18,10 @@
 		this._leftToolState = { down: false };
 		this._rightToolState = { down: false };
 
-		this.leftTool = leftTool || new LTP.BrushTool(colors.black, 1);
-		this.rightTool = rightTool || new LTP.BrushTool(colors.white, 1);
+		this.leftTool = leftTool || new LTP.BrushTool(5);
+		this.rightTool = rightTool || new LTP.BrushTool(5);
+		this.leftColor = leftColor || colors.black;
+		this.rightColor = rightColor || colors.white;
 
 		this._lastToolState = this._leftToolState;
 	
@@ -55,6 +57,22 @@
 		set leftTool(tool) {
 			this._leftToolState.tool = tool;
 			this._messageBus.publish('leftToolChanged', tool);
+		},
+
+		set leftColor(color) {
+			this._leftColor = color;
+		},
+
+		get leftColor() {
+			return this._leftColor;
+		},
+
+		set rightColor(color) {
+			this._rightColor = color;
+		},
+
+		get rightColor() {
+			return this._rightColor;
 		},
 
 		get leftTool() {
@@ -171,6 +189,7 @@
 				toolState.down = true;
 				
 				var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
+				var color = e.button === 0 ? this.leftColor : this.rightColor;
 
 				toolState.tool.perform({
 					canvas: canvas,
@@ -181,7 +200,8 @@
 					lastPointNonTransformed: currentPointNonTransformed,
 					currentPointNonTransformed: currentPointNonTransformed,
 					containerElement: this._activeCanvas.parentNode.parentNode,
-					mouseButton: e.button
+					mouseButton: e.button,
+					color: color
 				});
 				
 				toolState.lastPoint = currentPoint;
@@ -219,6 +239,7 @@
 				}
 
 				var canvas = toolState.tool.causesChange ? this._scratch : this._activeCanvas;
+				var color = e.button === 0 ? this.leftColor : this.rightColor;
 
 				toolState.tool.perform({
 					canvas: canvas,
@@ -229,7 +250,8 @@
 					lastPointNonTransformed: lastPointNonTransformed,
 					currentPointNonTransformed: currentPointNonTransformed,
 					containerElement: this._activeCanvas.parentNode.parentNode,
-					mouseButton: e.button
+					mouseButton: e.button,
+					color: color
 				});
 				toolState.lastPoint = currentPoint;
 				toolState.lastPointNonTransformed = currentPointNonTransformed;
@@ -313,16 +335,19 @@
 				
 			var boundingBox = this._currentBoundingBox.boundingBox;
 
-			this._undoRedoStates.push({
-				boundingBox: boundingBox,
-				undoClip: this._createClip(this._activeCanvas, boundingBox),
-				redoClip: this._createClip(this._scratch, boundingBox),
-				canvas: this._activeCanvas
-			});
+			if(boundingBox.hasArea) {
+				this._undoRedoStates.push({
+					boundingBox: boundingBox,
+					undoClip: this._createClip(this._activeCanvas, boundingBox),
+					redoClip: this._createClip(this._scratch, boundingBox),
+					canvas: this._activeCanvas
+				});
+
+				this._currentUndoRedoStateIndex = this._undoRedoStates.length - 1;
+			}
 
 			this._applyClip(this._activeCanvas, this._scratch, this._entireBoundingBox);
 			this._clear(this._scratch);
-			this._currentUndoRedoStateIndex = this._undoRedoStates.length - 1;
 		},
 
 		_onContextMenu: function p_onContextMenu(e) {
@@ -384,12 +409,14 @@
 			this.activeCanvas = newLayer;
 		},
 
-		_onLeftColorSelected: function p_onLeftColorSelected() {
+		_onLeftColorSelected: function p_onLeftColorSelected(color) {
+			this.leftColor = color;
 			this._lastToolState = this._leftToolState;
 			this._doOverlay();
 		},
 
-		_onRightColorSelected: function p_onRightColorSelected() {
+		_onRightColorSelected: function p_onRightColorSelected(color) {
+			this.rightColor = color;
 			this._lastToolState = this._rightToolState;
 			this._doOverlay();
 		}

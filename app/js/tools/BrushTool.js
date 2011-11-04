@@ -1,21 +1,13 @@
 (function() {
-	LTP.BrushTool = function(color, size) {
-		if(!color) {
-			throw new Error("BrushTool: color must be specified");
-		}
+	LTP.BrushTool = function(size) {
 		if(!size) {
 			throw new Error("BrushTool: size must be specified");
 		}
 
-		this._color = color;
 		this._size = size;
 	};
 
 	LTP.BrushTool.prototype = {
-		get color() {
-			return this._color;
-		},
-
 		get size() {
 			return this._size;
 		},
@@ -63,7 +55,7 @@
 			var endPoint = e.currentPoint;
 
 			context.save();
-			context.fillStyle = this._color;
+			context.fillStyle = e.color;
 			endPoint = startPoint;
 
 			if(startPoint.equals(endPoint)) {

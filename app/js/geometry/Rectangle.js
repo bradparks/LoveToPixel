@@ -23,6 +23,9 @@
 		get height() {
 			return this._height;
 		},
+		get hasArea() {
+			return this.height * this.width > 0;
+		},
 		equals: function r_equals(other) {
 			if(other) {
 				return other === this || (other.x === this._x && other.y === this._y && other.width === this._width && other.height === this._height);

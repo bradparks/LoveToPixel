@@ -45,14 +45,14 @@ describe("Painter", function() {
 			expect(overlay.height).toEqual(height);
 		});
 
-		it("should default to 1 pixel black/white if constructed without tools specified", function() {
+		it("should default to 5 pixel black/white if constructed without tools specified", function() {
 			var painter = new LTP.Painter(s(3,3), mockPointTransformer);
 
-			expect(painter.leftTool.color).toBe(colors.black);
-			expect(painter.leftTool.size).toBe(1);
+			expect(painter.leftColor).toBe(colors.black);
+			expect(painter.leftTool.size).toBe(5);
 
-			expect(painter.rightTool.color).toBe(colors.white);
-			expect(painter.rightTool.size).toBe(1);
+			expect(painter.rightColor).toBe(colors.white);
+			expect(painter.rightTool.size).toBe(5);
 		});
 
 		it("should take in the left and right tools", function() {
