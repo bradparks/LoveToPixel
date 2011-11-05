@@ -76,7 +76,7 @@
 				var delta = shift ? -1 : 1;
 				_currentZoomIndex += delta;
 				if(_currentZoomIndex >= _zoomLevels.length) {
-					_currentZoomIndex = _zoomlevels.length - 1;
+					_currentZoomIndex = _zoomLevels.length - 1;
 				}
 				if(_currentZoomIndex < 0) {
 					_currentZoomIndex = 0;
