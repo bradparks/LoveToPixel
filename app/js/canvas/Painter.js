@@ -57,11 +57,15 @@
 
 		set leftTool(tool) {
 			this._leftToolState.tool = tool;
+			this._lastToolState = this._leftToolState;
 			this._messageBus.publish('leftToolChanged', tool);
+			this._doOverlay();
 		},
 
 		set leftColor(color) {
 			this._leftColor = color;
+			this._lastToolState = this._leftToolState;
+			this._doOverlay();
 		},
 
 		get leftColor() {
@@ -70,6 +74,8 @@
 
 		set rightColor(color) {
 			this._rightColor = color;
+			this._lastToolState = this._rightToolState;
+			this._doOverlay();
 		},
 
 		get rightColor() {
@@ -86,7 +92,9 @@
 
 		set rightTool(tool) {
 			this._rightToolState.tool = tool;
+			this._lastToolState = this._rightToolState;
 			this._messageBus.publish('rightToolChanged', tool);
+			this._doOverlay();
 		},
 
 		get rightTool() {
@@ -413,14 +421,10 @@
 
 		_onLeftColorSelected: function p_onLeftColorSelected(color) {
 			this.leftColor = color;
-			this._lastToolState = this._leftToolState;
-			this._doOverlay();
 		},
 
 		_onRightColorSelected: function p_onRightColorSelected(color) {
 			this.rightColor = color;
-			this._lastToolState = this._rightToolState;
-			this._doOverlay();
 		},
 
 		_onCursorDisplayChangeRequest: function p_onCursorDisplayChangeRequest(cursorDisplay) {

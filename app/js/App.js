@@ -210,7 +210,7 @@
 
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor, mouseButton) {
 				var prefix = mouseButton === 0 ? 'left' : 'right';
-				LTP.GLobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
+				LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
 				this.painter.popOverrideTool();
 			}, this);
 
