@@ -13,6 +13,7 @@
 		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 		this._messageBus.subscribe('leftColorSelected', this._onLeftColorSelected, this);
 		this._messageBus.subscribe('rightColorSelected', this._onRightColorSelected, this);
+		this._messageBus.subscribe('cursorDisplayChangeRequest', this._onCursorDisplayChangeRequest, this);
 
 		this._overrideToolState = { down: false, active: false };
 		this._leftToolState = { down: false };
@@ -117,9 +118,10 @@
 
 		destroy: function() {
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
-		this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
-		this._messageBus.unsubscribe('leftColorSelected', this._onLeftColorSelected);
-		this._messageBus.unsubscribe('rightColorSelected', this._onRightColorSelected);
+			this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
+			this._messageBus.unsubscribe('leftColorSelected', this._onLeftColorSelected);
+			this._messageBus.unsubscribe('rightColorSelected', this._onRightColorSelected);
+			this._messageBus.unsubscribe('cursorDisplayChangeRequest', this._onCursorDisplayChangeRequest);
 		},
 
 		_hook: function p_hook(canvas) {
@@ -419,6 +421,10 @@
 			this.rightColor = color;
 			this._lastToolState = this._rightToolState;
 			this._doOverlay();
+		},
+
+		_onCursorDisplayChangeRequest: function p_onCursorDisplayChangeRequest(cursorDisplay) {
+			this._overlay.style.cursor = cursorDisplay;
 		}
 	};
 

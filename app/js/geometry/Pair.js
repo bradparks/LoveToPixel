@@ -25,6 +25,9 @@
 					(other.width == this._a && other.height == this._b);
 			} 
 			return false;
+		},
+		toString: function p_toString() {
+			return "[" + this._a + "," + this._b + "]";
 		}
 	};
 
