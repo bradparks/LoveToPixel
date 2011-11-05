@@ -1,5 +1,5 @@
 (function() {
-	var _zoomLevels = [.25, .5, 1, 2, 4, 8, 16, 32];
+	var _zoomLevels = [.125, .25, .5, 1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
 	var _savedZoomIndex = undefined;
 	var _currentZoomIndex = 2;
 	var _gridLevels = [5, 10, 15, 20, 20000];
@@ -71,8 +71,16 @@
 					LTP.app.floatingColorPalette.togglePopup();
 				}
 			},
-			z: function() {
-				_currentZoomIndex = (_currentZoomIndex + 1) % _zoomLevels.length;
+			z: function(shift) {
+				var delta = shift ? -1 : 1;
+				_currentZoomIndex += delta;
+				if(_currentZoomIndex >= _zoomLevels.length) {
+					_currentZoomIndex = _zoomlevels.length - 1;
+				}
+				if(_currentZoomIndex < 0) {
+					_currentZoomIndex = 0;
+				}
+
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
 			u: function() {
