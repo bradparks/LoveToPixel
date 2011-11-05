@@ -1,5 +1,6 @@
 (function() {
 	var _zoomLevels = [.125, .25, .5, 1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
+	var _fullSizeSoomIndex = _zoomLevels.indexOf(1);
 	var _savedZoomIndex = undefined;
 	var _currentZoomIndex = 2;
 	var _gridLevels = [5, 10, 15, 20, 20000];
@@ -102,14 +103,19 @@
 					_overrideActive = true;
 				}
 			},
-			adown: function() {
-				_savedZoomIndex = _currentZoomIndex;
-				_currentZoomIndex = 2;
+			adown: function(shift) {
+				if(!shift) {
+					_savedZoomIndex = _currentZoomIndex;
+				}
+
+				_currentZoomIndex = _fullSizeSoomIndex;
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
-			aup: function() {
-				_currentZoomIndex = _savedZoomIndex;
-				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
+			aup: function(shift) {
+				if(!shift) {
+					_currentZoomIndex = _savedZoomIndex;
+					LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
+				}
 			},
 			s: function() {
 				var composited = LTP.app.layerManager.composite();
