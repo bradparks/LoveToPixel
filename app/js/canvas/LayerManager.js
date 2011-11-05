@@ -19,6 +19,19 @@
 		canvas.__defineGetter__("index", function() {
 			return parseInt(this.style.zIndex, 10);
 		});
+
+		canvas.__defineGetter__("data", function() {
+			return this.toDataURL("png");
+		});
+
+		canvas.__defineSetter__("data", function(data) {
+			var me = this;
+			var img = document.createElement('img');
+			img.onload = function() {
+				this.getContext('2d').drawImage(img, 0, 0);
+			};
+			img.src = data;
+		});
 	}
 
 	LTP.LayerManager = function LayerManager(config) {

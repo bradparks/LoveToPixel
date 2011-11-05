@@ -1,14 +1,4 @@
 (function() {
-	Ext.define('LTP.LayerModel', {
-		extend: 'Ext.data.Model',
-		fields: [
-			{	name: 'layerName', type: 'string' },
-			{ name: 'index', type: 'integer' },
-			{ name: 'isVisible', type: 'boolean' },
-			{ name: 'isActive', type: 'boolean' }
-		]
-	});
-
 	Ext.define('LTP.LayerPanel', {
 		extend: 'Ext.container.Container',
 		layout: 'fit',
@@ -111,11 +101,53 @@
 			for(var i = 0; i < layerManager.layers.length; ++i) {
 				var layer = layerManager.layers[i];
 
-				var layerModel = Ext.create('LTP.LayerModel');//, {
+				var layerModel = Ext.create('LTP.LayerModel');
 				layerModel.data = layer;
 
 				store.insert(0, [layerModel]);
 			}
+		},
+
+		saveProject2: function(id, name, size) {
+			var project = Ext.create('LTP.ProjectModel', {
+				id: id,
+				name: name,
+				width: size.width,
+				height: size.height
+			});
+
+			project.save();
+
+			var layers = project.layers();
+			this.viewStore.each(function(layer) {
+				layers.add(layer);
+			});
+
+			layers.sync();
+		},
+
+		saveProject: function(id, name, size) {
+			debugger;
+			var projectStore = Ext.create('Ext.data.Store', {
+				model: 'LTP.ProjectModel'
+			});
+
+			projectStore.add({
+				id: id,
+				name: name,
+				width: size.width,
+				height: size.height
+			});
+			projectStore.sync();
+
+			var project = projectStore.first();
+
+			var layers = project.layers();
+			this.viewStore.each(function(layer) {
+				layers.add(layer);
+			});
+
+			layers.sync();
 		}
 	});
 
