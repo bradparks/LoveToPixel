@@ -182,7 +182,7 @@
 					projects.push({Id: i, Name: 'Foo' + i, Thumbnail: 'http://www.gif-gifs.com/gif-English/metal-slug-gifs/metal-slug-gif-%20(5).gif', ThumbnailHeight: 60 });
 				}
 
-				this.imageChooser = Ext.create('LTP.ImageChooser', {
+				this.projectChooser = Ext.create('LTP.ProjectChooser', {
 					renderTo: Ext.getBody(),
 					listeners: {
 						newImage: onChooserNewImage

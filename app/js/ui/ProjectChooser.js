@@ -8,9 +8,9 @@
 		return s(parseInt(parts[0], 10), parseInt(parts[1], 10));
 	}
 
-	Ext.define('LTP.ImageChooser', {
+	Ext.define('LTP.ProjectChooser', {
 		extend: 'Ext.panel.Panel',
-		alias: 'widget.ltp.imagechooser',
+		alias: 'widget.ltp.projectchooser',
 		width: '100%',
 		height: '100%',
 		layout: 'border',
