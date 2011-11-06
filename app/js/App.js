@@ -1,8 +1,8 @@
 (function() {
 	var _zoomLevels = [.125, .25, .5, 1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
-	var _fullSizeSoomIndex = _zoomLevels.indexOf(1);
+	var _fullSizeZoomIndex = _zoomLevels.indexOf(1);
 	var _savedZoomIndex = undefined;
-	var _currentZoomIndex = 2;
+	var _currentZoomIndex = _fullSizeZoomIndex;
 	var _gridLevels = [5, 10, 15, 20, 20000];
 	var _currentGridIndex = 4;
 	var _overrideActive = false;
@@ -108,7 +108,7 @@
 					_savedZoomIndex = _currentZoomIndex;
 				}
 
-				_currentZoomIndex = _fullSizeSoomIndex;
+				_currentZoomIndex = _fullSizeZoomIndex;
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
 			aup: function(shift) {
