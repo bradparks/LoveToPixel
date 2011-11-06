@@ -4,8 +4,6 @@
 		fields: [
 			{ name: 'id', type: 'integer' },
 			{	name: 'name', type: 'string' },
-			//{ name: 'createdAt', type: 'date' },
-			//{ name: 'lastModifiedAt', type: 'date' },
 			{ name: 'width', type: 'integer' },
 			{ name: 'height', type: 'integer' }
 		],

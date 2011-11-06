@@ -12,6 +12,7 @@
 
 	<script type="text/javascript" src="js/persistence/models/LayerModel.js"></script>
 	<script type="text/javascript" src="js/persistence/models/ProjectModel.js"></script>
+	<script type="text/javascript" src="js/persistence/ProjectPersister.js"></script>
 
 	<script type="text/javascript" src="js/ImageLoader.js"></script>
 
@@ -47,6 +48,7 @@
 	<script type="text/javascript" src="js/ui/ColorSwatch.js"></script>
 	<script type="text/javascript" src="js/ui/SizeSwatch.js"></script>
 	<script type="text/javascript" src="js/ui/Toolbar.js"></script>
+	<script type="text/javascript" src="js/ui/ProjectList.js"></script>
 	<script type="text/javascript" src="js/ui/ImageChooser.js"></script>
 	<script type="text/javascript" src="js/ui/LayerPanel.js"></script>
 	<script type="text/javascript" src="js/ui/FloatingPalette.js"></script>
@@ -79,16 +81,6 @@
 				statusBarElementId: 'statusBarElement',
 				layerPanelElementId: 'layerPanelElement'
 			});
-	
-			var chooser = Ext.create('LTP.ImageChooser', {
-				listeners: {
-					newImage: function(options) {
-						LTP.app.load(options);
-					}
-				}
-			});
-			chooser.render('containerElement');
-			chooser.alignTo('containerElement', 'c-c');
 		});
 
 	</script>

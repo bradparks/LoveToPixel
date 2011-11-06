@@ -8,38 +8,20 @@
 	var _overrideActive = false;
 
 	var _lockDirections = [
-		LTP.DirectionLockTransformer.directions.upDown,
-		LTP.DirectionLockTransformer.directions.leftRight
-	];
+	LTP.DirectionLockTransformer.directions.upDown, LTP.DirectionLockTransformer.directions.leftRight];
 	var _currentLockIndex = 0;
 
 	var _colors = [
-		colors.white,
-		colors.black,
-		colors.red,
-		colors.lightGray,
-		colors.blue,
-		colors.green,
-		colors.yellow,
-		colors.orange,
-		colors.purple,
-		colors.gray,
-		colors.brown,
-		'#FF9999',
-		'#33AA11',
-		'#333333',
-		'#88AAFF',
-		'#337722',
-	];
+	colors.white, colors.black, colors.red, colors.lightGray, colors.blue, colors.green, colors.yellow, colors.orange, colors.purple, colors.gray, colors.brown, '#FF9999', '#33AA11', '#333333', '#88AAFF', '#337722', ];
 
-	var _sizes = [1,2,3,4,5,8,14];
+	var _sizes = [1, 2, 3, 4, 5, 8, 14];
 
 	function _destroyAll(components) {
 		var component;
-		if(components) {
-			for(var i = 0, len = components.length; i < len; ++i) {
+		if (components) {
+			for (var i = 0, len = components.length; i < len; ++i) {
 				component = components[i];
-				if(typeof component.destroy === 'function') {
+				if (typeof component.destroy === 'function') {
 					component.destroy();
 				}
 			}
@@ -49,7 +31,7 @@
 	var app = {
 		callbacks: {
 			c: function() {
-				if(!LTP.app.floatingColorPalette) {
+				if (!LTP.app.floatingColorPalette) {
 					LTP.app.floatingColorPalette = Ext.create('LTP.FloatingColorPalette', {
 						colors: _colors
 					});
@@ -58,7 +40,7 @@
 				LTP.app.floatingColorPalette.togglePopup();
 			},
 			b: function() {
-				if(!LTP.app.floatingSizePalette) {
+				if (!LTP.app.floatingSizePalette) {
 					LTP.app.floatingSizePalette = Ext.create('LTP.FloatingSizePalette', {
 						sizes: _sizes
 					});
@@ -68,17 +50,17 @@
 			},
 			escdown: function() {
 				// TODO: this should be incorporated into the palette
-				if(LTP.app.floatingColorPalette && LTP.app.floatingColorPalette.isPopped) {
+				if (LTP.app.floatingColorPalette && LTP.app.floatingColorPalette.isPopped) {
 					LTP.app.floatingColorPalette.togglePopup();
 				}
 			},
 			z: function(shift) {
-				var delta = shift ? -1 : 1;
+				var delta = shift ? - 1: 1;
 				_currentZoomIndex += delta;
-				if(_currentZoomIndex >= _zoomLevels.length) {
+				if (_currentZoomIndex >= _zoomLevels.length) {
 					_currentZoomIndex = _zoomLevels.length - 1;
 				}
-				if(_currentZoomIndex < 0) {
+				if (_currentZoomIndex < 0) {
 					_currentZoomIndex = 0;
 				}
 
@@ -91,11 +73,11 @@
 				LTP.app.painter.redo();
 			},
 			g: function() {
-				_currentGridIndex  = (_currentGridIndex + 1) % _gridLevels.length;
+				_currentGridIndex = (_currentGridIndex + 1) % _gridLevels.length;
 				LTP.app.grid.cellSize = _gridLevels[_currentGridIndex];
 			},
 			i: function() {
-				if(_overrideActive) {
+				if (_overrideActive) {
 					LTP.app.painter.popOverrideTool();
 					_overrideActive = false;
 				} else {
@@ -104,7 +86,7 @@
 				}
 			},
 			adown: function(shift) {
-				if(!shift) {
+				if (!shift) {
 					_savedZoomIndex = _currentZoomIndex;
 				}
 
@@ -112,12 +94,15 @@
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
 			aup: function(shift) {
-				if(!shift) {
+				if (!shift) {
 					_currentZoomIndex = _savedZoomIndex;
 					LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 				}
 			},
 			s: function() {
+
+			},
+			e: function() {
 				var composited = LTP.app.layerManager.composite();
 				window.open(composited.toDataURL('png'), 'savedImage');
 			},
@@ -125,7 +110,7 @@
 				LTP.app.layerManager.dumpLayers();
 			},
 			spacedown: function() {
-				if(_overrideActive) {
+				if (_overrideActive) {
 					LTP.app.painter.popOverrideTool();
 				}
 				LTP.app.painter.pushOverrideTool(new LTP.PanningTool());
@@ -136,12 +121,12 @@
 				_overrideActive = false;
 			},
 			k: function() {
-				if(_overrideActive) {
+				if (_overrideActive) {
 					LTP.app.painter.popOverrideTool();
 				} else {
 					LTP.app.painter.pushOverrideTool(new LTP.FillTool());
 				}
-				_overrideActive = !_overrideActive;
+				_overrideActive = ! _overrideActive;
 			},
 			controldown: function() {
 				var direction = _lockDirections[_currentLockIndex];
@@ -165,6 +150,7 @@
 		},
 
 		init: function(config) {
+			var me = this;
 			Ext.apply(this, config);
 
 			this.statusBar = Ext.create('LTP.StatusBar', {
@@ -174,21 +160,36 @@
 			this.layerPanel = Ext.create('LTP.LayerPanel', {
 				renderTo: this.layerPanelElementId
 			});
-		},
 
-		load: function(project) {
-			if(project.imageFile) {
-				LTP.ImageLoader.load(project.imageFile, 
-					function(img) {
-						this._load(s(img.width, img.height), img);
+			var onChooserNewImage = function(project) {
+				if (project.imageFile) {
+					LTP.ImageLoader.load(project.imageFile, function(img) {
+						me._load(s(img.width, img.height), img);
 					},
 					function(errorMessage) {
 						Ext.MessageBox.alert('Error', errorMessage);
 					},
-					this);
-			} else {
-				this._load(project.imageSize);
-			}
+					me);
+				} else {
+					me._load(project.imageSize);
+				}
+			};
+
+			this.projectPersister = new LTP.ProjectPersister();
+
+			this.projectPersister.loadAllProjects(function(projects) {
+				for(var i = 0; i < 100; ++i) {
+					projects.push({Id: i, Name: 'Foo' + i, Thumbnail: 'http://www.gif-gifs.com/gif-English/metal-slug-gifs/metal-slug-gif-%20(5).gif', ThumbnailHeight: 60 });
+				}
+
+				this.imageChooser = Ext.create('LTP.ImageChooser', {
+					renderTo: Ext.getBody(),
+					listeners: {
+						newImage: onChooserNewImage
+					},
+					projects: projects
+				});
+			}, this);
 		},
 
 		_imageLoadError: function(msg) {
@@ -221,28 +222,30 @@
 			this.container.grid = this.grid.canvas;
 			this.container.scratch = this.painter.scratch;
 
-
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor, mouseButton) {
-				var prefix = mouseButton === 0 ? 'left' : 'right';
+				var prefix = mouseButton === 0 ? 'left': 'right';
 				LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
 				this.painter.popOverrideTool();
-			}, this);
+			},
+			this);
 
 			LTP.GlobalMessageBus.subscribe('leftSizeSelected', function(size) {
-				this.painter.leftTool = new LTP.BrushTool(size);	
-			}, this);
+				this.painter.leftTool = new LTP.BrushTool(size);
+			},
+			this);
 
 			LTP.GlobalMessageBus.subscribe('rightSizeSelected', function(size) {
-				this.painter.rightTool = new LTP.BrushTool(size);	
-			}, this);
+				this.painter.rightTool = new LTP.BrushTool(size);
+			},
+			this);
 
-			for(var i = 0; i < _colors.length; ++i) {
-				this.callbacks[(i+1).toString()] = (function(i, painter) {
+			for (var i = 0; i < _colors.length; ++i) {
+				this.callbacks[(i + 1).toString()] = (function(i, painter) {
 					return function() {
 						LTP.GlobalMessageBus.publish('leftColorSelected', _colors[i]);
 					}
 				})(i, this.painter);
-			}	
+			}
 
 			this.keyListener = new LTP.KeyListener(this);
 			this._components.push(this.keyListener);
@@ -258,3 +261,4 @@
 
 	LTP.app = app;
 })();
+
