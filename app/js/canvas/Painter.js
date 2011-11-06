@@ -13,6 +13,7 @@
 		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 		this._messageBus.subscribe('leftColorSelected', this._onLeftColorSelected, this);
 		this._messageBus.subscribe('rightColorSelected', this._onRightColorSelected, this);
+		this._messageBus.subscribe('cursorDisplayChangeRequest', this._onCursorDisplayChangeRequest, this);
 
 		this._overrideToolState = { down: false, active: false };
 		this._leftToolState = { down: false };
@@ -56,11 +57,15 @@
 
 		set leftTool(tool) {
 			this._leftToolState.tool = tool;
+			this._lastToolState = this._leftToolState;
 			this._messageBus.publish('leftToolChanged', tool);
+			this._doOverlay();
 		},
 
 		set leftColor(color) {
 			this._leftColor = color;
+			this._lastToolState = this._leftToolState;
+			this._doOverlay();
 		},
 
 		get leftColor() {
@@ -69,6 +74,8 @@
 
 		set rightColor(color) {
 			this._rightColor = color;
+			this._lastToolState = this._rightToolState;
+			this._doOverlay();
 		},
 
 		get rightColor() {
@@ -85,7 +92,9 @@
 
 		set rightTool(tool) {
 			this._rightToolState.tool = tool;
+			this._lastToolState = this._rightToolState;
 			this._messageBus.publish('rightToolChanged', tool);
+			this._doOverlay();
 		},
 
 		get rightTool() {
@@ -117,9 +126,10 @@
 
 		destroy: function() {
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
-		this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
-		this._messageBus.unsubscribe('leftColorSelected', this._onLeftColorSelected);
-		this._messageBus.unsubscribe('rightColorSelected', this._onRightColorSelected);
+			this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
+			this._messageBus.unsubscribe('leftColorSelected', this._onLeftColorSelected);
+			this._messageBus.unsubscribe('rightColorSelected', this._onRightColorSelected);
+			this._messageBus.unsubscribe('cursorDisplayChangeRequest', this._onCursorDisplayChangeRequest);
 		},
 
 		_hook: function p_hook(canvas) {
@@ -411,14 +421,14 @@
 
 		_onLeftColorSelected: function p_onLeftColorSelected(color) {
 			this.leftColor = color;
-			this._lastToolState = this._leftToolState;
-			this._doOverlay();
 		},
 
 		_onRightColorSelected: function p_onRightColorSelected(color) {
 			this.rightColor = color;
-			this._lastToolState = this._rightToolState;
-			this._doOverlay();
+		},
+
+		_onCursorDisplayChangeRequest: function p_onCursorDisplayChangeRequest(cursorDisplay) {
+			this._overlay.style.cursor = cursorDisplay;
 		}
 	};
 

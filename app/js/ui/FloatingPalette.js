@@ -15,13 +15,24 @@
 		layout: 'column',
 		isPopped: false,
 
+		constructor: function(config) {
+			this.callParent(arguments);
+			this.messageBus = config.messageBus || LTP.GlobalMessageBus;
+		},
+
 		togglePopup: function() {
 			if(!this.isPopped) {
+				this.messageBus.publish('cursorDisplayChangeRequest', '');
 				this.showAt(_mouseX - this.width / 2, _mouseY - this.height - 30);
 			} else {
 				this.hide();
 			}
 			this.isPopped = !this.isPopped;
+		},
+
+		hide: function() {
+			this.messageBus.publish('cursorDisplayChangeRequest', 'none');
+			this.callParent(arguments);
 		}
 	},
 	function() {

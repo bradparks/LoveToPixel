@@ -1,7 +1,8 @@
 (function() {
-	var _zoomLevels = [.25, .5, 1, 2, 4, 8, 16, 32];
+	var _zoomLevels = [.125, .25, .5, 1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
+	var _fullSizeZoomIndex = _zoomLevels.indexOf(1);
 	var _savedZoomIndex = undefined;
-	var _currentZoomIndex = 2;
+	var _currentZoomIndex = _fullSizeZoomIndex;
 	var _gridLevels = [5, 10, 15, 20, 20000];
 	var _currentGridIndex = 4;
 	var _overrideActive = false;
@@ -67,12 +68,20 @@
 			},
 			escdown: function() {
 				// TODO: this should be incorporated into the palette
-				if(LTP.app.floatingColorPalette.isPopped) {
+				if(LTP.app.floatingColorPalette && LTP.app.floatingColorPalette.isPopped) {
 					LTP.app.floatingColorPalette.togglePopup();
 				}
 			},
-			z: function() {
-				_currentZoomIndex = (_currentZoomIndex + 1) % _zoomLevels.length;
+			z: function(shift) {
+				var delta = shift ? -1 : 1;
+				_currentZoomIndex += delta;
+				if(_currentZoomIndex >= _zoomLevels.length) {
+					_currentZoomIndex = _zoomLevels.length - 1;
+				}
+				if(_currentZoomIndex < 0) {
+					_currentZoomIndex = 0;
+				}
+
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
 			u: function() {
@@ -94,14 +103,19 @@
 					_overrideActive = true;
 				}
 			},
-			adown: function() {
-				_savedZoomIndex = _currentZoomIndex;
-				_currentZoomIndex = 2;
+			adown: function(shift) {
+				if(!shift) {
+					_savedZoomIndex = _currentZoomIndex;
+				}
+
+				_currentZoomIndex = _fullSizeZoomIndex;
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
-			aup: function() {
-				_currentZoomIndex = _savedZoomIndex;
-				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
+			aup: function(shift) {
+				if(!shift) {
+					_currentZoomIndex = _savedZoomIndex;
+					LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
+				}
 			},
 			s: function() {
 				var composited = LTP.app.layerManager.composite();
@@ -210,7 +224,7 @@
 
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor, mouseButton) {
 				var prefix = mouseButton === 0 ? 'left' : 'right';
-				LTP.GLobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
+				LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
 				this.painter.popOverrideTool();
 			}, this);
 

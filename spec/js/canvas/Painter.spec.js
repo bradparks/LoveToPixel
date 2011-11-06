@@ -6,7 +6,8 @@ describe("Painter", function() {
 		'activeLayerChanged',
 		'leftColorSelected',
 		'rightColorSelected',
-		'canvasMouseCoordinatesChanged'
+		'canvasMouseCoordinatesChanged',
+		'cursorDisplayChangeRequest'
 	];
 
 	var mockSize = p(10,10);
@@ -225,6 +226,17 @@ describe("Painter", function() {
 
 			mb.publish('leftColorSelected');
 			expect(painter._lastToolState.tool).toBe(leftTool);
+		});
+
+		it("should set the cursor display on cursorDisplayChangeRequest", function() {
+			var mb = new LTP.MessageBus(messages);
+
+			var painter = new LTP.Painter(s(4,4), mockPointTransformer, mb);
+
+			var cursorDisplay = '';
+			mb.publish('cursorDisplayChangeRequest', cursorDisplay);
+			expect(painter.overlay.style.cursor).toEqual(cursorDisplay);
+
 		});
 	});
 });

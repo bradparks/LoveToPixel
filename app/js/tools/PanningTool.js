@@ -12,8 +12,13 @@
 			var topDelta = e.currentPointNonTransformed.y - e.lastPointNonTransformed.y;
 			var leftDelta = e.currentPointNonTransformed.x - e.lastPointNonTransformed.x;
 
-			container.scrollTop -= topDelta;
-			container.scrollLeft -= leftDelta;
+			console.log("lp: ", e.lastPointNonTransformed.toString(), " cp: ", e.currentPointNonTransformed.toString());
+
+			var newTopScroll = container.scrollTop - topDelta;
+			var newLeftScroll = container.scrollLeft - leftDelta;
+			
+			container.scrollTop = newTopScroll// -= topDelta;
+			container.scrollLeft = newLeftScroll;// -= leftDelta;
 		},
 
 		overlay: function p_overlay(context, point) {

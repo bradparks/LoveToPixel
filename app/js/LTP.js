@@ -3,6 +3,10 @@
 		return new LTP.Pair(w, h);
 	};
 
+	LTP.sr = function LTP_sr(w,h) {
+		return new LTP.Pair(Math.round(w), Math.round(h));
+	};
+
 	LTP.r = function LTP_r() {
 		if(arguments.length === 4) {
 			return new LTP.Rectangle(arguments[0], arguments[1], arguments[2], arguments[3]);
@@ -13,6 +17,7 @@
 	};
 
 	LTP.util.global.s = LTP.p = LTP.util.global.p = LTP.s;
+	LTP.util.global.sr = LTP.pr = LTP.util.global.pr = LTP.sr;
 	LTP.util.global.r = LTP.r;
 
 	LTP.GlobalMessages = [
@@ -28,7 +33,8 @@
 		'rightSizeSelected',
 		'newLayerCreated',
 		'activeLayerChanged',
-		'lockChanged'
+		'lockChanged',
+		'cursorDisplayChangeRequest'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);

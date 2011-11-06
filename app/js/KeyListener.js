@@ -37,7 +37,7 @@
 			var character =  this._getCharacter(e.keyCode); 
 			character = character.toLowerCase();
 
-			if(character === ' ') {
+			if(character === 'space') {
 				e.preventDefault();
 			}
 		
@@ -45,13 +45,13 @@
 				this._callbacks[character].call(this._scope, e.shiftKey);
 			}
 
-			return character !== ' ';
+			return character !== 'space';
 		},
 
 		_onKeyDown: function kl_onKeyDown(e) {
 			var character =  this._getCharacter(e.keyCode); 
 
-			if(character === ' ') {
+			if(character === 'space') {
 				e.preventDefault();
 			}
 
@@ -65,14 +65,14 @@
 				this._downKeys[character] = true;
 			}
 
-			return character !== ' ';
+			return character !== 'space';
 		},
 
 		_onKeyUp: function kl_onKeyUp(e) {
 			var character =  this._getCharacter(e.keyCode); 
 			var callbackName = character + 'up';
 
-			if(character === ' ') {
+			if(character === 'space') {
 				e.preventDefault();
 			}
 
@@ -82,7 +82,7 @@
 
 			this._downKeys[character] = false;
 
-			return character !== ' ' ;
+			return character !== 'space' ;
 		},
 
 		destroy: function() {

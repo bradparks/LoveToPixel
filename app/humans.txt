@@ -1,0 +1,12 @@
+/* TEAM */
+	Everything: Matt Greer
+	Contact: matt.e.greer@gmail.com
+	From: Denver, CO
+
+/* SITE */
+	Language: English
+	Doctype: HTML5
+	IDE: MacVim
+	Tools: JasmineJS, python SimpleHTTPServer, Chrome dev tools
+
+
