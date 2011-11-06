@@ -33,6 +33,11 @@ body, html {
 	image-rendering: -webkit-optimize-contrast;
 }
 
+canvas {
+	image-rendering: -webkit-optimize-contrast;
+}
+	
+
 #transparencyBackdropElement {
 	border: 2px solid black;
 	background-image: url(transparency.png);
