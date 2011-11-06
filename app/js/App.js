@@ -68,7 +68,7 @@
 			},
 			escdown: function() {
 				// TODO: this should be incorporated into the palette
-				if(LTP.app.floatingColorPalette.isPopped) {
+				if(LTP.app.floatingColorPalette && LTP.app.floatingColorPalette.isPopped) {
 					LTP.app.floatingColorPalette.togglePopup();
 				}
 			},

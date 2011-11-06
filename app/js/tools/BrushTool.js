@@ -18,12 +18,14 @@
 
 		overlay: function bt_overlay(context, point) {
 			context.save();
+			var color = 'rgba(255, 0, 0, .5)';
+			context.globalCompositeOperation = 'lighter';
 
 			if (this._size < 3) {
-				context.fillStyle = 'rgba(255, 0, 0, .5)';
+				context.fillStyle = color;
 				this._placePoint(context, point);
 			} else {
-				context.strokeStyle = 'orange';
+				context.strokeStyle = color;
 				context.lineWidth = 1;
 				this._placePoint(context, point, {
 					stroke: true

@@ -60,8 +60,14 @@
 	<script type="text/javascript">
 
 		Ext.onReady(function() {
-			if(navigator.userAgent.indexOf('WebKit') < 0 || !Ext.is.Desktop) {
-				alert('so far LoveToPixel only works on Chrome and Desktop Safari');
+			if(navigator.userAgent.indexOf('Chrome') < 0) {
+				Ext.MessageBox.show({
+					title: 'Chrome is required', 
+					msg: "So far <a href='http://www.google.com/chrome'>Chrome</a> is the only browser that LoveToPixel works well in. This is a temporary situation. <br/><br/> LTP won't work at all in IE, Firefox or Opera."
+					+ " LTP works in Safari, but is quite slow and sluggish.",
+					icon: Ext.Msg.WARNING,
+					buttons: Ext.Msg.OK
+				});
 			} 
 			LTP.app.init({
 				toolbarElementId: 'toolbarElement',
