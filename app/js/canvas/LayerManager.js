@@ -20,6 +20,10 @@
 			return parseInt(this.style.zIndex, 10);
 		});
 
+		canvas.__defineSetter__("index", function(index) {
+			this.style.zIndex = index;
+		});
+
 		canvas.__defineGetter__("data", function() {
 			return this.toDataURL("png");
 		});
@@ -28,27 +32,37 @@
 			var me = this;
 			var img = document.createElement('img');
 			img.onload = function() {
-				this.getContext('2d').drawImage(img, 0, 0);
+				me.getContext('2d').drawImage(img, 0, 0);
 			};
 			img.src = data;
 		});
 	}
 
-	LTP.LayerManager = function LayerManager(config) {
-		this._size = config.size;
+	LTP.LayerManager = function LayerManager(project, messageBus) {
+		this._size = project.size;
 
-		this._messageBus = config.messageBus || LTP.GlobalMessageBus;
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
-		this._layers = [];
-		var backgroundLayer = this.addNewLayer(this.BaseLayerName, config.size);
-
-		if(config.image) {
-			this._drawImageInto(config.image, backgroundLayer);
-		}
+		this._layers = this._hydrateLayersFromProject(project);
+		this._activeLayerIndex = this._layers.length - 1;
 	};
 
 	LTP.LayerManager.prototype = {
-		BaseLayerName: "initial layer",
+		_hydrateLayersFromProject: function lm_hydrateLayersFromProject(project) {
+			var layers = [];
+			for(var i = 0; i < project.layers.length; ++i) {
+				var layerConfig = project.layers[i];
+				var newLayer = this._createLayer(layerConfig.layerName, project.size, layerConfig.data);
+				newLayer.index = layerConfig.index;
+				layers.push(newLayer);
+			}
+
+			layers.sort(function(layerA, layerB) {
+				return layerA.index - layerB.index;
+			});
+
+			return layers;
+		},
 
 		dumpLayers: function() {
 			for(var i = 0; i < this._layers.length; ++i) {
@@ -161,7 +175,7 @@
 			this._layers = null;
 		},
 
-		_createLayer: function(name, size) {
+		_createLayer: function(name, size, data) {
 			var canvas = document.createElement('canvas');
 			canvasToLayer(canvas);
 			canvas.layerName = name;
@@ -172,6 +186,10 @@
 			canvas.style.position = "absolute";
 			canvas.style.top = 0;
 			canvas.style.left = 0;
+
+			if(data) {
+				canvas.data = data;
+			}
 
 			return canvas;
 		},

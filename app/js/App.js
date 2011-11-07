@@ -161,31 +161,37 @@
 				renderTo: this.layerPanelElementId
 			});
 
-			var onChooserNewImage = function(project) {
-				if (project.imageFile) {
-					LTP.ImageLoader.load(project.imageFile, function(img) {
-						me._load(s(img.width, img.height), img);
-					},
-					function(errorMessage) {
-						Ext.MessageBox.alert('Error', errorMessage);
-					},
-					me);
-				} else {
-					me._load(project.imageSize);
-				}
-			};
-
 			this.projectPersister = new LTP.ProjectPersister();
 
 			this.projectPersister.loadAllProjects(function(projects) {
-				for(var i = 0; i < 100; ++i) {
-					projects.push({Id: i, Name: 'Foo' + i, Thumbnail: 'http://www.gif-gifs.com/gif-English/metal-slug-gifs/metal-slug-gif-%20(5).gif', ThumbnailHeight: 60 });
-				}
+				var thumbnail = LTP.ImageLoader.createThumbnail(LTP.KOF94BG, s(200, 80));
+				console.log("THUMBNAIL: " + thumbnail.substring(0, 30));
+				projects.push(
+					{
+						name: 'KOF94',
+						size: s(768, 241),
+						thumbnail: thumbnail,
+						thumbnailHeight: 80,
+						layers: [
+							{
+								layerName: 'kof94',
+								index: 3,
+								data: LTP.KOF94BG
+							},
+							{
+								layerName: 'doodle',
+								index: 6,
+								data: LTP.KOF94BG_2
+							}
+						]
+					}
+				);
 
 				this.projectChooser = Ext.create('LTP.ProjectChooser', {
 					renderTo: Ext.getBody(),
 					listeners: {
-						newImage: onChooserNewImage
+						projectChosen: this._load,
+						scope: this
 					},
 					projects: projects
 				});
@@ -196,27 +202,27 @@
 			Ext.MessageBox.alert('Error', msg);
 		},
 
-		_load: function(size, baseImage) {
+		_load: function(project) {
 			_destroyAll(this._components);
 			this._components = [];
 
-			this.layerManager = new LTP.LayerManager({
-				size: size,
-				image: baseImage
-			});
+			this.layerManager = new LTP.LayerManager(project);
 
 			this._components.push(this.layerManager);
 
-			this.container = new LTP.Container(size, document.getElementById(this.containerElementId));
+			this.container = new LTP.Container(project.size, document.getElementById(this.containerElementId));
 			this._components.push(this.container);
 
-			this.painter = new LTP.Painter(size, new LTP.PointTransformer());
+			this.painter = new LTP.Painter(project.size, new LTP.PointTransformer());
 			this._components.push(this.painter);
 
-			this.grid = new LTP.Grid(size, 'gray', 20000);
+			this.grid = new LTP.Grid(project.size, 'gray', 20000);
 			this._components.push(this.grid);
 
-			this.container.addLayer(this.layerManager.activeLayer);
+			Ext.Array.each(this.layerManager.layers, function(layer) {
+				this.container.addLayer(layer)
+			}, this);
+
 			this.painter.activeCanvas = this.layerManager.activeLayer;
 			this.container.overlay = this.painter.overlay;
 			this.container.grid = this.grid.canvas;

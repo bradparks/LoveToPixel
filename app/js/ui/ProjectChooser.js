@@ -39,21 +39,25 @@
 				},
 				items: [{
 					xtype: 'ltp.projectlist',
+					itemId: 'projectList',
 					title: 'Saved Projects',
-					projects: this.projects
-				},
-				{
-					xtype: 'panel',
-					title: 'From an Image',
-					items: [{
-						xtype: 'filefield',
-						fieldLabel: 'Image'
-					}]
+					projects: this.projects,
+					flex: 2
 				},
 				{
 					xtype: 'panel',
 					title: 'New Project',
 					items: [{
+						xtype: 'textfield',
+						fieldLabel: 'Name',
+						name: 'name',
+						itemId: 'nameField'
+					},
+					{
+						xtype: 'filefield',
+						fieldLabel: 'Image'
+					},
+					{
 						xtype: 'textfield',
 						fieldLabel: 'size',
 						value: '600x400',
@@ -83,23 +87,59 @@
 			}];
 
 			this.callParent(arguments);
-			//this.on('show', function() {
-				//this.focus(true);
-			//},
-			//this);
+		},
+
+		_getSizeFromSizeField: function() {
+			var sizeString = this.down('#sizeField').getValue();
+			return parseSizeString(sizeString);
+		},
+
+		_getNameFromNameField: function() {
+			var name = this.down('#nameField').getValue();
+			return name || 'Untitled Project';
+		},
+
+		_setSizeAndImageDataFromFile: function(file, project, callback) {
+			LTP.ImageLoader.load(file, function(loadedImg) {
+				project.size = s(loadedImg.width, loadedImg.height);
+				project.layers[0].data = loadedImg.src;
+				callback();
+			});
 		},
 
 		go: function() {
-			var sizeString = this.down('#sizeField').getValue();
-			var size = parseSizeString(sizeString);
-			var fileList = this.down('filefield').fileInputEl.dom.files;
+			function fireEvent(project) {
+				this.fireEvent('projectChosen', project);
+				this.close();
+			}
 
-			this.fireEvent('newImage', {
-				imageSize: size,
-				imageFile: fileList && fileList[0]
-			});
+			var project = this.down('#projectList').getSelectedProject();
 
-			this.close();
+			if (!project) {
+				project = {};
+
+				project.name = this._getNameFromNameField();
+
+				project.layers = [{
+					layerName: 'Initial Layer',
+					isVisible: true,
+					index: 3,
+					data: null
+				}];
+
+				var fileList = this.down('filefield').fileInputEl.dom.files;
+
+				if (fileList && fileList[0]) {
+					var me = this;
+					this._setSizeAndImageDataFromFile(fileList[0], project, function() {
+						fireEvent.call(me, project);
+					});
+					return;
+				} else {
+					project.size = this._getSizeFromSizeField() || s(300, 300);
+				}
+			}
+			fireEvent.call(this, project);
 		}
 	});
 })();

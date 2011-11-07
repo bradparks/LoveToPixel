@@ -10,15 +10,15 @@
 		initComponent: function() {
 			this.columns = [{
 				header: 'Name',
-				dataIndex: 'Name',
+				dataIndex: 'name',
 				menuDisabled: true
 			},
 			{
 				header: 'Thumbnail',
 				xtype: 'templatecolumn',
-				tpl: '<div style="height:{ThumbnailHeight}px"><img src="{Thumbnail}" /></div>',
+				tpl: '<div style="height:{thumbnailHeight}px"><img src="{thumbnail}" /></div>',
 				flex: 1,
-				dataIndex: 'Thumbnail'
+				dataIndex: 'thumbnail'
 			}],
 			this.store = Ext.create('Ext.data.Store', {
 				model: 'LTP.ProjectModel',
@@ -30,7 +30,7 @@
 
 		getSelectedProject: function() {
 			var s = this.getSelectionModel().getSelection();
-			return s && s.length && s[0];
+			return s && s.length && s[0] && s[0].data;
 		}
 	});
 
