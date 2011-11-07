@@ -12,8 +12,6 @@
 			var topDelta = e.currentPointNonTransformed.y - e.lastPointNonTransformed.y;
 			var leftDelta = e.currentPointNonTransformed.x - e.lastPointNonTransformed.x;
 
-			console.log("lp: ", e.lastPointNonTransformed.toString(), " cp: ", e.currentPointNonTransformed.toString());
-
 			var newTopScroll = container.scrollTop - topDelta;
 			var newLeftScroll = container.scrollLeft - leftDelta;
 			

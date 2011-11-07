@@ -121,6 +121,7 @@
 				project.name = this._getNameFromNameField();
 
 				project.layers = [{
+					id: 1,
 					layerName: 'Initial Layer',
 					isVisible: true,
 					index: 3,

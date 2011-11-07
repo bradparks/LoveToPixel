@@ -100,7 +100,7 @@
 				}
 			},
 			s: function() {
-
+				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers);
 			},
 			e: function() {
 				var composited = LTP.app.layerManager.composite();
@@ -164,45 +164,39 @@
 			this.projectPersister = new LTP.ProjectPersister();
 
 			this.projectPersister.loadAllProjects(function(projects) {
-				var thumbnail = LTP.ImageLoader.createThumbnail(LTP.KOF94BG, s(200, 80));
-				console.log("THUMBNAIL: " + thumbnail.substring(0, 30));
-				projects.push(
-					{
+				LTP.ImageLoader.createThumbnail(LTP.KOF94BG, s(200, 80), function(thumbnail, thumbnailSize) {
+					projects.push({
 						name: 'KOF94',
 						size: s(768, 241),
-						thumbnail: thumbnail,
-						thumbnailHeight: 80,
-						layers: [
-							{
-								layerName: 'kof94',
-								index: 3,
-								data: LTP.KOF94BG
-							},
-							{
-								layerName: 'doodle',
-								index: 6,
-								data: LTP.KOF94BG_2
-							}
-						]
-					}
-				);
+						thumbnailData: thumbnail,
+						thumbnailHeight: thumbnailSize.height,
+						layers: [{
+							layerName: 'kof94',
+							index: 3,
+							data: LTP.KOF94BG
+						},
+						{
+							layerName: 'doodle',
+							index: 6,
+							data: LTP.KOF94BG_2
+						}]
+					});
 
-				this.projectChooser = Ext.create('LTP.ProjectChooser', {
-					renderTo: Ext.getBody(),
-					listeners: {
-						projectChosen: this._load,
-						scope: this
-					},
-					projects: projects
-				});
+					this.projectChooser = Ext.create('LTP.ProjectChooser', {
+						renderTo: Ext.getBody(),
+						projects: projects,
+						listeners: {
+							projectChosen: this._load,
+							scope: this
+						}
+					});
+				}, this);
 			}, this);
 		},
 
-		_imageLoadError: function(msg) {
-			Ext.MessageBox.alert('Error', msg);
-		},
-
 		_load: function(project) {
+			this._currentProject = project;
+
 			_destroyAll(this._components);
 			this._components = [];
 
@@ -221,7 +215,8 @@
 
 			Ext.Array.each(this.layerManager.layers, function(layer) {
 				this.container.addLayer(layer)
-			}, this);
+			},
+			this);
 
 			this.painter.activeCanvas = this.layerManager.activeLayer;
 			this.container.overlay = this.painter.overlay;

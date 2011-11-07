@@ -13,6 +13,7 @@
 
 			this.items = [{
 				xtype: 'grid',
+				itemId: 'layerGrid',
 				multiSelect: false,
 				sortableColumns: false,
     		viewConfig: {
@@ -80,6 +81,9 @@
 			this.layerManager = layerManager;
 			this._addLayersToStore(this.viewStore, layerManager);
 			this.setDisabled(false);
+
+			var grid = this.down('#layerGrid');
+			grid.getSelectionModel().select(grid.store.first());
 		},
 
 		_selectionChange: function(selectionModel, selectedRecords, options) {

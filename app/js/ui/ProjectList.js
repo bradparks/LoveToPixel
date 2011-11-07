@@ -16,9 +16,9 @@
 			{
 				header: 'Thumbnail',
 				xtype: 'templatecolumn',
-				tpl: '<div style="height:{thumbnailHeight}px"><img src="{thumbnail}" /></div>',
+				tpl: '<div style="height:{thumbnailHeight}px"><img src="{thumbnailData}" /></div>',
 				flex: 1,
-				dataIndex: 'thumbnail'
+				dataIndex: 'thumbnailData'
 			}],
 			this.store = Ext.create('Ext.data.Store', {
 				model: 'LTP.ProjectModel',

@@ -25,40 +25,41 @@
 			}
 		},
 
-		fromDataUrlToImg: function(dataUrl) {
+		fromDataUrlToImg: function(dataUrl, callback, scope) {
 			var img = document.createElement('img');
+			img.onload = function() {
+				callback.call(scope, img);
+			};
 			img.src = dataUrl;
-			return img;
 		},
 
-		createThumbnail: function(dataUrl, maxSize) {
-			var img = this.fromDataUrlToImg(dataUrl);
-			
-			var canvas = document.createElement('canvas');
+		createThumbnail: function(dataUrl, maxSize, callback, scope) {
+			this.fromDataUrlToImg(dataUrl, function(img) {
 
-			var widthDelta = img.width - maxSize.width;
-			var heightDelta = img.height - maxSize.height;
-			var percentage;
+				var canvas = document.createElement('canvas');
 
-			if(widthDelta > 0 && widthDelta > heightDelta) {
-				percentage = maxSize.width / img.width;
-			} else if(heightDelta > 0 && heightDelta > widthDelta) {
-				percentage = maxSize.height / img.height;
-			}
+				var widthDelta = img.width - maxSize.width;
+				var heightDelta = img.height - maxSize.height;
+				var percentage;
 
-			if(percentage) {
-				canvas.width = img.width * percentage;
-				canvas.height = img.height * percentage;
-			} else {
-				canvas.width = img.width;
-				canvas.height = img.height;
-			}
+				if (widthDelta > 0 && widthDelta > heightDelta) {
+					percentage = maxSize.width / img.width;
+				} else if (heightDelta > 0 && heightDelta > widthDelta) {
+					percentage = maxSize.height / img.height;
+				}
 
-			console.log("IMG SRC: " + img.src.substring(0, 30));
-			console.log("IMG H: " + img.height);
-			canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+				if (percentage) {
+					canvas.width = img.width * percentage;
+					canvas.height = img.height * percentage;
+				} else {
+					canvas.width = img.width;
+					canvas.height = img.height;
+				}
 
-			return canvas.toDataURL('png');
+				canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height, 0, 0, canvas.width, canvas.height);
+
+				callback.call(scope, canvas.toDataURL('png'), s(canvas.width, canvas.height));
+			});
 		}
 	};
 

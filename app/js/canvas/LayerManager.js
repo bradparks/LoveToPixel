@@ -54,6 +54,8 @@
 				var layerConfig = project.layers[i];
 				var newLayer = this._createLayer(layerConfig.layerName, project.size, layerConfig.data);
 				newLayer.index = layerConfig.index;
+				newLayer['ltp.projectmodel_id'] = layerConfig['ltp.projectmodel_id'];
+				newLayer.id = layerConfig.id;
 				layers.push(newLayer);
 			}
 
