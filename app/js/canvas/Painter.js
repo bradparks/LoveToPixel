@@ -40,6 +40,7 @@
 		this._undoRedoStates = [];
 		this._currentUndoRedoStateIndex = -1;
 		this._entireBoundingBox = r(0, 0, this._size.width, this._size.height);
+		this._zoom = 1;
 	};	
 	
 	LTP.Painter.prototype = {
@@ -133,19 +134,19 @@
 		},
 
 		_hook: function p_hook(canvas) {
-			this._setEventListeners(canvas, 'add');
+			this._setEventListeners(Ext.get(canvas), 'on');
 		},
 
 		_unhook: function p_unhook(canvas) {
-			this._setEventListeners(canvas, 'remove');
+			this._setEventListeners(Ext.get(canvas), 'un');
 		},
 
-		_setEventListeners: function p_setEventListeners(canvas, prefix) {
-			canvas[prefix + 'EventListener']('mousedown', LTP.util.bind(this._onMouseDown, this), false);
-			canvas[prefix + 'EventListener']('mousemove', LTP.util.bind(this._onMouseMove, this), false);
-			canvas[prefix + 'EventListener']('mouseout', LTP.util.bind(this._onMouseOut, this), false);
-			canvas[prefix + 'EventListener']('mouseup', LTP.util.bind(this._onMouseUp, this), false);
-			canvas[prefix + 'EventListener']('contextmenu', LTP.util.bind(this._onContextMenu, this), false);
+		_setEventListeners: function p_setEventListeners(canvas, method) {
+			canvas[method]('mousedown', this._onMouseDown, this);
+			canvas[method]('mousemove', this._onMouseMove, this);
+			canvas[method]('mouseout', this._onMouseOut, this);
+			canvas[method]('mouseup', this._onMouseUp, this);
+			canvas[method]('contextmenu', this._onContextMenu, this);
 		},
 
 		_getToolStateForButton: function(button) {
@@ -182,9 +183,8 @@
 			e.preventDefault();
 			this._clear(this._overlay);
 
-
 			var toolState = this._getToolStateForButton(e.button);
-			var currentPointNonTransformed = p(e.offsetX, e.offsetY);
+			var currentPointNonTransformed = this._getCurrentPoint(e);
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
 
 			if(this._adhocTransformer) {
@@ -230,15 +230,22 @@
 			this._doOverlay(currentPoint);
 		},
 
+		_getCurrentPoint: function(e) {
+			var t = Ext.fly(e.target);
+			console.log('left: ' + t.getLeft());
+			console.log('top: ' + t.getTop());
+
+			var x = e.getX() - (t.getLeft() * this._zoom);
+			var y = e.getY() - (t.getTop() * this._zoom);
+			return p(x, y);
+		},
+
 		_onMouseMove: function p_onMouseMove(e) {
 			e.preventDefault();
 
 			var toolState = this._getToolStateForButton(e.button);
-			
-			var currentPointNonTransformed = p(e.offsetX, e.offsetY);
+			var currentPointNonTransformed = this._getCurrentPoint(e);
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
-
-
 
 			if(toolState && toolState.down) {
 				var lastPoint = toolState.lastPoint || currentPoint;
@@ -279,7 +286,8 @@
 			e.preventDefault();
 
 			var toolState = this._getToolStateForButton(e.button);
-			var currentPoint = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
+			var currentPointNonTransformed = this._getCurrentPoint(e);
+			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
 
 			if(toolState && toolState.down) {
 				toolState.down = false;
@@ -412,6 +420,7 @@
 		},
 
 		_onZoomChanged: function p_onZoomChanged(newZoom) {
+			this._zoom = newZoom;
 			this._pointTransformer.zoom = newZoom;
 		},
 

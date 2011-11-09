@@ -13,6 +13,7 @@
 		info.isLinux = (/Linux/i).test(platform);
 		info.isChrome = (/Chrome/i).test(ua);
 		info.isSafari = (/Safari/i).test(ua) && !info.isChrome;
+		info.isFirefox = (/Firefox/i).test(ua);
 
 		return info;
 	}
@@ -86,6 +87,9 @@
 			var rendering = 'optimizeSpeed';
 			if(this.platformInfo.isOSX && this.platformInfo.isChrome) {
 				rendering = '-webkit-optimize-contrast';
+			}
+			if(this.platformInfo.isFirefox) {
+				rendering = '-moz-crisp-edges';
 			}
 
 			element.style.imageRendering = rendering;

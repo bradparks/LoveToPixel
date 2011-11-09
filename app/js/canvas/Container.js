@@ -37,6 +37,8 @@
 		zoomTo: function c_zoomTo(zoom) {
 			this._pointTransformer.zoom = zoom;
 			this._containingElement.style.zoom = (Math.round(zoom * 100)).toString() + '%';
+			this._containingElement.style.MozTransform = 'scale(' + zoom + ')';
+
 
 			this._centerLayers();
 
