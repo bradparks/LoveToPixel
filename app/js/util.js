@@ -3,11 +3,28 @@
 		return this;
 	}
 
+	function getPlatformInfo() {
+		var ua = navigator.userAgent;
+		var platform = navigator.platform;
+
+		info = {};
+		info.isOSX = (/Mac/i).test(platform);
+		info.isWindows = (/Windows/i).test(platform);
+		info.isLinux = (/Linux/i).test(platform);
+		info.isChrome = (/Chrome/i).test(ua);
+		info.isSafari = (/Safari/i).test(ua) && !info.isChrome;
+		info.isFirefox = (/Firefox/i).test(ua);
+
+		return info;
+	}
+
+
 	global = returnGlobal.call(null);
 
 	global.LTP = global.LTP || {};
 
 	LTP.util = {
+		platformInfo: getPlatformInfo(),
 		get global() {
 			return global;
 		},
@@ -29,6 +46,10 @@
 			return function() {
 				fn.apply(scope, arguments);
 			}
+		},
+
+		get isOSX() {
+			return navigator.userAgent.indexOf("OS X") >= 0;
 		},
 
 		toArray: function(arg) {
@@ -57,7 +78,21 @@
 				}
 			}
 
+			this.setImageRendering(canvas);
+
 			return canvas;
+		},
+
+		setImageRendering: function(element) {
+			var rendering = 'optimizeSpeed';
+			if(this.platformInfo.isOSX && this.platformInfo.isChrome) {
+				rendering = '-webkit-optimize-contrast';
+			}
+			if(this.platformInfo.isFirefox) {
+				rendering = '-moz-crisp-edges';
+			}
+
+			element.style.imageRendering = rendering;
 		}
 	};
 	

@@ -80,6 +80,7 @@ describe("Painter", function() {
 			var outerDiv = document.createElement('div');
 			var innerDiv = document.createElement('div');
 			outerDiv.appendChild(innerDiv);
+			Ext.getBody().appendChild(outerDiv);
 
 			var canvas = document.createElement('canvas');
 			innerDiv.appendChild(canvas);
@@ -93,8 +94,9 @@ describe("Painter", function() {
 			var e = {
 				preventDefault: function() {},
 				button: 0,
-				clientX : 10,
-				clientY: 10
+				target: canvas,
+				getX: function() { return 0; },
+				getY: function() { return 0; }
 			};
 
 			spyOn(e, "preventDefault");

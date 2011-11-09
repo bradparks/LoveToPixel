@@ -177,17 +177,16 @@
 			this._layers = null;
 		},
 
-		_createLayer: function(name, size, data) {
-			var canvas = document.createElement('canvas');
+		_createLayer: function(name, size) {
+			var canvas = LTP.util.canvas(this._size, {
+				position: 'absolute',
+				top: 0,
+				left: 0
+			});
+
 			canvasToLayer(canvas);
 			canvas.layerName = name;
 			canvas.layerManager = this;
-
-			canvas.width = this._size.width;
-			canvas.height = this._size.height;
-			canvas.style.position = "absolute";
-			canvas.style.top = 0;
-			canvas.style.left = 0;
 
 			if(data) {
 				canvas.data = data;
@@ -210,3 +209,4 @@
 		}
 	};
 })();
+

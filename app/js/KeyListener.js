@@ -34,7 +34,7 @@
 			return _specialKeys[keyCode] || String.fromCharCode(keyCode).toLowerCase();
 		},
 		_onKeyPress: function kl_onKeyPress(e) {
-			var character =  this._getCharacter(e.keyCode); 
+			var character =  this._getCharacter(e.keyCode || e.charCode); 
 			character = character.toLowerCase();
 
 			if(character === 'space') {
