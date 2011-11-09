@@ -60,11 +60,13 @@
 	<script type="text/javascript">
 
 		Ext.onReady(function() {
-			if(navigator.userAgent.indexOf('Chrome') < 0) {
+			if(!LTP.util.platformInfo.isChrome || !LTP.util.platformInfo.isOSX) {
 				Ext.MessageBox.show({
 					title: 'Chrome is required', 
-					msg: "So far <a href='http://www.google.com/chrome'>Chrome</a> is the only browser that LoveToPixel works well in. This is a temporary situation. <br/><br/> LTP won't work at all in IE, Firefox or Opera."
-					+ " LTP works in Safari, but is quite slow and sluggish.",
+					msg: "So far <a href='http://www.google.com/chrome'>Chrome</a> is the only browser that LoveToPixel works well in. <b>Even then it only works perfectly in OSX</b>, it has some issues on other platforms. "
+					+ "This is a temporary situation. <br/><br/> LTP won't work at all in IE, Firefox or Opera."
+					+ " LTP works in Safari, but is quite slow and sluggish, and has issues when you zoom in.<br/><br/>"
+					+ "However, when LTP reaches that magical 1.0, it will work on all modern browsers. I promise :)",
 					icon: Ext.Msg.WARNING,
 					buttons: Ext.Msg.OK
 				});
