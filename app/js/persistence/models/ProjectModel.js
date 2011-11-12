@@ -9,7 +9,7 @@
 		],
 
 		associations: [
-			{ type: 'hasMany', model: 'LTP.LayerModel', name: 'layers' }
+			{ type: 'hasMany', model: 'LTP.LayerModel', name: 'layers', autoLoad: true }
 		],
 
 		proxy: {

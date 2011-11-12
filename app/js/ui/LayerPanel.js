@@ -110,48 +110,6 @@
 
 				store.insert(0, [layerModel]);
 			}
-		},
-
-		saveProject2: function(id, name, size) {
-			var project = Ext.create('LTP.ProjectModel', {
-				id: id,
-				name: name,
-				width: size.width,
-				height: size.height
-			});
-
-			project.save();
-
-			var layers = project.layers();
-			this.viewStore.each(function(layer) {
-				layers.add(layer);
-			});
-
-			layers.sync();
-		},
-
-		saveProject: function(id, name, size) {
-			debugger;
-			var projectStore = Ext.create('Ext.data.Store', {
-				model: 'LTP.ProjectModel'
-			});
-
-			projectStore.add({
-				id: id,
-				name: name,
-				width: size.width,
-				height: size.height
-			});
-			projectStore.sync();
-
-			var project = projectStore.first();
-
-			var layers = project.layers();
-			this.viewStore.each(function(layer) {
-				layers.add(layer);
-			});
-
-			layers.sync();
 		}
 	});
 

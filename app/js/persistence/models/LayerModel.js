@@ -2,7 +2,7 @@
 	Ext.define('LTP.LayerModel', {
 		extend: 'Ext.data.Model',
 		fields: [
-			{ name: 'id', type: 'integer' },
+			{ name: 'layerId', type: 'integer' },
 			{ name: 'ltp.projectmodel_id', type: 'integer' },
 			{	name: 'layerName', type: 'string' },
 			{ name: 'index', type: 'integer' },
@@ -13,6 +13,8 @@
 		associations: [
 			{ type: 'belongsTo', model: 'LTP.ProjectModel', name: 'project' }
 		],
+
+		idProperty: 'layerId',
 
 		proxy: {
 			type: 'localstorage',

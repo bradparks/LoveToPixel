@@ -232,8 +232,6 @@
 
 		_getCurrentPoint: function(e) {
 			var t = Ext.fly(e.target);
-			console.log('left: ' + t.getLeft());
-			console.log('top: ' + t.getTop());
 
 			var x = e.getX() - (t.getLeft() * this._zoom);
 			var y = e.getY() - (t.getTop() * this._zoom);

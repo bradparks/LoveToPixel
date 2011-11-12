@@ -2,11 +2,7 @@
 	LTP.ImageLoader = {
 		load: function il_load(file, callback, errorCallback, scope) {
 			this.loadToDataURL(file, function(dataUrl) {
-				var img = document.createElement('img');
-				img.onload = function() {
-					callback.call(scope, img);
-				};
-				img.src = dataUrl;
+				this.fromDataUrlToImg(dataUrl, callback, scope);
 			},
 			function(errorMsg) {
 				errorCallback.call(errorMsg, scope);
@@ -33,6 +29,7 @@
 			img.src = dataUrl;
 		},
 
+		// TODO: this doesn't belong here
 		createThumbnail: function(dataUrl, maxSize, callback, scope) {
 			this.fromDataUrlToImg(dataUrl, function(img) {
 

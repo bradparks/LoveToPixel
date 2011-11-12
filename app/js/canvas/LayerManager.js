@@ -54,8 +54,7 @@
 				var layerConfig = project.layers[i];
 				var newLayer = this._createLayer(layerConfig.layerName, project.size, layerConfig.data);
 				newLayer.index = layerConfig.index;
-				newLayer['ltp.projectmodel_id'] = layerConfig['ltp.projectmodel_id'];
-				newLayer.id = layerConfig.id;
+				newLayer.layerId = layerConfig.layerId;
 				layers.push(newLayer);
 			}
 
@@ -177,7 +176,7 @@
 			this._layers = null;
 		},
 
-		_createLayer: function(name, size) {
+		_createLayer: function(name, size, data) {
 			var canvas = LTP.util.canvas(this._size, {
 				position: 'absolute',
 				top: 0,

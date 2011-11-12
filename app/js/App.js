@@ -164,34 +164,16 @@
 			this.projectPersister = new LTP.ProjectPersister();
 
 			this.projectPersister.loadAllProjects(function(projects) {
-				LTP.ImageLoader.createThumbnail(LTP.KOF94BG, s(200, 80), function(thumbnail, thumbnailSize) {
-					projects.push({
-						name: 'KOF94',
-						size: s(768, 241),
-						thumbnailData: thumbnail,
-						thumbnailHeight: thumbnailSize.height,
-						layers: [{
-							layerName: 'kof94',
-							index: 3,
-							data: LTP.KOF94BG
-						},
-						{
-							layerName: 'doodle',
-							index: 6,
-							data: LTP.KOF94BG_2
-						}]
-					});
-
-					this.projectChooser = Ext.create('LTP.ProjectChooser', {
-						renderTo: Ext.getBody(),
-						projects: projects,
-						listeners: {
-							projectChosen: this._load,
-							scope: this
-						}
-					});
-				}, this);
-			}, this);
+				this.projectChooser = Ext.create('LTP.ProjectChooser', {
+					renderTo: Ext.getBody(),
+					projects: projects,
+					listeners: {
+						projectChosen: this._load,
+						scope: this
+					}
+				});
+			},
+			this);
 		},
 
 		_load: function(project) {
