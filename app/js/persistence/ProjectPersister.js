@@ -7,11 +7,11 @@
 	};
 
 	LTP.ProjectPersister.prototype = {
-		loadAllProjects: function pp_loadAllProjects(callback, scope) {
+		loadAllProjects: function(callback, scope) {
 			this._projectStore.load({
 				scope: this,
 				callback: function() {
-					this._projects = this._extract(this._projectStore, callback, scope);
+					this._extract(this._projectStore, callback, scope);
 				}
 			});
 		},
@@ -21,7 +21,14 @@
 			project.height = project.size.height;
 			project.lastSaved = new Date();
 
-			var projectRecord = this._projectStore.getById(project.id) || this._projectStore.add(project)[0];
+			var projectRecord;
+
+			if (project.id) {
+				projectRecord = this._projectStore.getById(project.id);
+			} else {
+				projectRecord = this._projectStore.add({})[0];
+			}
+
 			projectRecord.data = project;
 			projectRecord.dirty = true;
 			this._projectStore.sync();
@@ -29,7 +36,14 @@
 			var layerStore = projectRecord.layers();
 
 			Ext.Array.each(layers, function(layer) {
-				var layerRecord = layerStore.getById(layer.layerId) || layerStore.add(layer)[0];
+				var layerRecord;
+
+				if (layer.layerId) {
+					layerRecord = layerStore.getById(layer.layerId);
+				} else {
+					layerRecord = layerStore.add({})[0];
+				}
+
 				layerRecord.data = layer;
 				layerRecord.dirty = true;
 				layerStore.add(layerRecord);

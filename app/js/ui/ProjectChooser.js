@@ -9,16 +9,21 @@
 	}
 
 	Ext.define('LTP.ProjectChooser', {
-		extend: 'Ext.container.Viewport',
+		//extend: 'Ext.container.Viewport',
+		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.projectchooser',
 		layout: 'border',
 		border: false,
+		width: '100%',
+		height: '100%',
 
 		defaults: {
 			border: false
 		},
 
 		initComponent: function() {
+			Ext.EventManager.onWindowResize(this._onWindowResize, this);
+
 			this.items = [{
 				region: 'north',
 				html: 'this will be the header'
@@ -43,7 +48,7 @@
 					flex: 2,
 					listeners: {
 						itemdblclick: function() {
-							this.go();
+							this._go();
 						},
 						scope: this
 					}
@@ -73,7 +78,7 @@
 							keydown: function(text, e) {
 								if (e.keyCode === Ext.EventObject.ENTER) {
 									var parent = this.up('panel');
-									parent.go();
+									parent._go();
 								}
 							}
 						}
@@ -85,8 +90,8 @@
 				xtype: 'button',
 				text: 'Start',
 				handler: function() {
-					var parent = this.up('viewport');
-					parent.go();
+					var parent = this.up('panel');
+					parent._go();
 				}
 			}];
 
@@ -111,7 +116,11 @@
 			});
 		},
 
-		go: function() {
+		_onWindowResize: function(width, height) {
+			this.setSize(width, height);
+		},
+
+		_go: function() {
 			function fireEvent(project) {
 				this.fireEvent('projectChosen', project);
 				this.destroy();

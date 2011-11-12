@@ -155,13 +155,6 @@
 		init: function(config) {
 			Ext.apply(this, config);
 
-			this.statusBar = Ext.create('LTP.StatusBar', {
-				renderTo: this.statusBarElementId
-			});
-
-			this.layerPanel = Ext.create('LTP.LayerPanel', {
-				renderTo: this.layerPanelElementId
-			});
 
 			this.showProjectChooser();
 		},
@@ -185,6 +178,13 @@
 		_load: function(project) {
 			this._currentProject = project;
 
+			this.statusBar = Ext.create('LTP.StatusBar', {
+				renderTo: this.statusBarElementId
+			});
+
+			this.layerPanel = Ext.create('LTP.LayerPanel', {
+				renderTo: this.layerPanelElementId
+			});
 
 			_destroyAll(this._components);
 			this._components = [];
