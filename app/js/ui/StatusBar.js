@@ -5,6 +5,9 @@
 		alias: 'widget.ltp.statusbar',
 		items: [
 			{
+				xtype: 'ltp.flairmessage'
+			},
+			{
 				xtype: 'ltp.currentcolor',
 				tool: 'left'
 			},

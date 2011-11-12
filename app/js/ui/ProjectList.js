@@ -24,6 +24,17 @@
 				tpl: '<div style="height:{thumbnailHeight}px; width:{thumbnailWidth}px"><img class="thumbnail" src="{thumbnailData}" /></div>',
 				flex: 1,
 				dataIndex: 'thumbnailData'
+			},
+			{
+				xtype: 'actioncolumn',
+				header: 'Delete',
+				width: 50,
+				items: [{
+					icon: '/images/delete.png',
+					handler: function(grid, rowIndex, colIndex) {
+						this.up('panel').deleteAt(rowIndex);
+					}
+				}]
 			}],
 			this.store = Ext.create('Ext.data.Store', {
 				model: 'LTP.ProjectModel',
@@ -36,6 +47,15 @@
 		getSelectedProject: function() {
 			var s = this.getSelectionModel().getSelection();
 			return s && s.length && s[0] && s[0].data;
+		},
+
+		deleteAt: function(index) {
+			Ext.MessageBox.confirm('Delete?', 'Really delete this project?', function(buttonId) {
+				if (buttonId === 'yes') {
+					this.store.removeAt(index);
+					this.store.sync();
+				}
+			}, this);
 		}
 	});
 

@@ -101,6 +101,7 @@
 			},
 			s: function() {
 				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers);
+				LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
 			},
 			e: function() {
 				var composited = LTP.app.layerManager.composite();

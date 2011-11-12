@@ -68,7 +68,7 @@
 					},
 					{
 						xtype: 'textfield',
-						fieldLabel: 'size',
+						fieldLabel: 'or size',
 						value: '600x400',
 						name: 'size',
 						itemId: 'sizeField',

@@ -19,7 +19,7 @@
     		viewConfig: {
         		plugins: {
             		ptype: 'gridviewdragdrop',
-            		dragText: 'Drag and drop to reorganize'
+            		dragText: 'Drag to re-arrange layer ordering'
         		},
 						listeners: {
 							drop: function(node, data, overModel, dropPosition) {
@@ -33,7 +33,7 @@
 				columns: [
 					{
 						xtype: 'booleancolumn',
-						trueText: '<img src="visible.png" />',
+						trueText: '<img src="images/visible.png" />',
 						falseText: ' ',
 						header: '', 
 						dataIndex: 'isVisible',

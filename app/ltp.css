@@ -10,7 +10,7 @@ body, html {
 	position: absolute;
 	top: 0;
 	left: 0;
-	bottom: 0;
+	bottom: 20px;
 	width: 200px;
 	overflow: auto;
 	background-color: black;
@@ -33,13 +33,13 @@ body, html {
 
 #transparencyBackdropElement {
 	border: 2px solid black;
-	background-image: url(transparency.png);
+	background-image: url(images/transparency.png);
 }
 
 #statusBarElement {
 	position: absolute;
 	bottom: 0;
-	left: 200px;
+	left: 0;
 	right: 0;
 	height: 20px;
 }
