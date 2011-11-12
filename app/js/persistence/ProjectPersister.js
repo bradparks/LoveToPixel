@@ -11,8 +11,7 @@
 			this._projectStore.load({
 				scope: this,
 				callback: function() {
-					this._projects = this._extract(this._projectStore);
-					callback.call(scope, this._projects);
+					this._projects = this._extract(this._projectStore, callback, scope);
 				}
 			});
 		},
@@ -20,6 +19,7 @@
 		saveProject: function(project, layers) {
 			project.width = project.size.width;
 			project.height = project.size.height;
+			project.lastSaved = new Date();
 
 			var projectRecord = this._projectStore.getById(project.id) || this._projectStore.add(project)[0];
 			projectRecord.data = project;
@@ -38,22 +38,51 @@
 			layerStore.sync();
 		},
 
-		_extract: function(projectStore) {
-			var projects = [];
-			projectStore.each(function(projectRecord) {
-				var project = projectRecord.data;
-				project.size = s(project.width, project.height);
-				project.layers = [];
+		_extract: function(projectStore, callback, scope) {
+			this.projects = [];
+			var me = this;
+			var pendingCount = projectStore.count();
 
-				var layerStore = projectRecord.layers();
-				layerStore.each(function(layerRecord) {
-					project.layers.push(layerRecord.data);
-				});
+			if (pendingCount === 0) {
+				callback.call(scope, me.projects);
+			} else {
+				projectStore.each(function(projectRecord) {
+					var project = projectRecord.data;
+					project.size = s(project.width, project.height);
+					project.layers = [];
 
-				projects.push(project);
+					var layerStore = projectRecord.layers();
+					layerStore.each(function(layerRecord) {
+						project.layers.push(layerRecord.data);
+					});
+
+					this._createThumbnail(project, function() {--pendingCount;
+						if (pendingCount === 0) {
+							callback.call(scope, me.projects);
+						}
+					});
+
+					this.projects.push(project);
+				},
+				this);
+			}
+		},
+
+		_createThumbnail: function(project, callback) {
+			var layerManager = new LTP.LayerManager(project, new LTP.MessageBus(LTP.GlobalMessages));
+
+			LTP.util.waitFor(function() {
+				return layerManager.dataLoaded;
+			},
+			function() {
+
+				var composite = layerManager.composite(s(200, 100));
+				project.thumbnailData = composite.toDataURL();
+				project.thumbnailHeight = composite.height;
+				project.thumbnailWidth = composite.width;
+
+				callback();
 			});
-
-			return projects;
 		}
 	};
 

@@ -14,9 +14,14 @@
 				menuDisabled: true
 			},
 			{
+				header: 'Last Saved',
+				xtype: 'datecolumn',
+				dataIndex: 'lastSaved',
+			},
+			{
 				header: 'Thumbnail',
 				xtype: 'templatecolumn',
-				tpl: '<div style="height:{thumbnailHeight}px"><img src="{thumbnailData}" /></div>',
+				tpl: '<div style="height:{thumbnailHeight}px; width:{thumbnailWidth}px"><img class="thumbnail" src="{thumbnailData}" /></div>',
 				flex: 1,
 				dataIndex: 'thumbnailData'
 			}],

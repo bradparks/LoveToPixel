@@ -9,10 +9,8 @@
 	}
 
 	Ext.define('LTP.ProjectChooser', {
-		extend: 'Ext.panel.Panel',
+		extend: 'Ext.container.Viewport',
 		alias: 'widget.ltp.projectchooser',
-		width: '100%',
-		height: '100%',
 		layout: 'border',
 		border: false,
 
@@ -42,7 +40,13 @@
 					itemId: 'projectList',
 					title: 'Saved Projects',
 					projects: this.projects,
-					flex: 2
+					flex: 2,
+					listeners: {
+						itemdblclick: function() {
+							this.go();
+						},
+						scope: this
+					}
 				},
 				{
 					xtype: 'panel',
@@ -81,7 +85,7 @@
 				xtype: 'button',
 				text: 'Start',
 				handler: function() {
-					var parent = this.up('panel');
+					var parent = this.up('viewport');
 					parent.go();
 				}
 			}];
@@ -110,7 +114,7 @@
 		go: function() {
 			function fireEvent(project) {
 				this.fireEvent('projectChosen', project);
-				this.close();
+				this.destroy();
 			}
 
 			var project = this.down('#projectList').getSelectedProject();

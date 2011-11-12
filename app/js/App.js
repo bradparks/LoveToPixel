@@ -146,11 +146,13 @@
 			altup: function() {
 				LTP.app.painter.adhocTransformer = null;
 				LTP.GlobalMessageBus.publish('lockChanged', null);
+			},
+			n: function() {
+				window.location = window.location;
 			}
 		},
 
 		init: function(config) {
-			var me = this;
 			Ext.apply(this, config);
 
 			this.statusBar = Ext.create('LTP.StatusBar', {
@@ -161,6 +163,10 @@
 				renderTo: this.layerPanelElementId
 			});
 
+			this.showProjectChooser();
+		},
+
+		showProjectChooser: function() {
 			this.projectPersister = new LTP.ProjectPersister();
 
 			this.projectPersister.loadAllProjects(function(projects) {
@@ -178,6 +184,7 @@
 
 		_load: function(project) {
 			this._currentProject = project;
+
 
 			_destroyAll(this._components);
 			this._components = [];

@@ -3,7 +3,7 @@
 		canvas.__defineGetter__("layerName", function() {
 			return this.dataset.layerName;
 		});
-	
+
 		canvas.__defineSetter__("layerName", function(layerName) {
 			this.dataset.layerName = layerName;
 		});
@@ -13,7 +13,7 @@
 		});
 
 		canvas.__defineSetter__("isVisible", function(visible) {
-			this.style.display = visible ? "" : "none";
+			this.style.display = visible ? "": "none";
 		});
 
 		canvas.__defineGetter__("index", function() {
@@ -40,7 +40,7 @@
 	}
 
 	LTP.LayerManager = function LayerManager(project, messageBus) {
-		if(!project) {
+		if (!project) {
 			throw new Error("LayerManager: project is required");
 		}
 
@@ -48,7 +48,7 @@
 
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
-		if(project.layers) {
+		if (project.layers) {
 			this._layers = this._hydrateLayersFromProject(project);
 		} else {
 			this._layers = [this._createLayer(this.InitialLayerName, project.size)]
@@ -58,11 +58,23 @@
 	};
 
 	LTP.LayerManager.prototype = {
-		InitialLayerName : 'Initial Layer',
+		InitialLayerName: 'Initial Layer',
+
+		get dataLoaded() {
+			if (!this._layers || this._layers.length === 0) {
+				return true;
+			}
+			for (var i = 0; i < this._layers.length; ++i) {
+				if (!this._layers[i].dataLoaded) {
+					return false;
+				}
+			}
+			return true;
+		},
 
 		_hydrateLayersFromProject: function lm_hydrateLayersFromProject(project) {
 			var layers = [];
-			for(var i = 0; i < project.layers.length; ++i) {
+			for (var i = 0; i < project.layers.length; ++i) {
 				var layerConfig = project.layers[i];
 				var newLayer = this._createLayer(layerConfig.layerName, project.size, layerConfig.data);
 				newLayer.index = layerConfig.index;
@@ -78,7 +90,7 @@
 		},
 
 		dumpLayers: function() {
-			for(var i = 0; i < this._layers.length; ++i) {
+			for (var i = 0; i < this._layers.length; ++i) {
 				var layer = this._layers[i];
 
 				window.open(layer.toDataURL('png'), layer.layerName + i);
@@ -102,7 +114,7 @@
 		},
 
 		setActiveLayer: function lm_setActiveLayer(index) {
-			if(index < 0 || index >= this.count) {
+			if (index < 0 || index >= this.count) {
 				throw new Error("LayerManager.setActiveLayer: index out of range");
 			}
 
@@ -116,7 +128,7 @@
 		setActiveLayerByLayer: function lm_setActiveLayerByLayer(layer) {
 			var index = this._layers.indexOf(layer);
 
-			if(index > -1) {
+			if (index > - 1) {
 				this.setActiveLayer(index);
 			}
 		},
@@ -154,34 +166,43 @@
 		},
 
 		deleteLayer: function lm_deleteLayer(index) {
-			if(this.count === 1) {
+			if (this.count === 1) {
 				throw new Error("LayerManager.deleteLayer can not delete the last layer");
 			}
 
-			if(index < 0 || index >= this.count) {
+			if (index < 0 || index >= this.count) {
 				throw new Error("LayerManger.deleteLayer: index out of range: " + index);
 			}
 
 			var deletedLayer = this._layers.splice(index, 1);
 
-			if(this._activeLayerIndex >= this.count) {
+			if (this._activeLayerIndex >= this.count) {
 				this._activeLayerIndex = this.count - 1;
 			}
 
 			this.activeLayer.isVisible = true;
 			this._updateZIndices();
 
-			return { deleted: deletedLayer, active: this.activeLayer };
+			return {
+				deleted: deletedLayer,
+				active: this.activeLayer
+			};
 		},
 
-		composite: function lm_composite() {
+		composite: function(maxSize) {
+			maxSize = maxSize || this._size;
+			var actualSize = LTP.util.scaleSize(this._size, maxSize);
+
 			var compositeCanvas = this._createLayer('composite');
+			compositeCanvas.width = actualSize.width;
+			compositeCanvas.height = actualSize.height;
+
 			var compositeContext = compositeCanvas.getContext('2d');
 
-			for(var i = 0, l = this.count; i < l; ++i) {
+			for (var i = 0, l = this.count; i < l; ++i) {
 				var layer = this._layers[i];
-				if(layer.isVisible) {
-					compositeContext.drawImage(layer, 0, 0);
+				if (layer.isVisible) {
+					compositeContext.drawImage(layer, 0, 0, layer.width, layer.height, 0, 0, compositeCanvas.width, compositeCanvas.height);
 				}
 			}
 
@@ -203,7 +224,7 @@
 			canvas.layerName = name;
 			canvas.layerManager = this;
 
-			if(data) {
+			if (data) {
 				canvas.data = data;
 			}
 
@@ -216,10 +237,10 @@
 			context.drawImage(image, 0, 0);
 			context.restore();
 		},
-		
+
 		_updateZIndices: function() {
-			for(var i = 0; i < this._layers.length; ++i) {
-				this._layers[i].style.zIndex = (i+1) * 3;
+			for (var i = 0; i < this._layers.length; ++i) {
+				this._layers[i].style.zIndex = (i + 1) * 3;
 			}
 		}
 	};

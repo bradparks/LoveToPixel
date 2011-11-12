@@ -5,7 +5,8 @@
 			{ name: 'id', type: 'integer' },
 			{	name: 'name', type: 'string' },
 			{ name: 'width', type: 'integer' },
-			{ name: 'height', type: 'integer' }
+			{ name: 'height', type: 'integer' },
+			{ name: 'lastSaved', type: 'date' }
 		],
 
 		associations: [
