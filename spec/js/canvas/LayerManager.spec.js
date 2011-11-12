@@ -1,11 +1,9 @@
 describe("LayerManager", function() {
-	
+
 	describe("construction", function() {
-		it("should throw if no size provided", function() {
+		it("should throw if no project provided", function() {
 			var fn = function() {
-				new LTP.Manager({
-					size: null
-				});
+				new LTP.Manager();
 			};
 
 			expect(fn).toThrow();
@@ -13,15 +11,16 @@ describe("LayerManager", function() {
 
 		it("should set to the passed in size", function() {
 			var size = s(40, 50);
-			var layerManager = new LTP.LayerManager({
+			var project = {
 				size: size
-			});
+			};
+			var layerManager = new LTP.LayerManager(project);
 
-			expect(layerManager._size).toEqual(size);
+			expect(layerManager.size).toEqual(size);
 		});
 
 		it("should get constructed with an initial background layer", function() {
-			var size = s(12,34);
+			var size = s(12, 34);
 			var layerManager = new LTP.LayerManager({
 				size: size
 			});
@@ -33,29 +32,43 @@ describe("LayerManager", function() {
 			expect(activeLayer).not.toBeNull();
 			expect(activeLayer.width).toEqual(size.width);
 			expect(activeLayer.height).toEqual(size.height);
-			expect(activeLayer.layerName).toEqual(LTP.LayerManager.prototype.BaseLayerName);
+			expect(activeLayer.layerName).toEqual(LTP.LayerManager.prototype.InitialLayerName);
 			expect(activeLayer.isVisible).toEqual(true);
 		});
 
 		it("should create the base layer with the provided image", function() {
-			var canvas = document.createElement('canvas');
-			canvas.width = 2;
-			canvas.height = 2;
-			var context = canvas.getContext('2d');
-			context.fillStyle = 'red';
-			context.fillRect(0, 0, 2, 2);
+			runs(function() {
+				var canvas = document.createElement('canvas');
+				canvas.width = 2;
+				canvas.height = 2;
+				var context = canvas.getContext('2d');
+				context.fillStyle = 'red';
+				context.fillRect(0, 0, 2, 2);
 
-			var size = s(2, 2);
-			var layerManager = new LTP.LayerManager({
-				size: size,
-				image: canvas
+				var size = s(2, 2);
+				var layerManager = new LTP.LayerManager({
+					size: size,
+					layers: [{
+						layerId: 1,
+						layerName: 'foo',
+						data: canvas.toDataURL(),
+						index: 3
+					}]
+				});
+
+				this.layer = layerManager.activeLayer;
 			});
 
-			var activeLayer = layerManager.activeLayer;
-			var imageData = activeLayer.getContext('2d').getImageData(0,0,2,2);
-			for(var i = 0; i < imageData.data.length; i += 4) {
-				expect(imageData.data[i]).toBe(255);
-			}
+			waitsFor(function() {
+				return this.layer.dataLoaded;
+			});
+
+			runs(function() {
+				var imageData = this.layer.getContext('2d').getImageData(0, 0, 2, 2);
+				for (var i = 0; i < imageData.data.length; i += 4) {
+					expect(imageData.data[i]).toBe(255);
+				}
+			});
 		});
 	});
 
@@ -64,18 +77,18 @@ describe("LayerManager", function() {
 		var layerManager = null;
 
 		beforeEach(function() {
-			size = s(30,40);
+			size = s(30, 40);
 			layerManager = new LTP.LayerManager({
 				size: size
 			});
 		});
-		
+
 		it("should create a new layer", function() {
 			var newLayerName = "myNewLayer";
 			var resultOfAddNewLayer = layerManager.addNewLayer(newLayerName);
 
 			expect(layerManager.count).toEqual(2);
-			
+
 			var activeLayer = layerManager.activeLayer;
 
 			expect(activeLayer.layerName).toEqual(newLayerName);
@@ -86,7 +99,7 @@ describe("LayerManager", function() {
 		});
 
 		it("should create a new layer that is fully transparent", function() {
-			size = s(2,2);
+			size = s(2, 2);
 			layerManager = new LTP.LayerManager({
 				size: size
 			});
@@ -95,7 +108,7 @@ describe("LayerManager", function() {
 
 			var imageData = layer.getContext('2d').getImageData(0, 0, size.width, size.height);
 
-			for(var i = 3, l = imageData.data.length; i < l; i += 4) {
+			for (var i = 3, l = imageData.data.length; i < l; i += 4) {
 				expect(imageData.data[i]).toEqual(0);
 			}
 		});
@@ -113,7 +126,7 @@ describe("LayerManager", function() {
 		var size = null;
 		var layerManager = null;
 		beforeEach(function() {
-			size = s(10,20);
+			size = s(10, 20);
 			layerManager = new LTP.LayerManager({
 				size: size
 			});
@@ -130,7 +143,7 @@ describe("LayerManager", function() {
 			layerManager.setActiveLayer(0);
 			activeLayer = layerManager.activeLayer;
 			expect(activeLayer.layerName).not.toEqual(newLayerName);
-			expect(activeLayer.layerName).toEqual(layerManager.BaseLayerName);
+			expect(activeLayer.layerName).toEqual(layerManager.InitialLayerName);
 		});
 
 		it("should throw an error if attempt to set active layer outside of range", function() {
@@ -148,7 +161,7 @@ describe("LayerManager", function() {
 		var size = null;
 		var layerManager = null;
 		beforeEach(function() {
-			size = s(10,20);
+			size = s(10, 20);
 			layerManager = new LTP.LayerManager({
 				size: size
 			});
@@ -165,7 +178,7 @@ describe("LayerManager", function() {
 
 		it("should throw an exception if delete index is outside of range", function() {
 			layerManager.addNewLayer("newLayer");
-			
+
 			var fn = function() {
 				layerManager.deleteLayer(3);
 			};
@@ -189,7 +202,7 @@ describe("LayerManager", function() {
 		var size = null;
 		var layerManager = null;
 		beforeEach(function() {
-			size = s(10,20);
+			size = s(10, 20);
 			layerManager = new LTP.LayerManager({
 				size: size
 			});
@@ -198,66 +211,64 @@ describe("LayerManager", function() {
 		it("should have the correct z-indices after adding layers", function() {
 			var numLayers = 3;
 
-			for(var i = 0; i < numLayers; ++i) {
+			for (var i = 0; i < numLayers; ++i) {
 				layerManager.addNewLayer();
 			}
-			
-			for(var i = 0; i < layerManager.count; ++i) {
+
+			for (var i = 0; i < layerManager.count; ++i) {
 				var layer = layerManager.setActiveLayer(i);
-				expect(layer.style.zIndex).toEqual(((i+1)*3).toString());
+				expect(layer.style.zIndex).toEqual(((i + 1) * 3).toString());
 			}
 		});
 
 		it("should move the layer after correctly", function() {
 			var layers = [];
-			for(var i = 0; i < 5; ++i) {
+			for (var i = 0; i < 5; ++i) {
 				layers.push(layerManager.addNewLayer("otherLayer" + i));
 			}
 
 			// layers = [ol0, ol1, ol2, ol3, ol4]
-
 			layerManager.moveLayerAhead(layers[0], layers[3]);
 
 			layers = [layers[1], layers[2], layers[3], layers[0], layers[4]];
 
-			for(var i = 0; i < layers.length; ++i) {
+			for (var i = 0; i < layers.length; ++i) {
 				// +1 because layerManager's layers array also contains the background
-				expect(layerManager.layers[i+1]).toEqual(layers[i]);
-				expect(layerManager.layers[i].style.zIndex).toEqual(((i+1)*3).toString());
+				expect(layerManager.layers[i + 1]).toEqual(layers[i]);
+				expect(layerManager.layers[i].style.zIndex).toEqual(((i + 1) * 3).toString());
 			}
 		});
 
 		it("should move the layer behind correctly", function() {
 			var layers = [];
-			for(var i = 0; i < 5; ++i) {
+			for (var i = 0; i < 5; ++i) {
 				layers.push(layerManager.addNewLayer("otherLayer" + i));
 			}
 
 			// layers = [ol0, ol1, ol2, ol3, ol4]
-
 			layerManager.moveLayerBehind(layers[0], layers[3]);
 
 			layers = [layers[1], layers[2], layers[0], layers[3], layers[4]];
 
-			for(var i = 0; i < layers.length; ++i) {
+			for (var i = 0; i < layers.length; ++i) {
 				// +1 because layerManager's layers array also contains the background
-				expect(layerManager.layers[i+1]).toEqual(layers[i]);
-				expect(layerManager.layers[i].style.zIndex).toEqual(((i+1)*3).toString());
+				expect(layerManager.layers[i + 1]).toEqual(layers[i]);
+				expect(layerManager.layers[i].style.zIndex).toEqual(((i + 1) * 3).toString());
 			}
 		});
-		
+
 	});
 
 	describe("compositing", function() {
 		function drawPixel(context, color, x, y) {
 			context.save();
-				context.fillStyle = color;
-				context.fillRect(x, y, 1, 1);
+			context.fillStyle = color;
+			context.fillRect(x, y, 1, 1);
 			context.restore();
 		}
 
 		it("should return a composited canvas", function() {
-			var size = s(3,1);
+			var size = s(3, 1);
 			var layerManager = new LTP.LayerManager({
 				size: size
 			});
@@ -270,7 +281,7 @@ describe("LayerManager", function() {
 
 			var composited = layerManager.composite().getContext('2d');
 
-			var imageData = composited.getImageData(0,0,size.width, size.height);
+			var imageData = composited.getImageData(0, 0, size.width, size.height);
 			// expect first pixel to be red, fully opaque
 			expect(imageData.data[0]).toEqual(255);
 			expect(imageData.data[1]).toEqual(0);

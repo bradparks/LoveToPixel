@@ -33,21 +33,33 @@
 			var img = document.createElement('img');
 			img.onload = function() {
 				me.getContext('2d').drawImage(img, 0, 0);
+				me.dataLoaded = true;
 			};
 			img.src = data;
 		});
 	}
 
 	LTP.LayerManager = function LayerManager(project, messageBus) {
+		if(!project) {
+			throw new Error("LayerManager: project is required");
+		}
+
 		this._size = project.size;
 
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
-		this._layers = this._hydrateLayersFromProject(project);
+		if(project.layers) {
+			this._layers = this._hydrateLayersFromProject(project);
+		} else {
+			this._layers = [this._createLayer(this.InitialLayerName, project.size)]
+		}
+
 		this._activeLayerIndex = this._layers.length - 1;
 	};
 
 	LTP.LayerManager.prototype = {
+		InitialLayerName : 'Initial Layer',
+
 		_hydrateLayersFromProject: function lm_hydrateLayersFromProject(project) {
 			var layers = [];
 			for(var i = 0; i < project.layers.length; ++i) {
@@ -71,6 +83,10 @@
 
 				window.open(layer.toDataURL('png'), layer.layerName + i);
 			}
+		},
+
+		get size() {
+			return this._size;
 		},
 
 		get count() {
