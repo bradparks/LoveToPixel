@@ -52,8 +52,19 @@
 		deleteAt: function(index) {
 			Ext.MessageBox.confirm('Delete?', 'Really delete this project?', function(buttonId) {
 				if (buttonId === 'yes') {
-					this.store.removeAt(index);
-					this.store.sync();
+					var record = this.store.getAt(index);
+
+					if(record) {
+						var layerStore = record.layers();
+
+						layerStore.each(function(layerRecord) {
+							layerRecord.destroy();
+						});
+						layerStore.sync();
+
+						this.store.remove(record);
+						this.store.sync();
+					}
 				}
 			}, this);
 		}

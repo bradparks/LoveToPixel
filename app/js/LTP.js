@@ -35,7 +35,8 @@
 		'activeLayerChanged',
 		'lockChanged',
 		'cursorDisplayChangeRequest',
-		'flairMessage'
+		'flairMessage',
+		'canvasContentChange'
 	];
 
 	LTP.GlobalMessageBus = new LTP.MessageBus(LTP.GlobalMessages);

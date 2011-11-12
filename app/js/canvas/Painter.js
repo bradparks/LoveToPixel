@@ -294,6 +294,7 @@
 
 				if(toolState.tool.causesChange) {
 					this._finishUndoRedo(toolState.tool, currentPoint);
+					this._messageBus.publish('canvasContentChange', this._activeCanvas);
 				}
 			}
 

@@ -7,7 +7,9 @@
 			{	name: 'layerName', type: 'string' },
 			{ name: 'index', type: 'integer' },
 			{ name: 'isVisible', type: 'boolean' },
-			{ name: 'data', type: 'string' }
+			{ name: 'data', type: 'string' },
+			{ name: 'thumbnailData', type: 'string', persist: false },
+			{ name: 'thumbnailHeight', type: 'integer', persist: false },
 		],
 
 		associations: [

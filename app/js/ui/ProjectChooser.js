@@ -9,13 +9,13 @@
 	}
 
 	Ext.define('LTP.ProjectChooser', {
-		//extend: 'Ext.container.Viewport',
 		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.projectchooser',
 		layout: 'border',
 		border: false,
 		width: '100%',
 		height: '100%',
+		itemId: 'projectChooser',
 
 		defaults: {
 			border: false
@@ -77,7 +77,7 @@
 						listeners: {
 							keydown: function(text, e) {
 								if (e.keyCode === Ext.EventObject.ENTER) {
-									var parent = this.up('panel');
+									var parent = this.up('#projectChooser');
 									parent._go();
 								}
 							}
@@ -90,7 +90,7 @@
 				xtype: 'button',
 				text: 'Start',
 				handler: function() {
-					var parent = this.up('panel');
+					var parent = this.up('#projectChooser');
 					parent._go();
 				}
 			}];
