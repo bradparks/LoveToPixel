@@ -3,8 +3,6 @@
 		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.browserwarningpanel',
 		title: 'Browser Compatibility Warning!',
-		collapsible: true,
-		collapsed: true,
 		border: true,
 		margin: 30,
 		iconCls: 'warningIcon',
@@ -12,7 +10,6 @@
 
 		constructor: function() {
 			this.callParent(arguments);
-			//this.setVisible(false);
 		},
 
 		initComponent: function() {

@@ -2,7 +2,7 @@ LTP.compatibilityInfo = function() {
 	var info = {
 		canvas: {
 			available: !!window.HTMLCanvasElement,
-			message: 'Your browser lacks canvas support'
+			message: 'Your browser lacks canvas support.'
 		},
 		'image-rendering': {
 			available: (function() {
@@ -16,15 +16,19 @@ LTP.compatibilityInfo = function() {
 				}
 				return hasIt;
 			})(),
-			message: 'Your browser does not support a nearest-neighbor choice for the css image-rendering property, or its support is buggy'
+			message: 'Your browser does not support a nearest-neighbor choice for the css image-rendering property, or its support is buggy.'
 		},
 		'FileReader': {
 			available: !!window.FileReader,
-			message: 'Your browser lacks the FileReader API'
+			message: 'Your browser lacks the FileReader API.'
 		},
 		'Internet Explorer': {
 			available: !LTP.util.platformInfo.isIE,
-			message: 'Currently LTP does not work in any version of Internet Explorer'
+			message: 'Currently LTP does not work in any version of Internet Explorer. Support for IE9 is on its way.'
+		},
+		'Opera' : {
+			available: !LTP.util.platformInfo.isOpera,
+			message: 'LTP does not work in any version of Opera yet. Support is on its way.'
 		}
 	};
 
