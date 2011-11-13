@@ -68,7 +68,7 @@
 	<script type="text/javascript">
 
 		Ext.onReady(function() {
-			if(!LTP.util.platformInfo.isChrome || !LTP.util.platformInfo.isOSX) {
+			if(!(LTP.util.platformInfo.isFirefox && !LTP.util.platformInfo.isChrome) || !LTP.util.platformInfo.isOSX) {
 				Ext.MessageBox.show({
 					title: 'Chrome is required', 
 					msg: "So far <a href='http://www.google.com/chrome'>Chrome</a> is the only browser that LoveToPixel works well in. <b>Even then it only works perfectly in OSX</b>, it has some issues on other platforms. "
