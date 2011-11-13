@@ -25,8 +25,8 @@
 			Ext.EventManager.onWindowResize(this._onWindowResize, this);
 
 			this.items = [{
+				xtype: 'ltp.projectchooserheader',
 				region: 'north',
-				html: 'this will be the header'
 			},
 			{
 				region: 'center',

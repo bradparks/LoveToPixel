@@ -6,7 +6,7 @@
 			},
 			function(errorMsg) {
 				errorCallback.call(errorMsg, scope);
-			});
+			}, this);
 		},
 
 		loadToDataURL: function(file, callback, errorCallback, scope) {

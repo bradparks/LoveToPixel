@@ -14,6 +14,7 @@
 		info.isChrome = (/Chrome/i).test(ua);
 		info.isSafari = (/Safari/i).test(ua) && ! info.isChrome;
 		info.isFirefox = (/Firefox/i).test(ua);
+		info.isIE = (/Explorer/i).test(ua) && info.isWindows;
 
 		return info;
 	}

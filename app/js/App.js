@@ -155,8 +155,6 @@
 
 		init: function(config) {
 			Ext.apply(this, config);
-
-
 			this.showProjectChooser();
 		},
 

@@ -48,4 +48,15 @@ img.thumbnail {
 	border: 1px solid black;
 }
 
+.warningIcon {
+	background-image: url(images/warning.png);
+	width: 34px;
+	height: 34px;
+}
+
+.warningPanel div.x-panel-header {
+	background: red !important;
+	border: 0 !important;
+	color: black;
+}
 
