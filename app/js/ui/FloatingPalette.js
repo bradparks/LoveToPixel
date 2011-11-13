@@ -1,8 +1,8 @@
 (function() {
 	var _mouseX, _mouseY;
 	function onMouseMove(e) {
-		_mouseX = e.browserEvent.x;
-		_mouseY = e.browserEvent.y;
+		_mouseX = e.getX();
+		_mouseY = e.getY();
 	}
 
 	Ext.define('LTP.FloatingPalette', {

@@ -3,11 +3,11 @@
 	var gridIndex = 1999;
 
 	LTP.Container = function Container(imageSize, containingElement, messageBus) {
-		if(!imageSize) {
+		if (!imageSize) {
 			throw new Error("Container: size is required");
 		}
 
-		if(!containingElement) {
+		if (!containingElement) {
 			throw new Error("Container: containingElement is required");
 		}
 
@@ -23,9 +23,7 @@
 		this._messageBus.subscribe('newLayerCreated', this._onNewLayerCreated, this);
 		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 
-		this._mouseMoveListener = LTP.util.bind(this._onMouseMove, this);
-		this._containingElement.parentNode.addEventListener('mousemove', this._mouseMoveListener, false);
-
+		Ext.fly(this._containingElement.parentNode).on('mousemove', this._onMouseMove, this);
 		this._pointTransformer = new LTP.PointTransformer();
 
 		this._windowResizeListener = LTP.util.bind(this._onWindowResize, this);
@@ -43,62 +41,56 @@
 				layer.style.MozTransform = 'scale(' + zoom + ')';
 			});
 			this._backdrop.style.MozTransform = 'scale(' + zoom + ')';
-			//this._containingElement.style.MozTransform = 'scale(' + zoom + ')';
-
 
 			this._centerLayers();
 
-			if(this._mouseCoords) {
+			if (this._mouseCoords) {
 				this._scrollTo(this._mouseCoords);
 			}
 		},
 
 		_centerLayers: function() {
-			var method = LTP.util.platformInfo.isFirefox ? this._centerLayerFirefox : this._centerLayer;
+			var method = LTP.util.platformInfo.isFirefox ? this._centerLayerFirefox: this._centerLayer;
 
 			method.call(this, this._backdrop);
-			for(var i = 0; i < this._layers.length; ++i) {
+			for (var i = 0; i < this._layers.length; ++i) {
 				method.call(this, this._layers[i]);
 			}
 		},
 
 		_centerLayerFirefox: function(layer) {
-			console.log(this._containingElement.clientWidth);
-			console.log(layer.clientWidth);
-
+			// figure out how much the scaled layer is sticking out of the container
+			// if it has left the container:
+			// move the NON scaled container's top/left in by that amount
+			// else
+			// just place top/left at the nonscaled location
 			var outsideWidth = (this._imageSize.width * this._zoom - this._containingElement.clientWidth) / 2;
 			var outsideHeight = (this._imageSize.height * this._zoom - this._containingElement.clientHeight) / 2;
 
 			var nonScaledLeft = (this._containingElement.clientWidth - this._imageSize.width) / 2;
 			var nonScaledTop = (this._containingElement.clientHeight - this._imageSize.height) / 2;
 
-			if(outsideWidth > 0) {
+			if (outsideWidth > 0) {
 				nonScaledLeft += outsideWidth;
 			}
 
-			if(outsideHeight > 0) {
+			if (outsideHeight > 0) {
 				nonScaledTop += outsideHeight;
 			}
 
 			layer.style.top = Math.round(nonScaledTop) + 'px';
 			layer.style.left = Math.round(nonScaledLeft) + 'px';
-
-			// figure out how much the scaled layer is sticking out of the container
-			// if it has left the container:
-				// move the NON scaled container's top/left in by that amount
-			// else
-				// just place top/left at the nonscaled location
 		},
 
 		_centerLayer: function(layer) {
 			var top = (this._containingElement.offsetHeight / 2 - layer.height / 2);
 			var left = (this._containingElement.offsetWidth / 2 - layer.width / 2);
 
-			layer.style.top =  Math.max(0, Math.round(top)) + "px";
+			layer.style.top = Math.max(0, Math.round(top)) + "px";
 			layer.style.left = Math.max(0, Math.round(left)) + "px";
 		},
 
-		_scrollTo: function c_scrollTo(point) {
+		_scrollTo: function(point) {
 			var percentX = point.x / this._imageSize.x;
 			var percentY = point.y / this._imageSize.y;
 
@@ -107,7 +99,7 @@
 			n.scrollTop = n.scrollHeight * percentY - n.clientHeight / 2;
 		},
 
-		addLayer: function c_addLayer(layer) {
+		addLayer: function(layer) {
 			layer.style.position = 'absolute';
 			layer.style.cursor = 'none';
 
@@ -116,7 +108,7 @@
 			this._layers.push(layer);
 		},
 
-		_addTransparencyBackdrop: function c_addTransparencyBackdrop() {
+		_addTransparencyBackdrop: function() {
 			var backdrop = document.createElement('div');
 			backdrop.id = 'transparencyBackdropElement';
 			backdrop.style.position = 'absolute'
@@ -131,7 +123,6 @@
 
 			this._backdrop = backdrop;
 		},
-
 
 		set overlay(overlay) {
 			this.addLayer(overlay);
@@ -148,16 +139,16 @@
 			this.addLayer(scratch);
 		},
 
-		_setScratchForLayer: function c_setScratchForLayer(layer) {		
+		_setScratchForLayer: function(layer) {
 			var layerFound = false;
-			for(var i = 0; i < this._layers.length; ++i) {
-				if(this._layers[i] === layer) {
+			for (var i = 0; i < this._layers.length; ++i) {
+				if (this._layers[i] === layer) {
 					layerFound = true;
 					break;
 				}
 			}
 
-			if(layerFound) {
+			if (layerFound) {
 				var layerZindex = parseInt(layer.style.zIndex, 10);
 				this._scratch.style.zIndex = layerZindex + 1;
 			}
@@ -168,23 +159,26 @@
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
 			this._messageBus = null;
 
-			this._containingElement.parentNode.removeEventListener('mousemove', this._mouseMoveListener, false);
+			Ext.fly(this._containingElement.parentNode).un('mousemove', this._onMouseMove, this);
 		},
 
-		_onZoomChanged: function c_onZoomChanged(newZoom) {
+		_onZoomChanged: function(newZoom) {
 			this.zoomTo(newZoom);
 		},
 
-		_onNewLayerCreated: function c_onNewLayerCreated(layer) {
+		_onNewLayerCreated: function(layer) {
 			this.addLayer(layer);
 		},
 
-		_onActiveLayerChanged: function c_onActiveLayerChanged(layer) {
+		_onActiveLayerChanged: function(layer) {
 			this._setScratchForLayer(layer);
 		},
 
-		_onMouseMove: function c_onMouseMove(e) {
-			this._mouseCoords = this._pointTransformer.transform(p(e.offsetX, e.offsetY));
+		_onMouseMove: function(e) {
+			var t = Ext.fly(e.target);
+			var point = p(e.getX() - t.getLeft(), e.getY() - t.getTop());
+
+			this._mouseCoords = this._pointTransformer.transform(point);
 		},
 
 		_onWindowResize: function c_onWindowResize() {
@@ -193,3 +187,4 @@
 	};
 
 })();
+

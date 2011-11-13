@@ -131,6 +131,7 @@
 			this._messageBus.unsubscribe('leftColorSelected', this._onLeftColorSelected);
 			this._messageBus.unsubscribe('rightColorSelected', this._onRightColorSelected);
 			this._messageBus.unsubscribe('cursorDisplayChangeRequest', this._onCursorDisplayChangeRequest);
+			this._unhook(this._overlay);
 		},
 
 		_hook: function p_hook(canvas) {
@@ -177,6 +178,40 @@
 				}
 
 				this._messageBus.publish('canvasMouseCoordinatesChanged', point);
+		},
+
+		_getLeftFirefox: function(fly) {
+			var left = fly.getLeft();
+
+			var widthDelta = this._size.width * this._zoom - this._size.width;
+			widthDelta = widthDelta / 2;
+			return left - widthDelta;
+		},
+
+		_getTopFirefox: function(fly) {
+			var top = fly.getTop();
+
+			var heightDelta = this._size.height * this._zoom - this._size.height;
+			heightDelta = heightDelta / 2;
+			return top - heightDelta;
+		},
+
+		_getCurrentPoint: function(e) {
+			var t = Ext.fly(e.target);
+
+			var left, top;
+			if(LTP.util.platformInfo.isFirefox) {
+				left = this._getLeftFirefox(t);
+				top = this._getTopFirefox(t);
+			} else {
+				left = t.getLeft() * this._zoom;
+				top = t.getTop() * this._zoom;
+			}
+
+			var x = e.getX() - left;
+			var y = e.getY() - top;
+
+			return p(x, y);
 		},
 
 		_onMouseDown: function p_onMouseDown(e) {
@@ -228,14 +263,6 @@
 			}
 
 			this._doOverlay(currentPoint);
-		},
-
-		_getCurrentPoint: function(e) {
-			var t = Ext.fly(e.target);
-
-			var x = e.getX() - (t.getLeft() * this._zoom);
-			var y = e.getY() - (t.getTop() * this._zoom);
-			return p(x, y);
 		},
 
 		_onMouseMove: function p_onMouseMove(e) {
