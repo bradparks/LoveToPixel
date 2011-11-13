@@ -17,9 +17,9 @@ Ext.override(Ext.data.proxy.WebStorage, {
 
 		for (; i < length; i++) {
 			field = fields[i];
-			name = field.name;
-
 			if (field.persist !== false) {
+				name = field.name;
+
 				if (typeof field.encode == 'function') {
 					data[name] = field.encode(rawData[name], record);
 				} else {
