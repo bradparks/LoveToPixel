@@ -4,18 +4,6 @@
 	};
 
 	LTP.EyeDropperTool.prototype = {
-		get causesChange() {
-			return false;
-		},
-
-		get sampledRgbColor() {
-			return this._sampledRgbColor;
-		},
-
-		get sampledHexColor() {
-			return this._sampledHexColor;
-		},
-		
 		perform: function(e) {
 			var context = e.context;
 			var currentPoint = e.currentPoint;
@@ -59,5 +47,22 @@
 		},
 	};
 
+	Object.defineProperty(LTP.EyeDropperTool.prototype, "causesChange", {
+		get: function() {
+			return false;
+		}
+	});
 
+	Object.defineProperty(LTP.EyeDropperTool.prototype, "sampledRgbColor", {
+		get: function() {
+			return this._sampledRgbColor;
+		}
+	});
+
+	Object.defineProperty(LTP.EyeDropperTool.prototype, "sampledHexColor", {
+		get: function() {
+			return this._sampledHexColor;
+		}
+	});
 })();
+

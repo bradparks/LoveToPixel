@@ -62,6 +62,15 @@ describe("Rectangle", function() {
 			expect(rect.width).toEqual(w);
 			expect(rect.height).toEqual(h);
 		});
+
+		it("should report hasArea correctly", function() {
+			var emptyRect = new LTP.Rectangle(10, 20, 0, 0);
+
+			expect(emptyRect.hasArea).toBe(false);
+
+			var rect = new LTP.Rectangle(30, 40, 33, 22);
+			expect(rect.hasArea).toBe(true);
+		});
 	});
 
 	describe("r utility method", function() {

@@ -3,19 +3,10 @@
 		if (!size) {
 			throw new Error("BrushTool: size must be specified");
 		}
-
 		this._size = size;
 	};
 
 	LTP.BrushTool.prototype = {
-		get size() {
-			return this._size;
-		},
-
-		get causesChange() {
-			return true;
-		},
-
 		overlay: function bt_overlay(context, point) {
 			context.save();
 			var color = 'rgba(255, 0, 0, .5)';
@@ -59,7 +50,7 @@
 
 			context.save();
 			context.fillStyle = e.color;
-			//endPoint = startPoint;
+
 			if (startPoint.equals(endPoint)) {
 				this._placePoint(context, startPoint);
 			} else {
@@ -118,7 +109,7 @@
 			var x, y;
 
 			if (Math.abs(slope) > 1) {
-				if(endPoint.y > startPoint.y) {
+				if (endPoint.y > startPoint.y) {
 					y = startPoint.y + 1;
 				} else {
 					y = startPoint.y - 1;
@@ -137,5 +128,17 @@
 			}
 		}
 	};
+
+	Object.defineProperty(LTP.BrushTool.prototype, "size", {
+		get: function() {
+			return this._size;
+		}
+	});
+
+	Object.defineProperty(LTP.BrushTool.prototype, "causesChange", {
+		get: function() {
+			return true;
+		}
+	});
 })();
 

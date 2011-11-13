@@ -10,6 +10,7 @@
 			{ name: 'data', type: 'string' },
 			{ name: 'thumbnailData', type: 'string', persist: false },
 			{ name: 'thumbnailHeight', type: 'integer', persist: false },
+			{ name: 'thumbnailWidth', type: 'integer', persist: false }
 		],
 
 		associations: [

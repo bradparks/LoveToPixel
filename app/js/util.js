@@ -26,9 +26,6 @@
 
 	LTP.util = {
 		platformInfo: getPlatformInfo(),
-		get global() {
-			return global;
-		},
 		ns: function() {
 			for (var i = 0, il = arguments.length; i < il; ++i) {
 				var s = arguments[i].split('.');
@@ -47,10 +44,6 @@
 			return function() {
 				fn.apply(scope, arguments);
 			}
-		},
-
-		get isOSX() {
-			return navigator.userAgent.indexOf("OS X") >= 0;
 		},
 
 		toArray: function(arg) {
@@ -119,6 +112,12 @@
 			}
 		}
 	};
+
+	Object.defineProperty(LTP.util, "global", {
+		get: function() {
+			return global;
+		}
+	});
 
 })();
 

@@ -3,10 +3,6 @@
 	};
 
 	LTP.FillTool.prototype = {
-		get causesChange() {
-			return true;
-		},
-
 		_sampleColorAt: function(context, point) {
 			var imageData = context.getImageData(point.x, point.y, 1, 1);
 			return LTP.util.toArray(imageData.data);
@@ -163,6 +159,12 @@
 			this._lastBoundingBox = boundingBoxBuilder.boundingBox;
 		}
 	};
+
+	Object.defineProperty(LTP.FillTool.prototype, "causesChange", {
+		get: function() {
+			return true;
+		}
+	});
 
 })();
 

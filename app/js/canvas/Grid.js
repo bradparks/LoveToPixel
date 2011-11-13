@@ -14,39 +14,6 @@
 	};
 
 	LTP.Grid.prototype = {
-		get color() {
-			return this._color;
-		},
-
-		get canvasSize() {
-			return this._canvasSize;
-		},
-
-		get cellSize() {
-			return this._cellSize;
-		},
-
-		set cellSize(cellSize) {
-			this._cellSize = cellSize;
-			this._paintGrid(this._canvas, cellSize, this._color);
-		},
-
-		get canvas() {
-			return this._canvas;
-		},
-
-		set visible(visible) {
-			if(visible) {
-				this._canvas.style.display = '';
-			} else {
-				this._canvas.style.display = 'none'
-			}
-		},
-
-		get visible() {
-			return this._canvas.style.display === '';
-		},
-
 		destroy: function() {
 			this._canvas = null;
 			this._messageBus = null;
@@ -81,4 +48,45 @@
 		}
 	};
 
+	Object.defineProperty(LTP.Grid.prototype, "color", {
+		get: function() {
+			return this._color;
+		}
+	});
+
+	Object.defineProperty(LTP.Grid.prototype, "canvasSize", {
+		get: function() {
+			return this._canvasSize;
+		}
+	});
+
+	Object.defineProperty(LTP.Grid.prototype, "cellSize", {
+		get: function() {
+			return this._cellSize;
+		},
+		set: function(cellSize) {
+			this._cellSize = cellSize;
+			this._paintGrid(this._canvas, cellSize, this._color);
+		}
+	});
+
+	Object.defineProperty(LTP.Grid.prototype, "canvas", {
+		get: function() {
+			return this._canvas;
+		}
+	});
+
+	Object.defineProperty(LTP.Grid.prototype, "visible", {
+		get: function() {
+			return this._canvas.style.display === '';
+		},
+		set: function(visible) {
+			if(visible) {
+				this._canvas.style.display = '';
+			} else {
+				this._canvas.style.display = 'none'
+			}
+		}
+	});
 })();
+

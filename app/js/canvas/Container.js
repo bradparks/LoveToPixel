@@ -124,20 +124,6 @@
 			this._backdrop = backdrop;
 		},
 
-		set overlay(overlay) {
-			this.addLayer(overlay);
-			overlay.style.zIndex = overlayIndex;
-		},
-
-		set grid(grid) {
-			this.addLayer(grid);
-			grid.style.zIndex = gridIndex;
-		},
-
-		set scratch(scratch) {
-			this._scratch = scratch;
-			this.addLayer(scratch);
-		},
 
 		_setScratchForLayer: function(layer) {
 			var layerFound = false;
@@ -186,5 +172,25 @@
 		}
 	};
 
+	Object.defineProperty(LTP.Container.prototype, "overlay", {
+		set: function(overlay) {
+			this.addLayer(overlay);
+			overlay.style.zIndex = overlayIndex;
+		}
+	});
+
+	Object.defineProperty(LTP.Container.prototype, "grid", {
+		set: function(grid) {
+			this.addLayer(grid);
+			grid.style.zIndex = gridIndex;
+		}
+	});
+
+	Object.defineProperty(LTP.Container.prototype, "scratch", {
+		set: function(scratch) {
+			this._scratch = scratch;
+			this.addLayer(scratch);
+		}
+	});
 })();
 

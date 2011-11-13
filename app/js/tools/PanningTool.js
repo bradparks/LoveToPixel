@@ -3,9 +3,6 @@
 	};
 
 	LTP.PanningTool.prototype = {
-		get causesChange() {
-			return false;
-		},
 		perform: function p_perform(e) {
 			var container = e.containerElement;
 
@@ -38,6 +35,12 @@
 
 		}
 	};
+
+	Object.defineProperty(LTP.PanningTool.prototype, "causesChange", {
+		get: function() {
+			return false;
+		}
+	});
 
 })();
 

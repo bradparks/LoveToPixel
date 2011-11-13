@@ -5,18 +5,6 @@
 	};
 
 	LTP.Pair.prototype = {
-		get width() {
-			return this._a;
-		},
-		get height() {
-			return this._b;
-		},
-		get x() {
-			return this._a;
-		},
-		get y() {
-			return this._b;
-		},
 		equals: function p_equals(other) {
 			if(other) {
 				return (other === this) || 
@@ -31,4 +19,27 @@
 		}
 	};
 
+	Object.defineProperty(LTP.Pair.prototype, "width", {
+		get: function() {
+			return this._a;
+		}
+	});
+
+	Object.defineProperty(LTP.Pair.prototype, "height", {
+		get: function() {
+			return this._b;
+		}
+	});
+
+	Object.defineProperty(LTP.Pair.prototype, "x", {
+		get: function() {
+			return this._a;
+		}
+	});
+
+	Object.defineProperty(LTP.Pair.prototype, "y", {
+		get: function() {
+			return this._b;
+		}
+	});
 })();

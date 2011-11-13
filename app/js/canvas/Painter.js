@@ -44,68 +44,6 @@
 	};	
 	
 	LTP.Painter.prototype = {
-		get overlay() {
-			return this._overlay;
-		},
-
-		get scratch() {
-			return this._scratch;
-		},
-
-		set activeCanvas(canvas) {
-			this._activeCanvas = canvas;
-		},
-
-		set leftTool(tool) {
-			this._leftToolState.tool = tool;
-			this._lastToolState = this._leftToolState;
-			this._messageBus.publish('leftToolChanged', tool);
-			this._doOverlay();
-		},
-
-		set leftColor(color) {
-			this._leftColor = color;
-			this._lastToolState = this._leftToolState;
-			this._doOverlay();
-		},
-
-		get leftColor() {
-			return this._leftColor;
-		},
-
-		set rightColor(color) {
-			this._rightColor = color;
-			this._lastToolState = this._rightToolState;
-			this._doOverlay();
-		},
-
-		get rightColor() {
-			return this._rightColor;
-		},
-
-		get leftTool() {
-			if(this._overrideToolState.active) {
-				return this._overrideToolState.tool;
-			} else {
-				return this._leftToolState.tool;
-			}
-		},
-
-		set rightTool(tool) {
-			this._rightToolState.tool = tool;
-			this._lastToolState = this._rightToolState;
-			this._messageBus.publish('rightToolChanged', tool);
-			this._doOverlay();
-		},
-
-		get rightTool() {
-			if(this._overrideToolState.active) {
-				return this._overrideToolState.tool;
-			} else {
-				return this._rightToolState.tool;
-			}
-		},
-
 		pushOverrideTool: function(overrideTool) {
 			this._overrideToolState.tool = overrideTool;
 			this._overrideToolState.active = true;
@@ -117,11 +55,6 @@
 			delete this._overrideToolState.tool;
 			this._overrideToolState.active = false;
 			this._lastToolState = this._leftToolState;
-			this._doOverlay();
-		},
-
-		set adhocTransformer(transformer) {
-			this._adhocTransformer = transformer;
 			this._doOverlay();
 		},
 
@@ -467,4 +400,90 @@
 		}
 	};
 
+	Object.defineProperty(LTP.Painter.prototype, "overlay", {
+		get: function() {
+			return this._overlay;
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.Painter.prototype, "scratch", {
+		get: function() {
+			return this._scratch;
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.Painter.prototype, "activeCanvas", {
+		set: function(canvas) {
+			this._activeCanvas = canvas;
+		}
+	});
+
+	Object.defineProperty(LTP.Painter.prototype, "leftTool", {
+		get: function() {
+			if(this._overrideToolState.active) {
+				return this._overrideToolState.tool;
+			} else {
+				return this._leftToolState.tool;
+			}
+		},
+		set: function(tool) {
+			this._leftToolState.tool = tool;
+			this._lastToolState = this._leftToolState;
+			this._messageBus.publish('leftToolChanged', tool);
+			this._doOverlay();
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.Painter.prototype, "rightTool", {
+		get: function() {
+			if(this._overrideToolState.active) {
+				return this._overrideToolState.tool;
+			} else {
+				return this._rightToolState.tool;
+			}
+		},
+		set: function(tool) {
+			this._rightToolState.tool = tool;
+			this._lastToolState = this._rightToolState;
+			this._messageBus.publish('rightToolChanged', tool);
+			this._doOverlay();
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.Painter.prototype, "leftColor", {
+		get: function() {
+			return this._leftColor;
+		},
+		set: function(color) {
+			this._leftColor = color;
+			this._lastToolState = this._leftToolState;
+			this._doOverlay();
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.Painter.prototype, "rightColor", {
+		get: function() {
+			return this._rightColor;
+		},
+		set: function(color) {
+			this._rightColor = color;
+			this._lastToolState = this._rightToolState;
+			this._doOverlay();
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.Painter.prototype, "adhocTransformer", {
+		set: function(transformer) {
+			this._adhocTransformer = transformer;
+			this._doOverlay();
+		},
+	});
+
 })();
+

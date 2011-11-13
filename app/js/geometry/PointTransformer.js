@@ -4,12 +4,6 @@
 	};
 
 	LTP.PointTransformer.prototype = {
-		set zoom(z) {
-			this._zoom = z;
-		},
-		get zoom() {
-			return this._zoom || 1;
-		},
 		transform: function pt_transform(point) {
 			var factor = 1 / (this.zoom);
 			var offsetX = this._pageOffsets.pageXOffset * factor;
@@ -24,5 +18,14 @@
 			return p(newX, newY);
 		}
 	};
+
+	Object.defineProperty(LTP.PointTransformer.prototype, "zoom", {
+		get: function() {
+			return this._zoom || 1;
+		},
+		set: function(z) {
+			this._zoom = z;
+		}
+	});
 })();
 

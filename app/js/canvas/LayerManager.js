@@ -1,58 +1,4 @@
 (function() {
-	function canvasToLayer(canvas) {
-		canvas.__defineGetter__("layerName", function() {
-			return this.dataset.layerName;
-		});
-
-		canvas.__defineSetter__("layerName", function(layerName) {
-			this.dataset.layerName = layerName;
-		});
-
-		canvas.__defineGetter__("isVisible", function() {
-			return this.style.display === '';
-		});
-
-		canvas.__defineSetter__("isVisible", function(visible) {
-			this.style.display = visible ? "": "none";
-		});
-
-		canvas.__defineGetter__("index", function() {
-			return parseInt(this.style.zIndex, 10);
-		});
-
-		canvas.__defineSetter__("index", function(index) {
-			this.style.zIndex = index;
-		});
-
-		canvas.__defineGetter__("data", function() {
-			return this.toDataURL("png");
-		});
-
-		canvas.__defineSetter__("data", function(data) {
-			var me = this;
-			var img = document.createElement('img');
-			img.onload = function() {
-				me.getContext('2d').drawImage(img, 0, 0);
-				me.dataLoaded = true;
-			};
-			img.src = data;
-		});
-
-		canvas.__defineGetter__("thumbnailData", function() {
-			var size = LTP.util.scaleSize(s(this.width, this.height), s(50, 50));
-			var thumbCanvas = LTP.util.canvas(size);
-
-			thumbCanvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height, 0, 0, size.width, size.height);
-
-			return thumbCanvas.toDataURL();
-		});
-
-		canvas.__defineGetter__("thumbnailHeight", function() {
-			var size = LTP.util.scaleSize(s(this.width, this.height), s(50, 50));
-			return size.height;
-		});
-	}
-
 	LTP.LayerManager = function LayerManager(project, messageBus) {
 		if (!project) {
 			throw new Error("LayerManager: project is required");
@@ -73,18 +19,6 @@
 
 	LTP.LayerManager.prototype = {
 		InitialLayerName: 'Initial Layer',
-
-		get dataLoaded() {
-			if (!this._layers || this._layers.length === 0) {
-				return true;
-			}
-			for (var i = 0; i < this._layers.length; ++i) {
-				if (!this._layers[i].dataLoaded) {
-					return false;
-				}
-			}
-			return true;
-		},
 
 		_hydrateLayersFromProject: function lm_hydrateLayersFromProject(project) {
 			var layers = [];
@@ -109,22 +43,6 @@
 
 				window.open(layer.toDataURL('png'), layer.layerName + i);
 			}
-		},
-
-		get size() {
-			return this._size;
-		},
-
-		get count() {
-			return this._layers.length;
-		},
-
-		get layers() {
-			return this._layers;
-		},
-
-		get activeLayer() {
-			return this._layers[this._activeLayerIndex];
 		},
 
 		setActiveLayer: function lm_setActiveLayer(index) {
@@ -258,5 +176,134 @@
 			}
 		}
 	};
+
+	Object.defineProperty(LTP.LayerManager.prototype, "dataLoaded", {
+		get: function() {
+			if (!this._layers || this._layers.length === 0) {
+				return true;
+			}
+			for (var i = 0; i < this._layers.length; ++i) {
+				if (!this._layers[i].dataLoaded) {
+					return false;
+				}
+			}
+			return true;
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.LayerManager.prototype, "size", {
+		get: function() {
+			return this._size;
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.LayerManager.prototype, "count", {
+		get: function() {
+			return this._layers.length;
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.LayerManager.prototype, "layers", {
+		get: function() {
+			return this._layers;
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.LayerManager.prototype, "activeLayer", {
+		get: function() {
+			return this._layers[this._activeLayerIndex];
+		},
+		enumerable: true
+	});
+
+	/*** Canvas, additional properties ***/
+	// TODO: just put these properties on HTMLCanvasElement?
+
+	function canvasToLayer(canvas) {
+		Object.defineProperty(canvas, "layerName", {
+			get: function() {
+				return this._layerName;
+			},
+			set: function(layerName) {
+				this._layerName = layerName;
+			},
+			enumerable: true
+		});
+
+		Object.defineProperty(canvas, "isVisible", {
+			get: function() {
+				return this.style.display === '';
+			},
+			set: function(visible) {
+				this.style.display = visible ? '': 'none';
+			},
+			enumerable: true
+		});
+
+		Object.defineProperty(canvas, "index", {
+			get: function() {
+				return parseInt(this.style.zIndex, 10);
+			},
+			set: function(index) {
+				this.style.zIndex = index;
+			},
+			enumerable: true
+		});
+
+		Object.defineProperty(canvas, "data", {
+			get: function() {
+				return this.toDataURL('png');
+			},
+			set: function(data) {
+				var me = this;
+				var img = document.createElement('img');
+				img.onload = function() {
+					me.getContext('2d').drawImage(img, 0, 0);
+					me.dataLoaded = true;
+				};
+				img.src = data;
+			},
+			enumerable: true
+		});
+
+		Object.defineProperty(canvas, "thumbnailData", {
+			get: function() {
+				var size = LTP.util.scaleSize(s(this.width, this.height), s(50, 50));
+				var thumbCanvas = LTP.util.canvas(size);
+
+				thumbCanvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height, 0, 0, size.width, size.height);
+
+				return thumbCanvas.toDataURL();
+			},
+			set: function(data) {
+			},
+			enumerable: true
+		});
+
+		Object.defineProperty(canvas, "thumbnailHeight", {
+			get: function() {
+				var size = LTP.util.scaleSize(s(this.width, this.height), s(50, 50));
+				return size.height;
+			},
+			set: function(height) {
+			},
+			enumerable: true
+		});
+
+		Object.defineProperty(canvas, "thumbnailWidth", {
+			get: function() {
+				var size = LTP.util.scaleSize(s(this.width, this.height), s(50, 50));
+				return size.width;
+			},
+			set: function(width) {
+			},
+			enumerable: true
+		});
+		
+	}
 })();
 

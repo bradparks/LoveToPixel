@@ -11,21 +11,6 @@
 	};
 
 	LTP.Rectangle.prototype = {
-		get x() {
-			return this._x;
-		},
-		get y() {
-			return this._y;
-		},
-		get width() {
-			return this._width;
-		},
-		get height() {
-			return this._height;
-		},
-		get hasArea() {
-			return this.height * this.width > 0;
-		},
 		equals: function r_equals(other) {
 			if(other) {
 				return other === this || (other.x === this._x && other.y === this._y && other.width === this._width && other.height === this._height);
@@ -34,4 +19,36 @@
 			}
 		}
 	};
+
+	Object.defineProperty(LTP.Rectangle.prototype, "x", {
+		get: function() {
+			return this._x;
+		}
+	});
+
+	Object.defineProperty(LTP.Rectangle.prototype, "y", {
+		get: function() {
+			return this._y;
+		}
+	});
+
+	Object.defineProperty(LTP.Rectangle.prototype, "width", {
+		get: function() {
+			return this._width;
+		}
+	});
+
+	Object.defineProperty(LTP.Rectangle.prototype, "height", {
+		get: function() {
+			return this._height;
+		}
+	});
+
+	Object.defineProperty(LTP.Rectangle.prototype, "hasArea", {
+		get: function() {
+			return this.height * this.width > 0;
+		}
+	});
+
 })();
+

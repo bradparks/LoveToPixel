@@ -9,9 +9,6 @@
 	};
 
 	LTP.BoundingBoxBuilder.prototype = {
-		get boundingBox() {
-			return r(this._minX, this._minY, this._maxX - this._minX, this._maxY - this._minY);
-		},
 		append: function bbb_append(rect) {
 			if(!rect) {
 				throw new Error("BoundingBoxBuilder.append: rect argument is required");
@@ -24,4 +21,11 @@
 		}
 	};
 
+	Object.defineProperty(LTP.BoundingBoxBuilder.prototype, "boundingBox", {
+		get: function() {
+			return r(this._minX, this._minY, this._maxX - this._minX, this._maxY - this._minY);
+		}
+	});
+
 })();
+
