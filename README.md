@@ -12,7 +12,7 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * grid overlay (status: in place, but isn't useful yet)
 * zoom in/out (status: in place)
 * hold the 'a' key to temporarily zoom to 100% (once you release 'a', it returns to whatever zoom you were at) (status: in place)
-* Save images in an intermediate format (maintain layers primarily) (status: not yet)
+* Save images in an intermediate format (maintain layers primarily) (status: in place with local storage)
 * Save images as pngs (status: in place, in a simple fashion, but then again FileWriter doesn't really exist yet)
 * unlimited, or at least very deep, undo/redo (status: in place for paint operations, not yet in place for anything else such as layer edits)
 * A pixel pipeline which allows for things like snap to grid, lock vertical/horizontal, snap to brush size, etc (status: in place)
