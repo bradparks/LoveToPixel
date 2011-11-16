@@ -22,6 +22,7 @@
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 		this._messageBus.subscribe('newLayerCreated', this._onNewLayerCreated, this);
 		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
+		this._messageBus.subscribe('layerDeleted', this._onLayerDeleted, this);
 
 		Ext.fly(this._containingElement.parentNode).on('mousemove', this._onMouseMove, this);
 		this._pointTransformer = new LTP.PointTransformer();
@@ -108,6 +109,12 @@
 			this._layers.push(layer);
 		},
 
+		removeLayer: function(layer) {
+			var index = this._layers.indexOf(layer);
+			this._layers.splice(index, 1);
+			this._containingElement.removeChild(layer);
+		},
+
 		_addTransparencyBackdrop: function() {
 			var backdrop = document.createElement('div');
 			backdrop.id = 'transparencyBackdropElement';
@@ -143,6 +150,9 @@
 		destroy: function() {
 			this._layers = null;
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
+			this._messageBus.unsubscribe('newLayerCreated', this._onNewLayerCreated);
+			this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
+			this._messageBus.unsubscribe('layerDeleted', this._onLayerDeleted);
 			this._messageBus = null;
 
 			Ext.fly(this._containingElement.parentNode).un('mousemove', this._onMouseMove, this);
@@ -154,6 +164,10 @@
 
 		_onNewLayerCreated: function(layer) {
 			this.addLayer(layer);
+		},
+
+		_onLayerDeleted: function(layer) {
+			this.removeLayer(layer);
 		},
 
 		_onActiveLayerChanged: function(layer) {

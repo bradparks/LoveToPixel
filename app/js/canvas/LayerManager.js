@@ -106,7 +106,7 @@
 				throw new Error("LayerManger.deleteLayer: index out of range: " + index);
 			}
 
-			var deletedLayer = this._layers.splice(index, 1);
+			var deletedLayer = this._layers.splice(index, 1)[0];
 
 			if (this._activeLayerIndex >= this.count) {
 				this._activeLayerIndex = this.count - 1;
@@ -115,10 +115,20 @@
 			this.activeLayer.isVisible = true;
 			this._updateZIndices();
 
+			this._messageBus.publish('layerDeleted', deletedLayer);
+
 			return {
 				deleted: deletedLayer,
 				active: this.activeLayer
 			};
+		},
+
+		deleteLayerByLayer: function(layer) {
+			var index = this._layers.indexOf(layer);
+
+			if(index >= 0) {
+				this.deleteLayer(index);
+			}
 		},
 
 		composite: function(maxSize) {

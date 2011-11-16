@@ -17,6 +17,7 @@
 		},
 
 		saveProject: function(project, layers) {
+			debugger;
 			project.width = project.size.width;
 			project.height = project.size.height;
 			project.lastSaved = new Date();
@@ -47,6 +48,16 @@
 				layerRecord.data = layer;
 				layerRecord.dirty = true;
 				layerStore.add(layerRecord);
+			});
+
+			// any layer record that is not set dirty is 
+			// a layer the user actually deleted. We don't really
+			// delete them until we are here incase the user changes
+			// their mind and decides to not save their project
+			layerStore.each(function(layerRecord) {
+				if(!layerRecord.dirty) {
+					layerRecord.destroy();
+				}
 			});
 
 			layerStore.sync();

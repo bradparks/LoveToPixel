@@ -2,6 +2,7 @@
 	Ext.define('LTP.LayerPanel', {
 		extend: 'Ext.container.Container',
 		layout: 'fit',
+		itemId: 'layerPanel',
 
 		constructor: function(config) {
 			this.callParent(arguments);
@@ -63,8 +64,18 @@
 					tpl: '<div style="height:{thumbnailHeight}px; width:{thumbnailWidth}px"><img class="thumbnail" src="{thumbnailData}" /></div>',
 					flex: 1,
 					dataIndex: 'thumbnailData'
-				}
-				],
+				},
+				{
+					xtype: 'actioncolumn',
+					header: 'Actions',
+					width: 50,
+					items: [{
+						icon: '/images/delete.png',
+						handler: function(grid, rowIndex, colIndex) {
+							this.up('#layerPanel')._deleteAt(rowIndex);
+						}
+					}]
+				}],
 				selType: 'rowmodel',
 				plugins: [
 				Ext.create('Ext.grid.plugin.RowEditing', {
@@ -131,6 +142,19 @@
 		_onCanvasContentChange: function(canvas) {
 			var record = this.viewStore.getById(canvas.layerId);
 			record.commit();
+		},
+		
+		_deleteAt: function(index) {
+			var layer = this.viewStore.getAt(index);
+
+			Ext.MessageBox.confirm("Delete Layer", "Really delete '" + layer.get('layerName') + "'", function(button) {
+				if(button === 'yes') {
+					this.layerManager.deleteLayerByLayer(layer.data);
+					this.viewStore.remove(layer);
+					this.viewStore.sync();
+				}
+			}, this);
+
 		}
 	});
 
