@@ -12,7 +12,7 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * grid overlay (status: in place, but isn't useful yet)
 * zoom in/out (status: in place)
 * hold the 'a' key to temporarily zoom to 100% (once you release 'a', it returns to whatever zoom you were at) (status: in place)
-* Save images in an intermediate format (maintain layers primarily) (status: not yet)
+* Save images in an intermediate format (maintain layers primarily) (status: in place with local storage)
 * Save images as pngs (status: in place, in a simple fashion, but then again FileWriter doesn't really exist yet)
 * unlimited, or at least very deep, undo/redo (status: in place for paint operations, not yet in place for anything else such as layer edits)
 * A pixel pipeline which allows for things like snap to grid, lock vertical/horizontal, snap to brush size, etc (status: in place)
@@ -28,6 +28,9 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * detailed brush editor
 * copy/cut/paste regions
 * server side persistence
+* Preview window
+* History window
+* Full persistence (save undo/redo state, brush state, etc)
 
 # So far... Preview at www.lovetopixel.com #
 I have deployed a preview of an alpha version of LTP to http://www.lovetopixel.com  
@@ -39,8 +42,9 @@ Here are the key commands for the preview version:
 * c - display the color palette, right or left click a color to pick it for the corresponding tool
 * b - display the brush size palette, right or left click to select your brush size
 * 1-9 - pick a color (for the left tool only)
-* z - zoom
-* hold a - return to 100% until a is released
+* z - zoom in
+* shift-z - zoom out
+* hold a - toggle to 100% until a is released
 * shift-a - return to 100%
 * g - toggle the grid
 * e - save to a png in a new window
