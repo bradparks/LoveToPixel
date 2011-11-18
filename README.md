@@ -67,8 +67,8 @@ Layers are modeled after most other image apps:
 * double click a layer to edit it (set visibility and change its name)
 * drag layers around to reorder them
 * the currently selected/highlighted layer is the active one, that is where you will paint into
-* so far, cannot delete layers
-* so far, cannot merge layers
+* To delete a layer, click the 'X' icon next to it
+* To merge a layer into the layer below it, click the down arrow icon next to it
 
 ## Local Storage saving ##
 Hitting 's' will save your current project to local storage. So far LTP is 100% done on the client, the server is doing nothing more than serving the JS/HTML/CSS files. Local storage is very limited in size in most browsers. Chrome, for example, only gives you a measly 2.5 megabytes. You can comfortably save a handful of projects, but you'll hit that 2.5mb limit quickly. So far LTP does not warn you or otherwise attempt to prevent this at all.
@@ -79,9 +79,9 @@ Server side saving is in the pipeline. I'd also like to take advantage of FileWr
 There are many. This is early code. Let's see here:
 
 * generally very raw, things work but not necessarily in a polished/slick way.
-* can't delete layers
 * editing a layer in the layer view is a bit iffy when there are only a couple of layers (the UI for editing typically scrolls up out of view, add some more layers to work around this)
 * turning on the brush lock (hold down ALT while painting) is hard coded to 20 pixels
+* **It's ugly!! :)** I'm focusing entirely on functionality for now. I will go back and make the app very pretty right before arriving at 1.0
 
 # License ... #
 I'm not sure what kind of license I'm going to use for LTP ultimately. For now I have chosen GPL 3, but that is (very) likely to change once this project solidifies. See the COPYING file for more info. I also chose to use Ext4, which also locks me into GPL for the moment.
