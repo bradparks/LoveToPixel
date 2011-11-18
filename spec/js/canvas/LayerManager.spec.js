@@ -167,15 +167,6 @@ describe("LayerManager", function() {
 			});
 		});
 
-		it("should throw an exception if attempt to delete the last layer", function() {
-			var fn = function() {
-				layerManager.deleteLayer(0);
-			};
-
-			expect(layerManager.deleteLayer).toBeDefined();
-			expect(fn).toThrow();
-		});
-
 		it("should throw an exception if delete index is outside of range", function() {
 			layerManager.addNewLayer("newLayer");
 

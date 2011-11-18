@@ -1,6 +1,6 @@
 describe("Container", function() {
 	var size = s(10, 20);
-	var messages = ['zoomChanged', 'newLayerCreated', 'activeLayerChanged'];
+	var messages = ['zoomChanged', 'newLayerCreated', 'activeLayerChanged', 'layerRemoved', 'noLayersInProject'];
 
 	describe("construction", function() {
 		it("should throw if not given a size", function() {

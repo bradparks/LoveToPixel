@@ -22,7 +22,8 @@
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 		this._messageBus.subscribe('newLayerCreated', this._onNewLayerCreated, this);
 		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
-		this._messageBus.subscribe('layerDeleted', this._onLayerDeleted, this);
+		this._messageBus.subscribe('layerRemoved', this._onLayerRemoved, this);
+		this._messageBus.subscribe('noLayersInProject', this._onNoLayersInProject, this);
 
 		Ext.fly(this._containingElement.parentNode).on('mousemove', this._onMouseMove, this);
 		this._pointTransformer = new LTP.PointTransformer();
@@ -152,7 +153,8 @@
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
 			this._messageBus.unsubscribe('newLayerCreated', this._onNewLayerCreated);
 			this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
-			this._messageBus.unsubscribe('layerDeleted', this._onLayerDeleted);
+			this._messageBus.unsubscribe('layerDeleted', this._onLayerRemoved);
+			this._messageBus.unsubscribe('noLayersInProject', this._onNoLayersInProject);
 			this._messageBus = null;
 
 			Ext.fly(this._containingElement.parentNode).un('mousemove', this._onMouseMove, this);
@@ -164,10 +166,15 @@
 
 		_onNewLayerCreated: function(layer) {
 			this.addLayer(layer);
+			this._backdrop.style.display = '';
 		},
 
-		_onLayerDeleted: function(layer) {
+		_onLayerRemoved: function(layer) {
 			this.removeLayer(layer);
+		},
+
+		_onNoLayersInProject: function() {
+			this._backdrop.style.display = 'none';
 		},
 
 		_onActiveLayerChanged: function(layer) {

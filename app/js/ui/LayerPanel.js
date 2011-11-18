@@ -17,6 +17,8 @@
 			});
 
 			this.viewStore = store;
+			// this store should never persist
+			this.viewStore.sync = function() {};
 			var me = this;
 
 			this.items = [{
@@ -72,7 +74,13 @@
 					items: [{
 						icon: '/images/delete.png',
 						handler: function(grid, rowIndex, colIndex) {
-							this.up('#layerPanel')._deleteAt(rowIndex);
+							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'delete');
+						}
+					},
+					{
+						icon: '/images/merge.png',
+						handler: function(grid, rowIndex, colIndex) {
+							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'merge');
 						}
 					}]
 				}],
@@ -143,18 +151,21 @@
 			var record = this.viewStore.getById(canvas.layerId);
 			record.commit();
 		},
-		
-		_deleteAt: function(index) {
+
+		_deleteOrMergeAt: function(index, action) {
 			var layer = this.viewStore.getAt(index);
+			var actionCapitalized = Ext.String.capitalize(action);
 
-			Ext.MessageBox.confirm("Delete Layer", "Really delete '" + layer.get('layerName') + "'", function(button) {
-				if(button === 'yes') {
-					this.layerManager.deleteLayerByLayer(layer.data);
-					this.viewStore.remove(layer);
-					this.viewStore.sync();
+			var msg = Ext.String.format("Really {0} '{1}'? <br/>This cannot be undone.", action, layer.get('layerName'));
+			Ext.MessageBox.confirm(actionCapitalized + " Layer", msg, function(button) {
+				if (button === 'yes') {
+					var result = this.layerManager[action + "LayerByLayer"](layer.data);
+					if(result) {
+						this.viewStore.remove(layer);
+					}
 				}
-			}, this);
-
+			},
+			this);
 		}
 	});
 

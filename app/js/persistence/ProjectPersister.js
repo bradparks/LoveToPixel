@@ -17,7 +17,6 @@
 		},
 
 		saveProject: function(project, layers) {
-			debugger;
 			project.width = project.size.width;
 			project.height = project.size.height;
 			project.lastSaved = new Date();

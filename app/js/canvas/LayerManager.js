@@ -45,7 +45,7 @@
 			}
 		},
 
-		setActiveLayer: function lm_setActiveLayer(index) {
+		setActiveLayer: function(index) {
 			if (index < 0 || index >= this.count) {
 				throw new Error("LayerManager.setActiveLayer: index out of range");
 			}
@@ -97,11 +97,7 @@
 			this._updateZIndices();
 		},
 
-		deleteLayer: function lm_deleteLayer(index) {
-			if (this.count === 1) {
-				throw new Error("LayerManager.deleteLayer can not delete the last layer");
-			}
-
+		deleteLayer: function(index) {
 			if (index < 0 || index >= this.count) {
 				throw new Error("LayerManger.deleteLayer: index out of range: " + index);
 			}
@@ -112,22 +108,44 @@
 				this._activeLayerIndex = this.count - 1;
 			}
 
-			this.activeLayer.isVisible = true;
 			this._updateZIndices();
 
-			this._messageBus.publish('layerDeleted', deletedLayer);
+			this._messageBus.publish('layerRemoved', deletedLayer);
+			if(this._layers.length === 0) {
+				this._messageBus.publish('noLayersInProject');
+			}
 
-			return {
-				deleted: deletedLayer,
-				active: this.activeLayer
-			};
+			return true;
 		},
 
 		deleteLayerByLayer: function(layer) {
 			var index = this._layers.indexOf(layer);
 
 			if(index >= 0) {
-				this.deleteLayer(index);
+				return this.deleteLayer(index);
+			}
+		},
+
+		mergeLayer: function(index) {
+			if(index <= 0) {
+				return false;
+			}
+
+			var toBeMerged = this._layers[index];
+			var toBeMergedInto = this._layers[index-1];
+
+			toBeMergedInto.getContext('2d').drawImage(toBeMerged, 0, 0);
+			this.deleteLayer(index);
+			this._messageBus.publish('canvasContentChange', toBeMergedInto);
+
+			return true;
+		},
+
+		mergeLayerByLayer: function(layer) {
+			var index = this._layers.indexOf(layer);
+
+			if(index >= 1) {
+				return this.mergeLayer(index);
 			}
 		},
 
