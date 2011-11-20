@@ -1,15 +1,31 @@
 (function() {
+	var picker;
+	var currentSwatch;
+
 	function singleClick() {
-		var panel = this.up('panel');
-		panel.hide();
-		panel.isPopped = false;
+		if (picker) {
+			if(currentSwatch) {
+				currentSwatch.color = '#' + picker.toString().toUpperCase();
+			}
+			picker.hidePicker();
+			picker = null;
+			currentSwatch = null;
+		} else {
+			var panel = this.up('panel');
+			panel.hide();
+			panel.isPopped = false;
+		}
 	}
 
 	function doubleClick() {
-		//alert('double click on: ' + this.color);
+		currentSwatch = this;
 		this.el.dom.value = this.color;
-		var jsc = new jscolor.color(this.el.dom);
-		jsc.showPicker();
+		picker = new jscolor.color(this.el.dom, {
+			pickerClosable: true,
+			pickerPosition: 'right',
+			pickerZIndex: 40000
+		});
+		picker.showPicker();
 	}
 
 	Ext.define('LTP.FloatingColorPalette', {
@@ -32,8 +48,8 @@
 					}
 				};
 
-				if(i < 9) {
-					swatch.label = (i+1).toString()
+				if (i < 9) {
+					swatch.label = (i + 1).toString()
 				}
 
 				items.push(swatch);

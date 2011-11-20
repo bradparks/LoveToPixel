@@ -17,16 +17,12 @@
 			var me = this;
 			this.on('render', function() {
 				me.el.dom.addEventListener('click', function(e) {
-					console.log('in single click: ' + me._doubleClickOccured);
 					if (me._doubleClickOccured) {
-						console.log('returning early');
 						delete me._doubleClickOccured;
 						return;
 					}
 
 					setTimeout(function() {
-
-						console.log('in setTimeout: ' + me._doubleClickOccured);
 						if (!me._doubleClickOccured) {
 							var leftRight = e.button === 0 ? 'left': 'right';
 
@@ -38,7 +34,6 @@
 				});
 
 				me.el.dom.addEventListener('dblclick', function(e) {
-					console.log('in dblclick');
 					me._doubleClickOccured = true;
 					me.fireEvent('dblclick');
 				});
