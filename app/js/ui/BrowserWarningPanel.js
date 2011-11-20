@@ -32,11 +32,17 @@
 					if(info.hasOwnProperty(prop) && !info[prop].available && info[prop].message) {
 						items.push({
 							xtype: 'panel',
-							border: 'false',
+							border: false,
 							html: Ext.String.format("<b>{0}:</b> {1}", prop, info[prop].message)
 						});
 					}
 				}
+				items.push({
+					xtype: 'panel',
+					border: false,
+					margin: 10,
+					html: Ext.String.format("<b>{0}</b>", info.resolution)
+				});
 			}
 
 			this.items = items;
