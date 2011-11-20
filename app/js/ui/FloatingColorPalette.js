@@ -6,7 +6,10 @@
 	}
 
 	function doubleClick() {
-		alert('double click on: ' + this.color);
+		//alert('double click on: ' + this.color);
+		this.el.dom.value = this.color;
+		var jsc = new jscolor.color(this.el.dom);
+		jsc.showPicker();
 	}
 
 	Ext.define('LTP.FloatingColorPalette', {
