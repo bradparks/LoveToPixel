@@ -33,7 +33,7 @@
 			c: function() {
 				if (!LTP.app.floatingColorPalette) {
 					LTP.app.floatingColorPalette = Ext.create('LTP.FloatingColorPalette', {
-						colors: _colors
+						colorManager: LTP.app.colorManager
 					});
 				}
 
@@ -190,6 +190,8 @@
 
 			_destroyAll(this._components);
 			this._components = [];
+
+			this.colorManager = new LTP.ColorManager(_colors);
 
 			this.layerManager = new LTP.LayerManager(project);
 

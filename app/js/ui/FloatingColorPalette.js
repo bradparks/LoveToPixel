@@ -1,4 +1,14 @@
 (function() {
+	function singleClick() {
+		var panel = this.up('panel');
+		panel.hide();
+		panel.isPopped = false;
+	}
+
+	function doubleClick() {
+		alert('double click on: ' + this.color);
+	}
+
 	Ext.define('LTP.FloatingColorPalette', {
 		extend: 'LTP.FloatingPalette',
 		alias: 'widget.ltp.floatingcolorpalette',
@@ -8,20 +18,22 @@
 		},
 
 		initComponent: function() {
-			var colors = this.colors || [];
 			var items = [];
 
-			for(var i = 0; i < colors.length; ++i) {
-				items.push({
-					color: colors[i],
+			for (var i = 0; i < this.colorManager.colors.length; ++i) {
+				var swatch = {
+					color: this.colorManager.colors[i],
 					listeners: {
-						click: function() {
-							var panel = this.up('panel');
-							panel.hide();
-							panel.isPopped = false;
-						}
+						click: singleClick,
+						dblclick: doubleClick
 					}
-				});
+				};
+
+				if(i < 9) {
+					swatch.label = (i+1).toString()
+				}
+
+				items.push(swatch);
 			}
 
 			this.items = items;
