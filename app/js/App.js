@@ -232,11 +232,12 @@
 			this);
 
 			for (var i = 0; i < _colors.length; ++i) {
-				this.callbacks[(i + 1).toString()] = (function(i, painter) {
-					return function() {
-						LTP.GlobalMessageBus.publish('leftColorSelected', _colors[i]);
+				this.callbacks[(i + 1).toString()] = (function(i) {
+					return function(shift) {
+						var prefix = shift ? 'right' : 'left';
+						LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', _colors[i]);
 					}
-				})(i, this.painter);
+				})(i);
 			}
 
 			this.keyListener = new LTP.KeyListener(this);
