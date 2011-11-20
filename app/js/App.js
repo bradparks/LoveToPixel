@@ -53,6 +53,9 @@
 				if (LTP.app.floatingColorPalette && LTP.app.floatingColorPalette.isPopped) {
 					LTP.app.floatingColorPalette.togglePopup();
 				}
+				if (LTP.app.floatingSizePalette && LTP.app.floatingSizePalette.isPopped) {
+					LTP.app.floatingSizePalette.togglePopup();
+				}
 			},
 			z: function(shift) {
 				var delta = shift ? - 1: 1;

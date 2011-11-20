@@ -25,14 +25,10 @@
 				this.messageBus.publish('cursorDisplayChangeRequest', '');
 				this.showAt(_mouseX - this.width / 2, _mouseY - this.height - 30);
 			} else {
+				this.messageBus.publish('cursorDisplayChangeRequest', 'none');
 				this.hide();
 			}
 			this.isPopped = !this.isPopped;
-		},
-
-		hide: function() {
-			this.messageBus.publish('cursorDisplayChangeRequest', 'none');
-			this.callParent(arguments);
 		}
 	},
 	function() {
