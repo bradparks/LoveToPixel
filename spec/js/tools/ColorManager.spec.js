@@ -96,6 +96,18 @@ describe("ColorManager", function() {
 				expect(colorManager.colors[i]).toEqual(expectedColorArray[i]);
 			}
 		});
+
+		it("should set the selected color", function() {
+			var colorArray = [colors.red, colors.green, colors.blue, colors.orange];
+
+			var colorManager = new LTP.ColorManager(colorArray);
+
+			colorManager.setLeftColorTo(2);
+			expect(colorManager.leftColor).toEqual(colors.blue);
+
+			colorManager.setRightColorTo(3);
+			expect(colorManager.rightColor).toEqual(colors.orange);
+		});
 	});
 });
 

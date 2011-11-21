@@ -233,11 +233,11 @@
 			},
 			this);
 
-			for (var i = 0; i < _colors.length; ++i) {
-				this.callbacks[(i + 1).toString()] = (function(i) {
+			for (var i = 1; i < 10; ++i) {
+				this.callbacks[i.toString()] = (function(i) {
 					return function(shift) {
-						var prefix = shift ? 'right' : 'left';
-						LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', _colors[i]);
+						var prefix = shift ? 'Right' : 'Left';
+						LTP.app.colorManager['set' + prefix + 'ColorTo'](i-1);
 					}
 				})(i);
 			}

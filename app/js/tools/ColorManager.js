@@ -1,8 +1,10 @@
 (function() {
-	LTP.ColorManager = function ColorManager(initialColors) {
+	LTP.ColorManager = function ColorManager(initialColors, messageBus) {
 		this._colors = initialColors || [colors.black, colors.white];
 		this._leftColorIndex = 0;
 		this._rightColorIndex = 1;
+
+		this._messageBus = messageBus || LTP.GlobalMessageBus;
 	};
 
 	LTP.ColorManager.prototype = {
@@ -23,6 +25,20 @@
 				} else {
 					this._rightColorIndex = 0;
 				}
+			}
+		},
+
+		setLeftColorTo: function(index) {
+			if(this._inRange(index)) {
+				this._leftColorIndex = index;
+				this._messageBus.publish('leftColorSelected', this.leftColor);
+			}
+		},
+
+		setRightColorTo: function(index) {
+			if(this._inRange(index)) {
+				this._rightColorIndex = index;
+				this._messageBus.publish('rightColorSelected', this.rightColor);
 			}
 		},
 

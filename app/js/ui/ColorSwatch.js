@@ -11,8 +11,10 @@
 			this.addEvents('click', 'dblclick');
 			this.style = {
 				backgroundColor: config.color,
-				border: '1px solid black'
+				border: '1px solid black',
+				color: colors.invert(config.color)
 			};
+			this.html = config.label;
 
 			var me = this;
 			this.on('render', function() {
