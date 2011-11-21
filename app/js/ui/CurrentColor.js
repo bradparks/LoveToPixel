@@ -16,7 +16,6 @@
 
 			this._messageBus.subscribe(config.tool + 'ColorSelected', function(color) {
 				if(color) {
-					console.log('CurrentColor: ' + color);
 					this.el.setStyle('backgroundColor', color);
 				}
 			}, this);
