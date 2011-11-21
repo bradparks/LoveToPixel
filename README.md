@@ -74,7 +74,7 @@ Layers are modeled after most other image apps:
 ## Palette/Color editing ##
 
 This is a bit raw right now, it's my current focus. When the color palette is open (hit 'c'), click on a color to pick it.
-Click and hold to edit the color. The first 9 colors have numbers in them, you can quickly select those colors by hitting
+Click and hold to edit the color (this works for both left and right clicking, for the left and right colors). The first 9 colors have numbers in them, you can quickly select those colors by hitting
 the corresponding number on your keyboard. The color palette doesn't need to be open to do this. Hold down shift then
 hit a number to select that color for your right tool.  
   
