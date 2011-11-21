@@ -41,7 +41,8 @@ Here are the key commands for the preview version:
 * r - redo
 * c - display the color palette, right or left click a color to pick it for the corresponding tool
 * b - display the brush size palette, right or left click to select your brush size
-* 1-9 - pick a color (for the left tool only)
+* 1-9 - select one of the first 9 colors in your palette for the left tool
+* shift 1-9 - select one of the first 9 colors in your palette for the right tool
 * z - zoom in
 * shift-z - zoom out
 * hold a - toggle to 100% until a is released
@@ -69,6 +70,15 @@ Layers are modeled after most other image apps:
 * the currently selected/highlighted layer is the active one, that is where you will paint into
 * To delete a layer, click the 'X' icon next to it
 * To merge a layer into the layer below it, click the down arrow icon next to it
+
+## Palette/Color editing ##
+
+This is a bit raw right now, it's my current focus. When the color palette is open (hit 'c'), click on a color to pick it.
+Click and hold to edit the color. The first 9 colors have numbers in them, you can quickly select those colors by hitting
+the corresponding number on your keyboard. The color palette doesn't need to be open to do this. Hold down shift then
+hit a number to select that color for your right tool.  
+  
+Your palette gets saved with your project. Much more palette editing features are coming, stay tuned!
 
 ## Local Storage saving ##
 Hitting 's' will save your current project to local storage. So far LTP is 100% done on the client, the server is doing nothing more than serving the JS/HTML/CSS files. Local storage is very limited in size in most browsers. Chrome, for example, only gives you a measly 2.5 megabytes. You can comfortably save a handful of projects, but you'll hit that 2.5mb limit quickly. So far LTP does not warn you or otherwise attempt to prevent this at all.
