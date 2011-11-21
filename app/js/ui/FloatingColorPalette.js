@@ -3,7 +3,7 @@
 	var _currentSwatch;
 
 	function _singleClick(e) {
-		var prefix = e.mouseButton ? 'right' : 'left';
+		var prefix = e.button ? 'right' : 'left';
 
 		LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', this.color);
 
@@ -15,32 +15,32 @@
 	function _longClick() {
 		currentSwatch = this;
 		this.el.dom.value = currentSwatch.color;
-		picker = new jscolor.color(currentSwatch.el.dom, {
+		_picker = new jscolor.color(currentSwatch.el.dom, {
 			pickerClosable: true,
 			pickerPosition: 'right',
 			pickerZIndex: 40000
 		});
-		picker.showPicker();
+		_picker.showPicker();
 	}
 
 	function _onMouseDown(e) {
 		if (e.target.id.indexOf('colorswatch') >= 0) {
 			return;
 		}
-		if (picker && e.target) {
+		if (_picker && e.target) {
 			if (!e.target.id || e.target.id.indexOf('jscolor.') === - 1) {
 				if (currentSwatch) {
-					currentSwatch.color = '#' + picker.toString().toUpperCase();
+					currentSwatch.color = '#' + _picker.toString().toUpperCase();
 
 					var palette = currentSwatch.up('panel');
 					palette.colorManager.redefineAt(currentSwatch.index, currentSwatch.color);
 
-					var prefix = e.mouseButton ? 'right': 'left';
+					var prefix = e.button ? 'right': 'left';
 					LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', currentSwatch.color);
 					currentSwatch = null;
 				}
-				picker.hidePicker();
-				picker = null;
+				_picker.hidePicker();
+				_picker = null;
 				if (this.isPopped) {
 					this.togglePopup();
 				}
