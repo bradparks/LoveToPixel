@@ -11,7 +11,7 @@
 	LTP.DirectionLockTransformer.directions.upDown, LTP.DirectionLockTransformer.directions.leftRight];
 	var _currentLockIndex = 0;
 
-	var _colors = [
+	var _defaultPalette = [
 	colors.white, colors.black, colors.red, colors.lightGray, colors.blue, colors.green, colors.yellow, colors.orange, colors.purple, colors.gray, colors.brown, '#FF9999', '#33AA11', '#333333', '#88AAFF', '#337722', ];
 
 	var _sizes = [1, 2, 3, 4, 5, 8, 14];
@@ -103,7 +103,7 @@
 				}
 			},
 			s: function() {
-				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers);
+				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
 				LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
 			},
 			e: function() {
@@ -191,7 +191,8 @@
 			_destroyAll(this._components);
 			this._components = [];
 
-			this.colorManager = new LTP.ColorManager(_colors);
+			this.colorManager = new LTP.ColorManager();
+			this.colorManager.setColorsFromString(project.palette, _defaultPalette);
 
 			this.layerManager = new LTP.LayerManager(project);
 

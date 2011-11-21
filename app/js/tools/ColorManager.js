@@ -12,8 +12,16 @@
 			return this._colors.join(',');
 		},
 
-		setColorsFromString: function(colorString) {
-			this._colors = colorString.split(',');
+		setColorsFromString: function(colorString, defaultPalette) {
+			if(!colorString) {
+				this._colors = defaultPalette;
+			} else {
+				this._colors = colorString.split(',');
+			}
+
+			if(!this._colors || this._colors.length === 0 || (this._colors.length === 1 && !this._colors[0])) {
+				this._colors = defaultPalette;
+			}
 
 			if(this._leftColorIndex > this._colors.length - 1) {
 				this._leftColorIndex = 0;

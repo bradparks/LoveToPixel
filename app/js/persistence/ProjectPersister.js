@@ -16,10 +16,11 @@
 			});
 		},
 
-		saveProject: function(project, layers) {
+		saveProject: function(project, layers, paletteString) {
 			project.width = project.size.width;
 			project.height = project.size.height;
 			project.lastSaved = new Date();
+			project.palette = paletteString;
 
 			var projectRecord;
 

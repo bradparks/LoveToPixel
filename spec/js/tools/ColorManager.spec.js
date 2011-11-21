@@ -49,6 +49,18 @@ describe("ColorManager", function() {
 				expect(colorManager.colors[i]).toEqual(colorArray[i]);
 			}
 		});
+
+		it("should resort to the default if the provided string contains no colors", function() {
+			var colorString = "";
+			var defaultColors = [colors.red, colors.orange];
+
+			var colorManager = new LTP.ColorManager();
+			colorManager.setColorsFromString(colorString, defaultColors);
+
+			for(var i = 0; i < defaultColors.length; ++i) {
+				expect(colorManager.colors[i]).toEqual(defaultColors[i]);
+			}
+		});
 	});
 
 	describe("color management", function() {
