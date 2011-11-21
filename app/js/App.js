@@ -237,8 +237,8 @@
 			for (var i = 1; i < 10; ++i) {
 				this.callbacks[i.toString()] = (function(i) {
 					return function(shift) {
-						var prefix = shift ? 'Right' : 'Left';
-						LTP.app.colorManager['set' + prefix + 'ColorTo'](i-1);
+						var prefix = shift ? 'Right': 'Left';
+						LTP.app.colorManager['set' + prefix + 'ColorTo'](i - 1);
 					}
 				})(i);
 			}
@@ -256,5 +256,13 @@
 	};
 
 	LTP.app = app;
+
+	// kill context menus everywhere, they are always bad in LTP
+	window.addEventListener('contextmenu', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	});
+
 })();
 
