@@ -52,6 +52,14 @@
 		extend: 'LTP.FloatingPalette',
 		alias: 'widget.ltp.floatingcolorpalette',
 
+		//dockedItems: [{
+			//xtype: 'toolbar',
+			//dock: 'top',
+			//items: [{
+				//text: 'docked to the top'
+			//}]
+		//}],
+
 		defaults: {
 			xtype: 'ltp.colorswatch'
 		},

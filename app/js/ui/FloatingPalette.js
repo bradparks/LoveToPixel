@@ -9,7 +9,6 @@
 		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.floatingpalette',
 		width: 200,
-		height: 50,
 		autoRender: true,
 		floating: true,
 		layout: 'column',
@@ -23,7 +22,12 @@
 		togglePopup: function() {
 			if(!this.isPopped) {
 				this.messageBus.publish('cursorDisplayChangeRequest', '');
-				this.showAt(_mouseX - this.width / 2, _mouseY - this.height - 30);
+
+				if(!this.el) {
+					this.showAt(0,0);
+				}
+
+				this.showAt(_mouseX - this.width / 2, _mouseY - this.getHeight() - 30);
 			} else {
 				this.messageBus.publish('cursorDisplayChangeRequest', 'none');
 				this.hide();
