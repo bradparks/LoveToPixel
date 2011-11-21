@@ -16,26 +16,23 @@
 
 			var me = this;
 			this.on('render', function() {
-				me.el.dom.addEventListener('click', function(e) {
-					if (me._doubleClickOccured) {
-						delete me._doubleClickOccured;
-						return;
-					}
-
+				me.el.dom.addEventListener('mousedown', function(e) {
+					me._mouseIsDown = true;
 					setTimeout(function() {
-						if (!me._doubleClickOccured) {
-							var leftRight = e.button === 0 ? 'left': 'right';
-
-							LTP.GlobalMessageBus.publish(leftRight + 'ColorSelected', me.color);
-							me.fireEvent('click');
+						if (me._mouseIsDown) {
+							me.fireEvent('longclick', e);
+							me._mouseIsDown = false;
 						}
 					},
 					200);
 				});
 
-				me.el.dom.addEventListener('dblclick', function(e) {
-					me._doubleClickOccured = true;
-					me.fireEvent('dblclick');
+				me.el.dom.addEventListener('mouseup', function(e) {
+					if(me._mouseIsDown) {
+						me.fireEvent('click', e);
+					}
+
+					me._mouseIsDown = false;
 				});
 
 				me.el.dom.addEventListener('contextmenu', function(e) {

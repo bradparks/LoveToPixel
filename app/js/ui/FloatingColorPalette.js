@@ -2,13 +2,17 @@
 	var picker;
 	var currentSwatch;
 
-	function _singleClick() {
+	function _singleClick(e) {
+		var prefix = e.mouseButton ? 'right' : 'left';
+
+		LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', this.color);
+
 		var panel = this.up('panel');
 		panel.hide();
 		panel.isPopped = false;
 	}
 
-	function _doubleClick() {
+	function _longClick() {
 		currentSwatch = this;
 		this.el.dom.value = this.color;
 		picker = new jscolor.color(this.el.dom, {
@@ -20,7 +24,6 @@
 	}
 
 	function _onMouseDown(e) {
-		console.log('id: ' + e.target.id);
 		if (e.target.id.indexOf('colorswatch') >= 0) {
 			return;
 		}
@@ -57,7 +60,7 @@
 					color: this.colorManager.colors[i],
 					listeners: {
 						click: _singleClick,
-						dblclick: _doubleClick
+						longclick: _longClick
 					}
 				};
 
