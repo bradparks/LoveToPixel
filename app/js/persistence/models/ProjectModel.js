@@ -6,6 +6,7 @@
 			{	name: 'name', type: 'string' },
 			{ name: 'width', type: 'integer' },
 			{ name: 'height', type: 'integer' },
+			{ name: 'palette', type: 'string' },
 			{ name: 'lastSaved', type: 'date' }
 		],
 

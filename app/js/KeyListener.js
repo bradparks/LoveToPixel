@@ -8,6 +8,19 @@
 		'27' : 'esc'
 	};
 
+	var _numbersWhenShifted = {
+		'!' : 1,
+		'@' : 2,
+		'#' : 3,
+		'$' : 4,
+		'%' : 5,
+		'^' : 6,
+		'&' : 7,
+		'*' : 8,
+		'(' : 9,
+		')' : 0
+	};
+
 	LTP.KeyListener = function KeyListener(config) {
 		var me = this;
 		if(!config) {
@@ -43,6 +56,8 @@
 		
 			if(typeof this._callbacks[character] === 'function') {
 				this._callbacks[character].call(this._scope, e.shiftKey);
+			} else if(typeof this._callbacks[_numbersWhenShifted[character].toString()] === 'function') {
+				this._callbacks[_numbersWhenShifted[character].toString()].call(this._scope, true);
 			}
 
 			return character !== 'space';

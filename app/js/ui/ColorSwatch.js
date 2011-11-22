@@ -8,19 +8,33 @@
 
 		constructor: function(config) {
 			this.callParent(arguments);
-			this.addEvents('click');
+			this.addEvents('click', 'dblclick');
 			this.style = {
 				backgroundColor: config.color,
-				border: '1px solid black'
+				border: '1px solid black',
+				color: colors.invert(config.color)
 			};
+			this.html = config.label;
 
 			var me = this;
 			this.on('render', function() {
 				me.el.dom.addEventListener('mousedown', function(e) {
-					var leftRight = e.button === 0 ? 'left' : 'right';
+					me._mouseIsDown = true;
+					setTimeout(function() {
+						if (me._mouseIsDown) {
+							me.fireEvent('longclick', e);
+							me._mouseIsDown = false;
+						}
+					},
+					200);
+				});
 
-					LTP.GlobalMessageBus.publish(leftRight + 'ColorSelected', me.color);
-					me.fireEvent('click');
+				me.el.dom.addEventListener('mouseup', function(e) {
+					if(me._mouseIsDown) {
+						me.fireEvent('click', e);
+					}
+
+					me._mouseIsDown = false;
 				});
 
 				me.el.dom.addEventListener('contextmenu', function(e) {
@@ -29,7 +43,26 @@
 					return false;
 				});
 			});
+		},
+
+		setIsCurrentLeft: function(isLeft) {
+			var style = isLeft ? '4px solid black' : '1px solid black';
+
+			this.el.setStyle('borderLeft', style);
+			this.el.setStyle('borderBottom', style);
+
+			if(isLeft) {
+				console.log('set current left: ' + style);
+			}
+		},
+
+		setIsCurrentRight: function(isRight) {
+			var style = isRight ? '4px solid black' : '1px solid black';
+
+			this.el.setStyle('borderRight', style);
+			this.el.setStyle('borderTop', style);
 		}
 	});
 
 })();
+

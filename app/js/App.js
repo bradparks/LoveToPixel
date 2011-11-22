@@ -11,7 +11,7 @@
 	LTP.DirectionLockTransformer.directions.upDown, LTP.DirectionLockTransformer.directions.leftRight];
 	var _currentLockIndex = 0;
 
-	var _colors = [
+	var _defaultPalette = [
 	colors.white, colors.black, colors.red, colors.lightGray, colors.blue, colors.green, colors.yellow, colors.orange, colors.purple, colors.gray, colors.brown, '#FF9999', '#33AA11', '#333333', '#88AAFF', '#337722', ];
 
 	var _sizes = [1, 2, 3, 4, 5, 8, 14];
@@ -33,7 +33,7 @@
 			c: function() {
 				if (!LTP.app.floatingColorPalette) {
 					LTP.app.floatingColorPalette = Ext.create('LTP.FloatingColorPalette', {
-						colors: _colors
+						colorManager: LTP.app.colorManager
 					});
 				}
 
@@ -103,8 +103,9 @@
 				}
 			},
 			s: function() {
-				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers);
+				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
 				LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
+				LTP.app._currentProject.isDirty = false;
 			},
 			e: function() {
 				var composited = LTP.app.layerManager.composite();
@@ -191,6 +192,9 @@
 			_destroyAll(this._components);
 			this._components = [];
 
+			this.colorManager = new LTP.ColorManager();
+			this.colorManager.setColorsFromString(project.palette, _defaultPalette);
+
 			this.layerManager = new LTP.LayerManager(project);
 
 			this._components.push(this.layerManager);
@@ -231,12 +235,13 @@
 			},
 			this);
 
-			for (var i = 0; i < _colors.length; ++i) {
-				this.callbacks[(i + 1).toString()] = (function(i, painter) {
-					return function() {
-						LTP.GlobalMessageBus.publish('leftColorSelected', _colors[i]);
+			for (var i = 1; i < 10; ++i) {
+				this.callbacks[i.toString()] = (function(i) {
+					return function(shift) {
+						var prefix = shift ? 'Right': 'Left';
+						LTP.app.colorManager['set' + prefix + 'ColorTo'](i - 1);
 					}
-				})(i, this.painter);
+				})(i);
 			}
 
 			this.keyListener = new LTP.KeyListener(this);
@@ -247,7 +252,23 @@
 			LTP.GlobalMessageBus.publish('leftColorSelected', this.painter.leftColor);
 			LTP.GlobalMessageBus.publish('rightColorSelected', this.painter.rightColor);
 
+			this._addCloseWarningHook();
+
 			this.layerPanel.load(this.layerManager);
+		},
+
+		_addCloseWarningHook: function() {
+			LTP.GlobalMessageBus.subscribe('canvasContentChange', function() {
+				this._currentProject.isDirty = true;
+			},
+			this);
+
+			var me = this;
+			window.onbeforeunload = function() {
+				if(me._currentProject.isDirty) {
+					return "There are unsaved changes to this project";
+				}
+			};
 		}
 	};
 

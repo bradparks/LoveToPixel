@@ -34,7 +34,7 @@
 		fromArrayToHex: function(colorArray, options) {
 			var hexString = '#';
 
-			var count = options.includeAlpha && colorArray.length === 4 ? 4 : 3;
+			var count = (options && options.includeAlpha && colorArray.length === 4) ? 4 : 3;
 
 			for(var i = 0; i < count; ++i) {
 				var hex = colorArray[i].toString(16);
@@ -59,12 +59,22 @@
 				parseInt(oxb, 16),
 			];
 
-			if(options.includeAlpha) {
+			if(options && options.includeAlpha) {
 				result.push(255);
 			}
 
 			return result;
 		},
+
+		invert: function(hexColor) {
+			var array = this.fromHexToArray(hexColor);
+
+			for(var i = 0; i < array.length; ++i) {
+				array[i] = 255 - array[i];
+			}
+
+			return this.fromArrayToHex(array); 
+		}
 
 	};
 
