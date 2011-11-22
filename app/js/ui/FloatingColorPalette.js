@@ -3,13 +3,21 @@
 	var _currentSwatch;
 
 	function _singleClick(e) {
-		var prefix = e.button ? 'right' : 'left';
+		var prefix = e.button ? 'right': 'left';
 
 		LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', this.color);
 
 		var panel = this.up('panel');
 		panel.hide();
 		panel.isPopped = false;
+	}
+
+	function disableContextMenu(element) {
+		element.addEventListener('contextmenu', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		});
 	}
 
 	function _longClick() {
@@ -20,7 +28,9 @@
 			pickerPosition: 'right',
 			pickerZIndex: 40000
 		});
+
 		_picker.showPicker();
+		disableContextMenu(document.getElementById('jscolor.boxB'));
 	}
 
 	function _onMouseDown(e) {
@@ -52,13 +62,17 @@
 		extend: 'LTP.FloatingPalette',
 		alias: 'widget.ltp.floatingcolorpalette',
 
-		//dockedItems: [{
-			//xtype: 'toolbar',
-			//dock: 'top',
-			//items: [{
-				//text: 'docked to the top'
-			//}]
-		//}],
+		dockedItems: [{
+			xtype: 'toolbar',
+			dock: 'bottom',
+			items: [{
+				text: 'Add Color',
+				handler: function() {
+					var panel = this.up('panel');
+					panel.addColor();
+				}
+			}]
+		}],
 
 		defaults: {
 			xtype: 'ltp.colorswatch'
@@ -85,15 +99,24 @@
 				items.push(swatch);
 			}
 
-			//items.push({
-				//xtype: 'ltp.addcolorswatch',
-			//});
-
 			this.items = items;
 
 			Ext.getBody().on('mousedown', _onMouseDown, this);
 			this.callParent(arguments);
 		},
+
+		addColor: function() {
+			this.add({
+				color: colors.white,
+				index: this.items.items.length,
+				listeners: {
+					click: _singleClick,
+					longclick: _longClick
+				}
+			});
+
+			this.colorManager.addColor(colors.white);
+		}
 	});
 })();
 

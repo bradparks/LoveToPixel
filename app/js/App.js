@@ -105,6 +105,7 @@
 			s: function() {
 				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
 				LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
+				LTP.app._currentProject.isDirty = false;
 			},
 			e: function() {
 				var composited = LTP.app.layerManager.composite();
@@ -251,18 +252,26 @@
 			LTP.GlobalMessageBus.publish('leftColorSelected', this.painter.leftColor);
 			LTP.GlobalMessageBus.publish('rightColorSelected', this.painter.rightColor);
 
+			this._addCloseWarningHook();
+
 			this.layerPanel.load(this.layerManager);
+		},
+
+		_addCloseWarningHook: function() {
+			LTP.GlobalMessageBus.subscribe('canvasContentChange', function() {
+				this._currentProject.isDirty = true;
+			},
+			this);
+
+			var me = this;
+			window.onbeforeunload = function() {
+				if(me._currentProject.isDirty) {
+					return "There are unsaved changes to this project";
+				}
+			};
 		}
 	};
 
 	LTP.app = app;
-
-	// kill context menus everywhere, they are always bad in LTP
-	window.addEventListener('contextmenu', function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-		return false;
-	});
-
 })();
 

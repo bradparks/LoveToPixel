@@ -23,11 +23,7 @@
 			if(!this.isPopped) {
 				this.messageBus.publish('cursorDisplayChangeRequest', '');
 
-				if(!this.el) {
-					this.showAt(0,0);
-				}
-
-				this.showAt(_mouseX - this.width / 2, _mouseY - this.getHeight() - 30);
+				this.showAt(_mouseX - this.width / 2, _mouseY);
 			} else {
 				this.messageBus.publish('cursorDisplayChangeRequest', 'none');
 				this.hide();
