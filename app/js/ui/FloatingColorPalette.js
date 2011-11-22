@@ -3,11 +3,10 @@
 	var _currentSwatch;
 
 	function _singleClick(e) {
-		var prefix = e.button ? 'right': 'left';
-
-		LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', this.color);
-
+		var prefix = e.button ? 'Right': 'Left';
 		var panel = this.up('panel');
+
+		panel.colorManager['set' + prefix + 'ColorTo'](this.index);
 		panel.hide();
 		panel.isPopped = false;
 	}
@@ -61,6 +60,12 @@
 	Ext.define('LTP.FloatingColorPalette', {
 		extend: 'LTP.FloatingPalette',
 		alias: 'widget.ltp.floatingcolorpalette',
+
+		constructor: function() {
+			this.callParent(arguments);
+			this.messageBus.subscribe('leftColorSelected', this._onLeftColorSelected, this);
+			this.messageBus.subscribe('rightColorSelected', this._onRightColorSelected, this);
+		},
 
 		dockedItems: [{
 			xtype: 'toolbar',
@@ -116,6 +121,19 @@
 			});
 
 			this.colorManager.addColor(colors.white);
+		},
+
+		_onLeftColorSelected: function(color, index) {
+			console.log('index: ' + index);
+			Ext.Array.each(this.items.items, function(item) {
+				item.setIsCurrentLeft(item.index === index);
+			});
+		},
+
+		_onRightColorSelected: function(color, index) {
+			Ext.Array.each(this.items.items, function(item) {
+				item.setIsCurrentRight(item.index === index);
+			});
 		}
 	});
 })();

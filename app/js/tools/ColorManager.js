@@ -39,14 +39,14 @@
 		setLeftColorTo: function(index) {
 			if(this._inRange(index)) {
 				this._leftColorIndex = index;
-				this._messageBus.publish('leftColorSelected', this.leftColor);
+				this._messageBus.publish('leftColorSelected', this.leftColor, this._leftColorIndex);
 			}
 		},
 
 		setRightColorTo: function(index) {
 			if(this._inRange(index)) {
 				this._rightColorIndex = index;
-				this._messageBus.publish('rightColorSelected', this.rightColor);
+				this._messageBus.publish('rightColorSelected', this.rightColor, this._rightColorIndex);
 			}
 		},
 

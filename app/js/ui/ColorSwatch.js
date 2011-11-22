@@ -43,6 +43,24 @@
 					return false;
 				});
 			});
+		},
+
+		setIsCurrentLeft: function(isLeft) {
+			var style = isLeft ? '4px solid black' : '1px solid black';
+
+			this.el.setStyle('borderLeft', style);
+			this.el.setStyle('borderBottom', style);
+
+			if(isLeft) {
+				console.log('set current left: ' + style);
+			}
+		},
+
+		setIsCurrentRight: function(isRight) {
+			var style = isRight ? '4px solid black' : '1px solid black';
+
+			this.el.setStyle('borderRight', style);
+			this.el.setStyle('borderTop', style);
 		}
 	});
 
