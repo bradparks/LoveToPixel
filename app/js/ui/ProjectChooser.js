@@ -7,7 +7,19 @@
 		}
 
 		var parts = sizeString.split('x');
-		return s(parseInt(parts[0], 10), parseInt(parts[1], 10));
+
+		if(!parts || parts.length !== 2) {
+			return;
+		}
+
+		var width = parseInt(parts[0], 10);
+		var height = parseInt(parts[1], 10);
+
+		if(isNaN(width) || isNaN(height)) {
+			return;
+		}
+
+		return s(width, height);
 	}
 
 	Ext.define('LTP.ProjectChooser', {
@@ -106,6 +118,7 @@
 						value: '600x400',
 						name: 'size',
 						itemId: 'sizeField',
+						invalidText: "needs to be in the form '100x100'",
 						enableKeyEvents: true,
 						listeners: {
 							keydown: function(text, e) {
@@ -114,6 +127,16 @@
 									parent._startNewProject();
 								}
 							}
+						},
+						validate: function() {
+							var isValid = !!parseSizeString(this.value);
+							if(!isValid) {
+								this.markInvalid("needs to be in the form '100x100'");
+							} else {
+								this.clearInvalid();
+							}
+								
+							return isValid;
 						}
 					},
 					{
@@ -202,6 +225,13 @@
 		},
 
 		_startNewProject: function() {
+			var size = this._getSizeFromSizeField();
+
+			if(!size) {
+				// the size field will have a validation error at this point
+				return;
+			}
+
 			var project = {
 				name: this._getNameFromNameField(),
 				layers: [{
@@ -212,8 +242,7 @@
 					data: null
 				}],
 				isDirty: true,
-				// TODO: should validate size field, not fall back to 300x300
-				size: this._getSizeFromSizeField() || s(300, 300)
+				size: size
 			};
 
 			this._go(project);
