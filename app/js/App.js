@@ -186,6 +186,7 @@
 
 		_load: function(project) {
 			this._currentProject = project;
+			document.title = project.name + " - ltp";
 
 			this._createDomStructure();
 
