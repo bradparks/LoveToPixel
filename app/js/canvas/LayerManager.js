@@ -24,9 +24,10 @@
 			var layers = [];
 			for (var i = 0; i < project.layers.length; ++i) {
 				var layerConfig = project.layers[i];
-				var newLayer = this._createLayer(layerConfig.layerName, project.size, layerConfig.data);
-				newLayer.index = layerConfig.index;
-				newLayer.layerId = layerConfig.layerId;
+				var newLayer = this._createLayer(layerConfig.layerName, project.size, layerConfig.data, { 
+					layerId: layerConfig.layerId,
+					index: layerConfig.index
+				});
 				layers.push(newLayer);
 			}
 
@@ -153,9 +154,7 @@
 			maxSize = maxSize || this._size;
 			var actualSize = LTP.util.scaleSize(this._size, maxSize);
 
-			var compositeCanvas = this._createLayer('composite');
-			compositeCanvas.width = actualSize.width;
-			compositeCanvas.height = actualSize.height;
+			var compositeCanvas = this._createLayer('composite', actualSize);
 
 			var compositeContext = compositeCanvas.getContext('2d');
 
@@ -173,8 +172,9 @@
 			this._layers = null;
 		},
 
-		_createLayer: function(name, size, data) {
-			var canvas = LTP.util.canvas(this._size, {
+		_createLayer: function(name, size, data, properties) {
+			size = size || this._size;
+			var canvas = LTP.util.canvas(size, {
 				position: 'absolute',
 				top: 0,
 				left: 0
@@ -183,6 +183,14 @@
 			canvasToLayer(canvas);
 			canvas.layerName = name;
 			canvas.layerManager = this;
+
+			if(properties) {
+				for(var prop in properties) {
+					if(properties.hasOwnProperty(prop)) {
+						canvas[prop] = properties[prop];
+					}
+				}
+			}
 
 			if (data) {
 				canvas.data = data;
@@ -292,6 +300,7 @@
 				img.onload = function() {
 					me.getContext('2d').drawImage(img, 0, 0);
 					me.dataLoaded = true;
+					me.layerManager._messageBus.publish("canvasContentChange", me);
 				};
 				img.src = data;
 			},
@@ -303,7 +312,9 @@
 				var size = LTP.util.scaleSize(s(this.width, this.height), s(50, 50));
 				var thumbCanvas = LTP.util.canvas(size);
 
-				thumbCanvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height, 0, 0, size.width, size.height);
+				if(this.dataLoaded) {
+					thumbCanvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height, 0, 0, size.width, size.height);
+				}
 
 				return thumbCanvas.toDataURL();
 			},

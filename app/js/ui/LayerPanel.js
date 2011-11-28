@@ -149,7 +149,9 @@
 
 		_onCanvasContentChange: function(canvas) {
 			var record = this.viewStore.getById(canvas.layerId);
-			record.commit();
+			if(record) {
+				record.commit();
+			}
 		},
 
 		_deleteOrMergeAt: function(index, action) {
