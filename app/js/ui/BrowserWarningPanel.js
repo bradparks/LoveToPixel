@@ -2,11 +2,11 @@
 	Ext.define('LTP.BrowserWarningPanel', {
 		extend: 'Ext.panel.Panel',
 		alias: 'widget.ltp.browserwarningpanel',
-		title: 'Browser Compatibility Warning!',
-		border: true,
-		margin: 30,
+		border: false,
 		iconCls: 'warningIcon',
-		cls: 'warningPanel',
+		style: {
+			borderBottom: '4px solid black'
+		},
 
 		constructor: function() {
 			this.callParent(arguments);
@@ -17,31 +17,30 @@
 			var info = LTP.compatibilityInfo();
 			var items = [];
 
-			if(!info.success) {
-				items.push({
-					xtype: 'panel',
-					border: false,
-					style: {
-						marginTop: '10px',
-						marginBottom: '10px'
-					},
-					html: "<b>LoveToPixel uses some cutting edge browser features. Unfortunately your browser didn't quite make the cut. We recommend using Chrome (if on OSX) or Firefox 8 (on any platform) for the optimal experience</b>"
-				});
-
-				for(var prop in info) {
-					if(info.hasOwnProperty(prop) && !info[prop].available && info[prop].message) {
-						items.push({
-							xtype: 'panel',
-							border: false,
-							html: Ext.String.format("<b>{0}:</b> {1}", prop, info[prop].message)
-						});
-					}
+			var missingFeatures = [];
+			for (var prop in info) {
+				if (info.hasOwnProperty(prop) && ! info[prop].available && info[prop].message) {
+					missingFeatures.push(prop);
 				}
+			}
+
+			if (!info.success) {
 				items.push({
-					xtype: 'panel',
+					xtype: 'container',
+					margin: 0,
+					html: '<img src="images/browserWarning.png" alt="browser warning" />',
+					height: 63,
+					style: {
+						borderBottom: '4px solid black',
+						backgroundColor: 'orange'
+					}
+				},
+				{
+					xtype: 'container',
 					border: false,
-					margin: 10,
-					html: Ext.String.format("<b>{0}</b>", info.resolution)
+					margin: 15,
+					html: "love to pixel only works on cutting edge browsers. So far that is Chrome (on OSX) or Firefox 8 (on all platforms). " +
+					"Your browser is missing these features or its support for them is buggy:<b> " + missingFeatures.join(', ') + "</b>"
 				});
 			}
 

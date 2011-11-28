@@ -6,9 +6,21 @@
 		multiSelect: false,
 		selType: 'rowmodel',
 		sortableColumns: false,
+		border: false,
+		viewConfig: {
+			emptyText: "<div class='emptyGridText'>You have no saved projects. Start a new project, then when you save it with 's' it will show up here</div>",
+			deferEmptyText: false
+		},
 
 		initComponent: function() {
 			this.columns = [{
+				header: 'Thumbnail',
+				xtype: 'templatecolumn',
+				tpl: '<div style="height:{thumbnailHeight}px; width:{thumbnailWidth}px"><img class="thumbnail" src="{thumbnailData}" /></div>',
+				flex: 1,
+				dataIndex: 'thumbnailData'
+			},
+			{
 				header: 'Name',
 				dataIndex: 'name',
 				menuDisabled: true
@@ -17,13 +29,6 @@
 				header: 'Last Saved',
 				xtype: 'datecolumn',
 				dataIndex: 'lastSaved',
-			},
-			{
-				header: 'Thumbnail',
-				xtype: 'templatecolumn',
-				tpl: '<div style="height:{thumbnailHeight}px; width:{thumbnailWidth}px"><img class="thumbnail" src="{thumbnailData}" /></div>',
-				flex: 1,
-				dataIndex: 'thumbnailData'
 			},
 			{
 				xtype: 'actioncolumn',

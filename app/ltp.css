@@ -48,15 +48,39 @@ img.thumbnail {
 	border: 1px solid black;
 }
 
-.warningIcon {
-	background-image: url(images/warning.png);
-	width: 34px;
-	height: 34px;
+.projectChooserContainer {
+	background-image: url('images/transparency.png');
 }
 
-.warningPanel div.x-panel-header {
-	background: red !important;
-	border: 0 !important;
-	color: black;
+.projectChooser {
+	margin-left: auto !important;
+	margin-right: auto !important;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	width: 556px !important;
+	border: 4px solid black;
 }
+
+.introSection ul {
+	margin: 20px;
+}
+
+.introSection ul li {
+	margin-bottom: 10px;
+}
+
+.inroSection ul li:last {
+	margin-bottom 0;
+}
+
+.doubleClickLine, .emptyGridText {
+	font-size: .9em;
+	font-style: italic;
+}
+
+.emptyGridText {
+	margin: 10px;
+}
+
+
 

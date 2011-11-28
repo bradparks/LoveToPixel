@@ -178,15 +178,23 @@
 			this);
 		},
 
+		_createDomStructure: function() {
+			Ext.getBody().createChild('<div id="layerPanelElement"></div>');
+			Ext.getBody().createChild('<div id="outerContainerElement"><div id="containerElement"></div></div >');
+			Ext.getBody().createChild('<div id="statusBarElement"></div>');
+		},
+
 		_load: function(project) {
 			this._currentProject = project;
 
+			this._createDomStructure();
+
 			this.statusBar = Ext.create('LTP.StatusBar', {
-				renderTo: this.statusBarElementId
+				renderTo: 'statusBarElement'
 			});
 
 			this.layerPanel = Ext.create('LTP.LayerPanel', {
-				renderTo: this.layerPanelElementId
+				renderTo: 'layerPanelElement'
 			});
 
 			_destroyAll(this._components);
@@ -199,7 +207,7 @@
 
 			this._components.push(this.layerManager);
 
-			this.container = new LTP.Container(project.size, document.getElementById(this.containerElementId));
+			this.container = new LTP.Container(project.size, document.getElementById('containerElement'));
 			this._components.push(this.container);
 
 			this.painter = new LTP.Painter(project.size, new LTP.PointTransformer());
@@ -265,7 +273,7 @@
 
 			var me = this;
 			window.onbeforeunload = function() {
-				if(me._currentProject.isDirty) {
+				if (me._currentProject.isDirty) {
 					return "There are unsaved changes to this project";
 				}
 			};
