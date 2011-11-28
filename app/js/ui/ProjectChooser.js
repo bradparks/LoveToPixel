@@ -164,7 +164,7 @@
 						fontStyle: 'italic',
 						padding: '2px'
 					},
-					html: 'version 0.1 alpha'
+					html: 'version 0.1 alpha, <a href="http://github.com/city41/LoveToPixel" target="_blank">github</a>'
 				}]
 			};
 
