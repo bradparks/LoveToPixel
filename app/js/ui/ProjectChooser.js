@@ -2,8 +2,9 @@
 	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " +
 		"geared towards those who do \"old school\" pixel art (think 16 bit video games)" + 
 		"<ul>" + 
-		"<li><a href='#'>read the quick help</a> or <a href='#'>watch the screencast</a> to get started</li>" + 
-		"<li>or <a href='#'>start a new project</a></li>" + 
+		"<li><a href='https://github.com/city41/LoveToPixel/blob/master/help/QuickHelp.md' target='_blank' " +
+			"id='launchHelpLink'>read the quick help</a> to get started</li>" +
+		"<li>or <a href='#' id='startNewProjectLink'>start a new project</a></li>" + 
 		"<li>or resume a saved project below</li></ul>";
 	
 
@@ -60,7 +61,7 @@
 						xtype: 'container',
 						baseCls: 'introSection',
 						margin: 15,
-						html: _introHtml,
+						html: _introHtml
 					},
 					style: {
 						borderBottom: '4px solid black',
@@ -108,7 +109,26 @@
 				}]
 			};
 
+			this.on('afterrender', this._onAfterRender, this);
 			this.callParent(arguments);
+		},
+
+		_onAfterRender: function() {
+			//Ext.fly('launchHelpLink').on('click', this._onHelpClick, this);
+			//Ext.fly('screencastLink').on('click', this._onScreencastClick, this);
+			Ext.fly('startNewProjectLink').on('click', this._onStartNewProjectClick, this);
+		},
+
+		_onHelpClick: function() {
+			Ext.MessageBox.alert('help', 'help here');
+		},
+
+		_onScreencastClick: function() {
+			Ext.MessageBox.alert('Screencast', 'The screencast won\'t be made until LTP reaches 1.0');
+		},
+
+		_onStartNewProjectClick: function() {
+			Ext.MessageBox.alert('new project', 'new here');
 		},
 
 		_getSizeFromSizeField: function() {
