@@ -88,7 +88,16 @@
 						fieldLabel: 'Name',
 						labelWidth: 40,
 						name: 'name',
-						itemId: 'nameField'
+						itemId: 'nameField',
+						enableKeyEvents: true,
+						listeners: {
+							keydown: function(text, e) {
+								if (e.keyCode === Ext.EventObject.ENTER) {
+									var parent = this.up('#projectChooser');
+									parent._startNewProject();
+								}
+							}
+						}
 					},
 					{
 						xtype: 'textfield',
@@ -97,7 +106,6 @@
 						value: '600x400',
 						name: 'size',
 						itemId: 'sizeField',
-						tabIndex: 0,
 						enableKeyEvents: true,
 						listeners: {
 							keydown: function(text, e) {
