@@ -1,12 +1,5 @@
 (function() {
-	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " +
-		"geared towards those who do \"old school\" pixel art (think 16 bit video games)" + 
-		"<ul>" + 
-		"<li><a href='https://github.com/city41/LoveToPixel/blob/master/help/QuickHelp.md' target='_blank' " +
-			"id='launchHelpLink'>read the quick help</a> to get started</li>" +
-		"<li>or <a href='#' id='startNewProjectLink'>start a new project</a></li>" + 
-		"<li>or resume a saved project below</li></ul>";
-	
+	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " + "geared towards those who do \"old school\" pixel art (think 16 bit video games)" + "<ul>" + "<li><a href='https://github.com/city41/LoveToPixel/blob/master/help/QuickHelp.md' target='_blank' " + "id='launchHelpLink'>read the quick help</a> to get started</li></ul>";
 
 	function parseSizeString(sizeString) {
 		if (!sizeString) {
@@ -74,6 +67,58 @@
 				{
 					xtype: 'container',
 					margin: 0,
+					html: 'new project',
+					style: {
+						borderBottom: '4px solid black',
+						backgroundColor: '#9E0000'
+					}
+				},
+				{
+					xtype: 'panel',
+					layout: 'hbox',
+					defaults: {
+						margin: 5
+					},
+					style: {
+						borderBottom: '4px solid black',
+					},
+					items: [{
+						xtype: 'textfield',
+						fieldLabel: 'Name',
+						labelWidth: 40,
+						name: 'name',
+						itemId: 'nameField'
+					},
+					{
+						xtype: 'textfield',
+						fieldLabel: 'Size',
+						labelWidth: 40,
+						value: '600x400',
+						name: 'size',
+						itemId: 'sizeField',
+						tabIndex: 0,
+						enableKeyEvents: true,
+						listeners: {
+							keydown: function(text, e) {
+								if (e.keyCode === Ext.EventObject.ENTER) {
+									var parent = this.up('#projectChooser');
+									parent._go();
+								}
+							}
+						}
+					},
+					{
+						xtype: 'button',
+						text: 'Start',
+						handler: function() {
+							var parent = this.up('#projectChooser');
+							parent._go();
+						}
+					}]
+				},
+				{
+					xtype: 'container',
+					margin: 0,
 					html: '<img src="images/savedProjects.png" alt="saved projects header" />',
 					height: 63,
 					style: {
@@ -109,14 +154,7 @@
 				}]
 			};
 
-			this.on('afterrender', this._onAfterRender, this);
 			this.callParent(arguments);
-		},
-
-		_onAfterRender: function() {
-			//Ext.fly('launchHelpLink').on('click', this._onHelpClick, this);
-			//Ext.fly('screencastLink').on('click', this._onScreencastClick, this);
-			Ext.fly('startNewProjectLink').on('click', this._onStartNewProjectClick, this);
 		},
 
 		_onHelpClick: function() {
@@ -174,17 +212,7 @@
 					data: null
 				}];
 
-				var fileList = this.down('filefield').fileInputEl.dom.files;
-
-				if (fileList && fileList[0]) {
-					var me = this;
-					this._setSizeAndImageDataFromFile(fileList[0], project, function() {
-						fireEvent.call(me, project);
-					});
-					return;
-				} else {
-					project.size = this._getSizeFromSizeField() || s(300, 300);
-				}
+				project.size = this._getSizeFromSizeField() || s(300, 300);
 			}
 			fireEvent.call(this, project);
 		}
