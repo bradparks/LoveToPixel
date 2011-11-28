@@ -312,9 +312,7 @@
 				var size = LTP.util.scaleSize(s(this.width, this.height), s(50, 50));
 				var thumbCanvas = LTP.util.canvas(size);
 
-				if(this.dataLoaded) {
-					thumbCanvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height, 0, 0, size.width, size.height);
-				}
+				thumbCanvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height, 0, 0, size.width, size.height);
 
 				return thumbCanvas.toDataURL();
 			},
