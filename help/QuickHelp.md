@@ -4,13 +4,12 @@ Also see the readme for more information:
 https://github.com/city41/LoveToPixel/blob/master/README.md
 
 ## To Paint ##
-Click in the main image area with either the left or right button on your mouse. The swatchs in the toolbar on the left
+Click in the main image area with either the left or right button on your mouse. The swatches in the toolbar on the left
 side show your current color for each tool.
 
 ## Changing Colors and Brushes ##
 Hit 'c' to pick a new color. When the color palette displays, click a swatch with either the left or right mouse button
-to pick a color for that tool. Click and hold to edit the color. Hit 'b' to bring up the brush size palette, same idea
-here.
+to pick a color for that tool. Click and hold to edit the color. Hit 'b' to bring up the brush size palette
 
 ## Layers ##
 On the left side, click the 'New' button to add a new layer. You can rearrange layers by dragging and dropping.
