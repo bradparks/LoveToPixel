@@ -103,7 +103,7 @@
 							keydown: function(text, e) {
 								if (e.keyCode === Ext.EventObject.ENTER) {
 									var parent = this.up('#projectChooser');
-									parent._go();
+									parent._startNewProject();
 								}
 							}
 						}
@@ -113,7 +113,7 @@
 						text: 'Start',
 						handler: function() {
 							var parent = this.up('#projectChooser');
-							parent._go();
+							parent._startNewProject();
 						}
 					}]
 				},
@@ -134,8 +134,8 @@
 					flex: 1,
 					autoScroll: true,
 					listeners: {
-						itemdblclick: function() {
-							this._go();
+						itemdblclick: function(grid, record, tr) {
+							this._startExistingProject(record.data);
 						},
 						scope: this
 					}
@@ -171,18 +171,6 @@
 			this.callParent(arguments);
 		},
 
-		_onHelpClick: function() {
-			Ext.MessageBox.alert('help', 'help here');
-		},
-
-		_onScreencastClick: function() {
-			Ext.MessageBox.alert('Screencast', 'The screencast won\'t be made until LTP reaches 1.0');
-		},
-
-		_onStartNewProjectClick: function() {
-			Ext.MessageBox.alert('new project', 'new here');
-		},
-
 		_getSizeFromSizeField: function() {
 			var sizeString = this.down('#sizeField').getValue();
 			return parseSizeString(sizeString);
@@ -205,30 +193,30 @@
 			this.setSize(width, height);
 		},
 
-		_go: function() {
-			function fireEvent(project) {
-				this.fireEvent('projectChosen', project);
-				this.destroy();
-			}
-
-			var project = this.down('#projectList').getSelectedProject();
-
-			if (!project) {
-				project = {};
-
-				project.name = this._getNameFromNameField();
-
-				project.layers = [{
+		_startNewProject: function() {
+			var project = {
+				name: this._getNameFromNameField(),
+				layers: [{
 					id: 1,
 					layerName: 'Initial Layer',
 					isVisible: true,
 					index: 3,
 					data: null
-				}];
+				}],
+				// TODO: should validate size field, not fall back to 300x300
+				size: this._getSizeFromSizeField() || s(300, 300)
+			};
 
-				project.size = this._getSizeFromSizeField() || s(300, 300);
-			}
-			fireEvent.call(this, project);
+			this._go(project);
+		},
+
+		_startExistingProject: function(project) {
+			this._go(project);
+		},
+
+		_go: function(project) {
+			this.fireEvent('projectChosen', project);
+			this.destroy();
 		}
 	});
 })();
