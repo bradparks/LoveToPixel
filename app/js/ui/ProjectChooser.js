@@ -211,6 +211,7 @@
 					index: 3,
 					data: null
 				}],
+				isDirty: true,
 				// TODO: should validate size field, not fall back to 300x300
 				size: this._getSizeFromSizeField() || s(300, 300)
 			};

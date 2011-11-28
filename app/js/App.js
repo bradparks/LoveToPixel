@@ -185,6 +185,7 @@
 		},
 
 		_load: function(project) {
+			console.log('dirty? ' + project.isDirty);
 			this._currentProject = project;
 			document.title = project.name + " - ltp";
 
