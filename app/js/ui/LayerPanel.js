@@ -1,8 +1,9 @@
 (function() {
 	Ext.define('LTP.LayerPanel', {
-		extend: 'Ext.container.Container',
+		extend: 'Ext.panel.Panel',
 		layout: 'fit',
 		itemId: 'layerPanel',
+		border: false,
 
 		constructor: function(config) {
 			this.callParent(arguments);
@@ -21,6 +22,24 @@
 			// this store should never persist
 			this.viewStore.sync = function() {};
 			var me = this;
+
+			this.dockedItems = [{
+				dock: 'top',
+				xtype: 'toolbar',
+				items: [{
+					text: 'New Layer',
+					listeners: {
+						click: this._onNewClick,
+						scope: this
+					}
+				},
+				{
+					text: 'New From Image'
+				},
+				{
+					text: 'Flatten Image'
+				}]
+			}];
 
 			this.items = [{
 				xtype: 'grid',
@@ -99,14 +118,6 @@
 					selectionchange: this._selectionChange,
 					scope: this
 				}
-			},
-			{
-				xtype: 'button',
-				text: 'New',
-				listeners: {
-					click: this._onNewClick,
-					scope: this
-				}
 			}];
 
 			this.disabled = true;
@@ -150,7 +161,7 @@
 
 		_onCanvasContentChange: function(canvas) {
 			var record = this.viewStore.getById(canvas.layerId);
-			if(record) {
+			if (record) {
 				record.commit();
 			}
 		},
@@ -163,7 +174,7 @@
 			Ext.MessageBox.confirm(actionCapitalized + " Layer", msg, function(button) {
 				if (button === 'yes') {
 					var result = this.layerManager[action + "LayerByLayer"](layer.data);
-					if(result) {
+					if (result) {
 						this.viewStore.remove(layer);
 					}
 				}
