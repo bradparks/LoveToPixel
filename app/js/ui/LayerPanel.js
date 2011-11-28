@@ -46,7 +46,7 @@
 					falseText: ' ',
 					header: '',
 					dataIndex: 'isVisible',
-					width: 30,
+					width: 42,
 					field: {
 						xtype: 'checkboxfield'
 					},
