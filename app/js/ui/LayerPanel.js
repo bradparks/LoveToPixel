@@ -9,6 +9,7 @@
 			this._messageBus = config.messageBus || LTP.GlobalMessageBus;
 
 			this._messageBus.subscribe('canvasContentChange', this._onCanvasContentChange, this);
+			this._messageBus.subscribe('layerLoad', this._onCanvasContentChange, this);
 		},
 
 		initComponent: function() {

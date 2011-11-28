@@ -300,7 +300,7 @@
 				img.onload = function() {
 					me.getContext('2d').drawImage(img, 0, 0);
 					me.dataLoaded = true;
-					me.layerManager._messageBus.publish("canvasContentChange", me);
+					me.layerManager._messageBus.publish("layerLoad", me);
 				};
 				img.src = data;
 			},
