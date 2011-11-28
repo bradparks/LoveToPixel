@@ -28,16 +28,16 @@ love to pixel is largely key driven. Here's the low down:
 * c - display the color palette, right or left click a color to pick it for the corresponding tool
 * b - display the brush size palette, right or left click to select your brush size
 * 1-9 - select one of the first 9 colors in your palette for the left tool
-* <shift> + 1-9 - select one of the first 9 colors in your palette for the right tool
+* [shift] + 1-9 - select one of the first 9 colors in your palette for the right tool
 * z - zoom in
-* <shift> + z - zoom out
+* [shift] + z - zoom out
 * hold a - toggle to 100% until a is released
-* <shift> + a - return to 100%
+* [shift] + a - return to 100%
 * g - toggle the grid
 * e - save to a png in a new window
 * s - save the project to local storage
 * i - toggle on/off the eye dropper tool
 * hold spacebar - pan the image
 * k - paint bucket fill tool 
-* hold CTRL -- lock painting vertically or horizontally (alternates each time)
+* hold [ctrl] -- lock painting vertically or horizontally (alternates each time)
 
