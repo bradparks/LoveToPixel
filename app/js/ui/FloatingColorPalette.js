@@ -1,4 +1,8 @@
 (function() {
+
+	// TODO: all of this mouse handling stuff generally works, but it's messy
+	// and hard to follow
+
 	var _picker;
 	var _currentSwatch;
 
@@ -9,6 +13,11 @@
 		panel.colorManager['set' + prefix + 'ColorTo'](this.index);
 		panel.hide();
 		panel.isPopped = false;
+
+		if (_picker) {
+			_picker.hidePicker();
+			_picker = null;
+		}
 	}
 
 	function disableContextMenu(element) {
@@ -23,7 +32,7 @@
 		currentSwatch = this;
 		this.el.dom.value = currentSwatch.color;
 		_picker = new jscolor.color(currentSwatch.el.dom, {
-			pickerClosable: true,
+			pickerClosable: false,
 			pickerPosition: 'right',
 			pickerZIndex: 40000
 		});
@@ -33,7 +42,14 @@
 	}
 
 	function _onMouseDown(e) {
-		if (e.target.id.indexOf('colorswatch') >= 0) {
+		if (currentSwatch) {
+			currentSwatch.color = '#' + _picker.toString().toUpperCase();
+
+			var palette = currentSwatch.up('panel');
+			palette.colorManager.redefineAt(currentSwatch.index, currentSwatch.color);
+		}
+
+		if (e.target.id && e.target.id.indexOf('colorswatch') >= 0) {
 			return;
 		}
 		if (_picker && e.target) {
@@ -44,8 +60,8 @@
 					var palette = currentSwatch.up('panel');
 					palette.colorManager.redefineAt(currentSwatch.index, currentSwatch.color);
 
-					var prefix = e.button ? 'right': 'left';
-					LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', currentSwatch.color);
+					var prefix = e.button ? 'Right': 'Left';
+					palette.colorManager['set' + prefix + 'ColorTo'](currentSwatch.index);
 					currentSwatch = null;
 				}
 				_picker.hidePicker();

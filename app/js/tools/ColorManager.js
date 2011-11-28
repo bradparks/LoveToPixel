@@ -56,17 +56,22 @@
 			}	
 
 			this._colors.push(color);
+			this._messageBus.publish('paletteContentChange');
 		},
 
 		removeColorAt: function(index) {
 			if(this._inRange(index)) {
 				this._colors.splice(index, 1);
+				this._messageBus.publish('paletteContentChange');
 			}
 		},
 
 		redefineAt: function(index, newColor) {
 			if(this._inRange(index)) {
-				this._colors[index] = newColor;
+				if(this._colors[index] !== newColor) {
+					this._colors[index] = newColor;
+					this._messageBus.publish('paletteContentChange');
+				}
 			}
 		},
 
@@ -74,6 +79,7 @@
 			if(this._inRange(from) && this._inRange(to)) {
 				var moving = this._colors.splice(from, 1);
 				this._colors.splice(to, 0, moving[0]);
+				this._messageBus.publish('paletteContentChange');
 			}
 		},
 

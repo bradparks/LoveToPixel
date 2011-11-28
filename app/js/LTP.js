@@ -37,6 +37,7 @@
 		'cursorDisplayChangeRequest',
 		'flairMessage',
 		'canvasContentChange',
+		'paletteContentChange',
 		'layerLoad',
 		'layerRemoved',
 		'noLayersInProject'

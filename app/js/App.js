@@ -272,6 +272,11 @@
 			},
 			this);
 
+			LTP.GlobalMessageBus.subscribe('paletteContentChange', function() {
+				this._currentProject.isDirty = true;
+			},
+			this);
+
 			var me = this;
 			window.onbeforeunload = function() {
 				if (me._currentProject.isDirty) {
