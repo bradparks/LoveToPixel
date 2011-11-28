@@ -8,7 +8,7 @@
 		sortableColumns: false,
 		border: false,
 		viewConfig: {
-			emptyText: "<div class='emptyGridText'>You have no saved projects. Start a new project, then when you save it with 's' it will show up here</div>",
+			emptyText: "<div class='emptyGridText'>You have no saved projects. Start a new project above, then when you save it with 's' it will show up here</div>",
 			deferEmptyText: false
 		},
 
@@ -43,7 +43,13 @@
 			}],
 			this.store = Ext.create('Ext.data.Store', {
 				model: 'LTP.ProjectModel',
-				data: this.projects
+				data: this.projects,
+				sorters: [
+					{ 
+						property: 'lastSaved',
+						direction: 'DESC'
+					}
+				]
 			});
 
 			this.callParent(arguments);

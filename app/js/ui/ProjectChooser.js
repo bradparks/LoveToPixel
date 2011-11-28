@@ -45,7 +45,7 @@
 					html: '<img src="images/mainLogo.png" alt="main logo" />',
 					height: 107,
 					style: {
-						borderBottom: '4px solid black',
+						borderBottom: '4px solid black'
 					}
 				},
 				{
@@ -67,7 +67,8 @@
 				{
 					xtype: 'container',
 					margin: 0,
-					html: 'new project',
+					html: '<img src="images/newProject.png" alt="new project header" />',
+					height: 63,
 					style: {
 						borderBottom: '4px solid black',
 						backgroundColor: '#9E0000'
@@ -151,6 +152,19 @@
 					style: {
 						backgroundColor: 'white'
 					}
+				},
+				{
+					xtype: 'container',
+					margin: 0,
+					style: {
+						textAlign: 'right',
+						backgroundColor: 'black',
+						color: 'white',
+						fontSize: '.9em',
+						fontStyle: 'italic',
+						padding: '2px'
+					},
+					html: 'version 0.1 alpha'
 				}]
 			};
 
