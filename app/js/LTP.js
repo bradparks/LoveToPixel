@@ -1,4 +1,6 @@
 (function() {
+	LTP.version = "0.1.2 alpha";
+
 	LTP.s = function LTP_s(w,h) {
 		return new LTP.Pair(w, h);
 	};

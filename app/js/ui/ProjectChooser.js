@@ -195,7 +195,7 @@
 						fontStyle: 'italic',
 						padding: '2px'
 					},
-					html: 'version 0.1 alpha, <a href="http://github.com/city41/LoveToPixel" target="_blank">github</a>'
+					html: Ext.String.format('version {0}, <a href="http://github.com/city41/LoveToPixel" target="_blank">github</a>', LTP.version)
 				}]
 			};
 
