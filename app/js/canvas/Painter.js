@@ -71,6 +71,7 @@
 			delete this._overrideToolState.tool;
 			this._overrideToolState.active = false;
 			this._lastToolState = this._leftToolState;
+			this._setCursor('none');
 			this._doOverlay();
 		},
 
@@ -99,8 +100,7 @@
 			canvas[method]('contextmenu', this._onContextMenu, this);
 		},
 
-		_setCursor: function(cursorUrl) {
-			var cursorString = Ext.String.format('url({0}), help', cursorUrl);
+		_setCursor: function(cursorString) {
 			this._overlay.style.cursor = cursorString; 
 		},
 

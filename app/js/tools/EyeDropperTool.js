@@ -19,14 +19,8 @@
 		overlay: function edt_overlay(context, point) {
 			context.save();
 
-			context.beginPath();
-			context.strokeStyle = colors.gray;
-			context.moveTo(point.x - 5, point.y);
-			context.lineTo(point.x + 5, point.y);
-			context.moveTo(point.x, point.y - 5);
-			context.lineTo(point.x, point.y + 5);
-			context.closePath();
-			context.stroke();
+			context.fillStyle = colors.blue;
+			context.fillRect(point.x, point.y, 1, 1);
 
 			context.restore();
 		},
@@ -63,6 +57,13 @@
 		get: function() {
 			return this._sampledHexColor;
 		}
+	});
+
+	Object.defineProperty(LTP.EyeDropperTool.prototype, "cursor", {
+		get: function() {
+			return 'url(images/cursors/EyeDropper.png), auto';
+		},
+		enumerable: true
 	});
 })();
 

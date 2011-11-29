@@ -3,7 +3,7 @@
 	};
 
 	LTP.PanningTool.prototype = {
-		perform: function p_perform(e) {
+		perform: function(e) {
 			var container = e.containerElement;
 
 			var topDelta = e.currentPointNonTransformed.y - e.lastPointNonTransformed.y;
@@ -16,23 +16,7 @@
 			container.scrollLeft = newLeftScroll;// -= leftDelta;
 		},
 
-		overlay: function p_overlay(context, point) {
-			context.save();
-
-			context.strokeStyle = colors.red;
-			context.beginPath();
-			
-			context.moveTo(point.x, point.y + 5);
-			context.lineTo(point.x - 5, point.y);
-			context.lineTo(point.x, point.y - 5);
-			context.lineTo(point.x + 5, point.y);
-			context.lineTo(point.x, point.y + 5);
-			
-			context.closePath();
-			context.stroke();
-
-			context.restore();
-
+		overlay: function(context, point) {
 		}
 	};
 
@@ -40,6 +24,13 @@
 		get: function() {
 			return false;
 		}
+	});
+
+	Object.defineProperty(LTP.PanningTool.prototype, "cursor", {
+		get: function() {
+			return 'move';
+		},
+		enumerable: true
 	});
 
 })();
