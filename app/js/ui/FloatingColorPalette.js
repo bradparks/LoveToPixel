@@ -29,9 +29,9 @@
 	}
 
 	function _longClick() {
-		currentSwatch = this;
-		this.el.dom.value = currentSwatch.color;
-		_picker = new jscolor.color(currentSwatch.el.dom, {
+		_currentSwatch = this;
+		this.el.dom.value = _currentSwatch.color;
+		_picker = new jscolor.color(_currentSwatch.el.dom, {
 			pickerClosable: false,
 			pickerPosition: 'right',
 			pickerZIndex: 40000
@@ -42,27 +42,20 @@
 	}
 
 	function _onMouseDown(e) {
-		if (currentSwatch) {
-			currentSwatch.color = '#' + _picker.toString().toUpperCase();
-
-			var palette = currentSwatch.up('panel');
-			palette.colorManager.redefineAt(currentSwatch.index, currentSwatch.color);
-		}
-
 		if (e.target.id && e.target.id.indexOf('colorswatch') >= 0) {
 			return;
 		}
 		if (_picker && e.target) {
 			if (!e.target.id || e.target.id.indexOf('jscolor.') === - 1) {
-				if (currentSwatch) {
-					currentSwatch.color = '#' + _picker.toString().toUpperCase();
+				if (_currentSwatch) {
+					_currentSwatch.color = '#' + _picker.toString().toUpperCase();
 
-					var palette = currentSwatch.up('panel');
-					palette.colorManager.redefineAt(currentSwatch.index, currentSwatch.color);
+					var palette = _currentSwatch.up('panel');
+					palette.colorManager.redefineAt(_currentSwatch.index, _currentSwatch.color);
 
 					var prefix = e.button ? 'Right': 'Left';
-					palette.colorManager['set' + prefix + 'ColorTo'](currentSwatch.index);
-					currentSwatch = null;
+					palette.colorManager['set' + prefix + 'ColorTo'](_currentSwatch.index);
+					_currentSwatch = null;
 				}
 				_picker.hidePicker();
 				_picker = null;
