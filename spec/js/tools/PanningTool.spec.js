@@ -6,6 +6,13 @@ describe("PanningTool", function() {
 			expect(p.causesChange).toBe(false);
 		});
 
+		it("should have a cursor", function() {
+			var p = new LTP.PanningTool();
+
+			expect(p.cursor).not.toBeUndefined();
+			expect(p.cursor).toEqual('move');
+		});
+
 		it("should pan the container element", function() {
 
 			var startTop = 100;

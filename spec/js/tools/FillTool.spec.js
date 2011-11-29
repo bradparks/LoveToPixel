@@ -1,4 +1,12 @@
 describe("FillTool", function() {
+	describe("construction", function() {
+		it("should have a cursor", function() {
+			var fillTool = new LTP.FillTool();
+			expect(fillTool.cursor).not.toBeUndefined();
+			expect(fillTool.cursor.toLowerCase().indexOf('fill') >= 0).toBe(true);
+		});
+	});
+
 	describe("performing", function() {
 		it("should throw if source and dest canvases are not the same size", function() {
 			var fn = function() {

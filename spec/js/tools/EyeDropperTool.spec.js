@@ -5,6 +5,12 @@ describe("EyeDropperTool", function() {
 
 			expect(eye.causesChange).toBe(false);
 		});
+
+		it("should have a cursor", function() {
+			var eye = new LTP.EyeDropperTool();
+			expect(eye.cursor).not.toBeUndefined();
+			expect(eye.cursor.toLowerCase().indexOf('eye') >= 0).toBe(true);
+		});
 	});
 
 	describe("performing", function() {

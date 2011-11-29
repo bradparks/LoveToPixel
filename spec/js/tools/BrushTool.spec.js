@@ -16,6 +16,11 @@ describe("BrushTool", function() {
 
 			expect(brush.size).toEqual(size);
 		});
+
+		it("should not have a cursor", function() {
+			var brush = new LTP.BrushTool(2);
+			expect(brush.cursor).toBeUndefined();
+		});
 	});
 
 	describe("performing", function() {
