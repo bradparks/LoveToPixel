@@ -44,17 +44,8 @@
 		overlay: function p_overlay(context, point) {
 			context.save();
 
-			context.strokeStyle = colors.purple;
-
-			context.beginPath();
-
-			context.moveTo(point.x - 7, point.y - 7);
-			context.lineTo(point.x, point.y);
-			context.lineTo(point.x + 7, point.y - 7);
-			context.moveTo(point.x, point.y);
-
-			context.closePath();
-			context.stroke();
+			context.fillStyle = colors.purple;
+			context.fillRect(point.x, point.y, 1, 1);
 
 			context.restore();
 		},
@@ -163,7 +154,15 @@
 	Object.defineProperty(LTP.FillTool.prototype, "causesChange", {
 		get: function() {
 			return true;
-		}
+		},
+		enumerable: true
+	});
+
+	Object.defineProperty(LTP.FillTool.prototype, "cursor", {
+		get: function() {
+			return 'images/cursors/Fill.png';
+		},
+		enumerables: true
 	});
 
 })();

@@ -63,6 +63,7 @@
 			this._overrideToolState.tool = overrideTool;
 			this._overrideToolState.active = true;
 			this._lastToolState = this._overrideToolState;
+			this._setCursor(overrideTool.cursor);
 			this._doOverlay();
 		},
 
@@ -96,6 +97,11 @@
 			canvas[method]('mouseout', this._onMouseOut, this);
 			canvas[method]('mouseup', this._onMouseUp, this);
 			canvas[method]('contextmenu', this._onContextMenu, this);
+		},
+
+		_setCursor: function(cursorUrl) {
+			var cursorString = Ext.String.format('url({0}), help', cursorUrl);
+			this._overlay.style.cursor = cursorString; 
 		},
 
 		_getToolStateForButton: function(button) {
