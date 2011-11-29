@@ -140,7 +140,6 @@
 		},
 
 		_onLeftColorSelected: function(color, index) {
-			console.log('index: ' + index);
 			Ext.Array.each(this.items.items, function(item) {
 				item.setIsCurrentLeft(item.index === index);
 			});

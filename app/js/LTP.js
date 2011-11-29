@@ -1,15 +1,15 @@
 (function() {
 	LTP.version = "0.1.2 alpha";
 
-	LTP.s = function LTP_s(w,h) {
+	LTP.s = function(w,h) {
 		return new LTP.Pair(w, h);
 	};
 
-	LTP.sr = function LTP_sr(w,h) {
+	LTP.sr = function(w,h) {
 		return new LTP.Pair(Math.round(w), Math.round(h));
 	};
 
-	LTP.r = function LTP_r() {
+	LTP.r = function() {
 		if(arguments.length === 4) {
 			return new LTP.Rectangle(arguments[0], arguments[1], arguments[2], arguments[3]);
 		} else {

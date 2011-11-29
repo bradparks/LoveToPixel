@@ -52,12 +52,15 @@
 		},
 
 		_centerLayers: function() {
-			var method = LTP.util.platformInfo.isFirefox ? this._centerLayerFirefox: this._centerLayer;
-
-			method.call(this, this._backdrop);
+			this._centerLayer(this._backdrop);
 			for (var i = 0; i < this._layers.length; ++i) {
-				method.call(this, this._layers[i]);
+				this._centerLayer(this._layers[i]);
 			}
+		},
+
+		_centerLayer: function(layer) {
+			var method = LTP.util.platformInfo.isFirefox ? this._centerLayerFirefox: this._centerLayerNotFirefox;
+			method.call(this, layer);
 		},
 
 		_centerLayerFirefox: function(layer) {
@@ -84,7 +87,7 @@
 			layer.style.left = Math.round(nonScaledLeft) + 'px';
 		},
 
-		_centerLayer: function(layer) {
+		_centerLayerNotFirefox: function(layer) {
 			var top = (this._containingElement.offsetHeight / 2 - layer.height / 2);
 			var left = (this._containingElement.offsetWidth / 2 - layer.width / 2);
 
@@ -214,4 +217,6 @@
 		}
 	});
 })();
+
+
 

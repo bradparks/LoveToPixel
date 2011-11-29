@@ -50,10 +50,6 @@
 
 			this.el.setStyle('borderLeft', style);
 			this.el.setStyle('borderBottom', style);
-
-			if(isLeft) {
-				console.log('set current left: ' + style);
-			}
 		},
 
 		setIsCurrentRight: function(isRight) {
