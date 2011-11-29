@@ -120,6 +120,35 @@ describe("LayerManager", function() {
 			expect(layer.style.top).toEqual('0px');
 			expect(layer.style.left).toEqual('0px');
 		});
+
+		it("should increment the names when creating unnamed layers repeatedly", function() {
+			var layerManager = new LTP.LayerManager({ size: size });
+			var layer1 = layerManager.addNewLayer();
+			var layer2 = layerManager.addNewLayer();
+
+			var layer1Suffix = layer1.layerName.substring(layer1.layerName.length - 1);
+			var layer2Suffix = layer2.layerName.substring(layer2.layerName.length - 1);
+
+			expect(layer1Suffix).toEqual('1');
+			expect(layer2Suffix).toEqual('2');
+
+			var layer3 = layerManager.addNewLayer('new layer 3');
+
+			var layer4 = layerManager.addNewLayer();
+
+			var layer4Suffix = layer4.layerName.substring(layer4.layerName.length - 1);
+			// the incrementer should be blind to existing layers, not try to be too smart
+			expect(layer4Suffix).toEqual('3');
+
+			layerManager.deleteLayer(1);
+
+			var layer5 = layerManager.addNewLayer();
+
+			var layer5Suffix = layer5.layerName.substring(layer5.layerName.length - 1);
+			// deleting existing layers should not affect the indexer
+			expect(layer5Suffix).toEqual('4');
+
+		});
 	});
 
 	describe("changing active layer", function() {

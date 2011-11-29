@@ -15,6 +15,8 @@
 		}
 
 		this._activeLayerIndex = this._layers.length - 1;
+
+		this._layerCounter = 1;
 	};
 
 	LTP.LayerManager.prototype = {
@@ -67,7 +69,7 @@
 		},
 
 		addNewLayer: function lm_addNewLayer(name, size) {
-			this._layers.push(this._createLayer(name || "new layer " + this._layers.length, size));
+			this._layers.push(this._createLayer(name || "new layer " + this._layerCounter++, size));
 			this._activeLayerIndex = this._layers.length - 1;
 			this._updateZIndices();
 
