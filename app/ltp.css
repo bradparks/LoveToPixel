@@ -82,5 +82,7 @@ img.thumbnail {
 	margin: 10px;
 }
 
-
+.closed-eye-visibility {
+	opacity: .2;
+}
 

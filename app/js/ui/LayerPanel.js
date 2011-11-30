@@ -67,18 +67,6 @@
 				store: store,
 				minHeight: 100,
 				columns: [{
-					xtype: 'booleancolumn',
-					trueText: '<img src="images/visible.png" />',
-					falseText: ' ',
-					header: '',
-					dataIndex: 'isVisible',
-					width: 42,
-					field: {
-						xtype: 'checkboxfield'
-					},
-					menuDisabled: true
-				},
-				{
 					header: 'Name',
 					dataIndex: 'layerName',
 					flex: 1,
@@ -97,8 +85,15 @@
 				{
 					xtype: 'actioncolumn',
 					header: 'Actions',
-					width: 50,
+					width: 75,
 					items: [{
+						icon: '/images/visible.png',
+						getClass: this._getVisibleIcon,
+						handler: function(grid, rowIndex, colIndex) {
+							this.up('#layerPanel')._toggleVisibilityAt(rowIndex);
+						}
+					},
+					{
 						icon: '/images/delete.png',
 						handler: function(grid, rowIndex, colIndex) {
 							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'delete');
@@ -106,6 +101,7 @@
 					},
 					{
 						icon: '/images/merge.png',
+						getClass: this._getMergeIcon,
 						handler: function(grid, rowIndex, colIndex) {
 							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'merge');
 						}
@@ -130,6 +126,14 @@
 
 			this.disabled = true;
 			this.callParent(arguments);
+		},
+
+		_getMergeIcon: function(value, meta, record, rowIndex, ColIndex, store) {
+			return rowIndex < store.count() - 1 ? 'x-grid-center-icon' : 'x-hide-display';
+		},
+
+		_getVisibleIcon: function(value,meta, record) {
+			return record.get('isVisible') ? 'x-grid-center-icon' : 'x-grid-center-icon closed-eye-visibility';
 		},
 
 		load: function(layerManager) {
@@ -212,6 +216,12 @@
 			});
 
 			return foundRecord;
+		},
+
+		_toggleVisibilityAt: function(index) {
+			var layer = this.viewStore.getAt(index);
+			layer.set('isVisible', !layer.get('isVisible'));
+			layer.commit();
 		},
 
 		_deleteOrMergeAt: function(index, action) {
