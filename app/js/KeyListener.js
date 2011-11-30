@@ -1,3 +1,5 @@
+// TODO: want to not handle key events in input fields (editing layer names)
+// the current solution is pretty lame (instanceof HTMLInputElement)
 (function() {
 	var _specialKeys = {
 		'16' : 'shift',
@@ -46,7 +48,11 @@
 		_getCharacter: function(keyCode) {
 			return _specialKeys[keyCode] || String.fromCharCode(keyCode).toLowerCase();
 		},
-		_onKeyPress: function kl_onKeyPress(e) {
+		_onKeyPress: function(e) {
+			if(e.target instanceof HTMLInputElement) {
+				return;
+			}
+
 			var character =  this._getCharacter(e.keyCode || e.charCode); 
 			character = character.toLowerCase();
 
@@ -63,7 +69,11 @@
 			return character !== 'space';
 		},
 
-		_onKeyDown: function kl_onKeyDown(e) {
+		_onKeyDown: function(e) {
+			if(e.target instanceof HTMLInputElement) {
+				return;
+			}
+
 			var character =  this._getCharacter(e.keyCode); 
 
 			if(character === 'space') {
@@ -83,7 +93,11 @@
 			return character !== 'space';
 		},
 
-		_onKeyUp: function kl_onKeyUp(e) {
+		_onKeyUp: function(e) {
+			if(e.target instanceof HTMLInputElement) {
+				return;
+			}
+
 			var character =  this._getCharacter(e.keyCode); 
 			var callbackName = character + 'up';
 

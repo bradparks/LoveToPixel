@@ -49,6 +49,7 @@
 
 			this.items = [{
 				xtype: 'grid',
+				hideHeaders: true,
 				itemId: 'layerGrid',
 				multiSelect: false,
 				sortableColumns: false,
@@ -67,9 +68,8 @@
 				store: store,
 				minHeight: 100,
 				columns: [{
-					header: 'Name',
 					dataIndex: 'layerName',
-					flex: 1,
+					flex: 2,
 					field: {
 						xtype: 'textfield'
 					},
@@ -84,7 +84,6 @@
 				},
 				{
 					xtype: 'actioncolumn',
-					header: 'Actions',
 					width: 75,
 					items: [{
 						icon: '/images/visible.png',
@@ -110,11 +109,11 @@
 				}],
 				selType: 'rowmodel',
 				plugins: [
-				Ext.create('Ext.grid.plugin.RowEditing', {
+				Ext.create('Ext.grid.plugin.CellEditing', {
 					clicksToEdit: 2,
 					listeners: {
 						edit: function(editor, e) {
-							editor.record.commit();
+							editor.context.record.commit();
 						}
 					}
 				})],
