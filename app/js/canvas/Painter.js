@@ -101,7 +101,7 @@
 		},
 
 		_setCursor: function(cursorString) {
-			this._overlay.style.cursor = cursorString; 
+			this._overlay.style.cursor = cursorString;
 		},
 
 		_getToolStateForButton: function(button) {
@@ -177,7 +177,8 @@
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
 
 			if (this._adhocTransformer) {
-				currentPoint = this._adhocTransformer.transform(currentPoint, currentPoint);
+				var toolSize = toolState && toolState.tool.size;
+				currentPoint = this._adhocTransformer.transform(currentPoint, currentPoint, toolSize);
 			}
 
 			if (toolState) {
@@ -225,14 +226,14 @@
 			var toolState = this._getToolStateForButton(e.button);
 			var currentPointNonTransformed = this._getCurrentPoint(e);
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
+			var lastPoint = toolState.lastPoint || currentPoint;
 
 			if (toolState && toolState.down) {
-				var lastPoint = toolState.lastPoint || currentPoint;
-				var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
-
 				if (this._adhocTransformer) {
-					currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint);
+					currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint, toolState.tool.size);
 				}
+
+				var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
 
 				var canvas = toolState.tool.causesChange ? this._scratch: this._activeCanvas;
 				var color = e.button === 0 ? this.leftColor: this.rightColor;
@@ -256,6 +257,9 @@
 					this._currentBoundingBox.append(toolState.tool.getBoundsAt(currentPoint));
 					this._currentBoundingBox.append(toolState.tool.getBoundsAt(lastPoint));
 				}
+			} else if(this._adhocTransformer && this._adhocTransformer.transformOnHover) {
+				var toolSize = this._lastToolState && this._lastToolState.tool.size;
+				currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint, toolSize);
 			}
 
 			this._doOverlay(currentPoint);
@@ -276,10 +280,6 @@
 					this._finishUndoRedo(toolState.tool, currentPoint);
 					this._messageBus.publish('canvasContentChange', this._activeCanvas);
 				}
-			}
-
-			if (this._adhocTransformer && this._adhocTransformer.reset) {
-				this._adhocTransformer.reset();
 			}
 
 			this._doOverlay(currentPoint);
@@ -310,10 +310,6 @@
 				if (activeToolState.tool.causesChange) {
 					this._finishUndoRedo(this._lastToolState.tool, currentPoint);
 				}
-			}
-
-			if (this._adhocTransformer && this._adhocTransformer.reset) {
-				this._adhocTransformer.reset();
 			}
 
 			this._messageBus.publish('canvasMouseCoordinatesChanged', null);

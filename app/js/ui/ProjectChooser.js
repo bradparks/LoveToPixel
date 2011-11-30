@@ -1,4 +1,6 @@
 (function() {
+	var _localStorageSizeKey = '__ltp_projectchooser_size__';
+
 	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " + "geared towards those who do \"old school\" pixel art (think 16 bit video games)" + "<ul>" + "<li><a href='https://github.com/city41/LoveToPixel/blob/master/help/QuickHelp.md' target='_blank' " + "id='launchHelpLink'>read the quick help</a> to get started</li></ul>";
 
 	function parseSizeString(sizeString) {
@@ -8,14 +10,14 @@
 
 		var parts = sizeString.split('x');
 
-		if(!parts || parts.length !== 2) {
+		if (!parts || parts.length !== 2) {
 			return;
 		}
 
 		var width = parseInt(parts[0], 10);
 		var height = parseInt(parts[1], 10);
 
-		if(isNaN(width) || isNaN(height)) {
+		if (isNaN(width) || width <= 0 || isNaN(height) || height <= 0) {
 			return;
 		}
 
@@ -115,7 +117,7 @@
 						xtype: 'textfield',
 						fieldLabel: 'Size',
 						labelWidth: 40,
-						value: '600x400',
+						value: this._getInitialSizeValue(),
 						name: 'size',
 						itemId: 'sizeField',
 						invalidText: "needs to be in the form '100x100'",
@@ -129,13 +131,13 @@
 							}
 						},
 						validate: function() {
-							var isValid = !!parseSizeString(this.value);
-							if(!isValid) {
+							var isValid = !! parseSizeString(this.value);
+							if (!isValid) {
 								this.markInvalid("needs to be in the form '100x100'");
 							} else {
 								this.clearInvalid();
 							}
-								
+
 							return isValid;
 						}
 					},
@@ -202,9 +204,22 @@
 			this.callParent(arguments);
 		},
 
+		_getInitialSizeValue: function() {
+			return localStorage[_localStorageSizeKey] || '600x400';
+		},
+
 		_getSizeFromSizeField: function() {
-			var sizeString = this.down('#sizeField').getValue();
-			return parseSizeString(sizeString);
+			var sizeField = this.down('#sizeField');
+
+			var sizeString = sizeField.getValue();
+
+			var size = parseSizeString(sizeString);
+
+			if (size) {
+				localStorage[_localStorageSizeKey] = sizeString;
+			}
+
+			return size;
 		},
 
 		_getNameFromNameField: function() {
@@ -227,7 +242,7 @@
 		_startNewProject: function() {
 			var size = this._getSizeFromSizeField();
 
-			if(!size) {
+			if (!size) {
 				// the size field will have a validation error at this point
 				return;
 			}

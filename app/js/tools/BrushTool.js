@@ -7,7 +7,7 @@
 	};
 
 	LTP.BrushTool.prototype = {
-		overlay: function bt_overlay(context, point) {
+		overlay: function(context, point) {
 			context.save();
 			var color = 'rgba(255, 0, 0, .5)';
 			context.globalCompositeOperation = 'lighter';
@@ -26,7 +26,7 @@
 			context.restore();
 		},
 
-		getBoundsAt: function bt_getBoundsAt(point) {
+		getBoundsAt: function(point) {
 			// if x or y are negative, then outside of the canvas and should return an empty bounds
 			if (point.x < 0 || point.y < 0) {
 				return r(0, 0, 0, 0);
@@ -43,7 +43,7 @@
 			return r(x, y, width, height);
 		},
 
-		perform: function bt_perform(e) {
+		perform: function(e) {
 			var context = e.context;
 			var startPoint = e.lastPoint;
 			var endPoint = e.currentPoint;
@@ -76,14 +76,14 @@
 			context.restore();
 		},
 
-		_placePoint: function bt_placePoint(context, point, options) {
+		_placePoint: function(context, point, options) {
 			var method = options && options.stroke ? context.strokeRect: context.fillRect;
 			var strokeOffset = options && options.stroke ? 0.5: 0;
 
 			method.call(context, point.x - this._size - strokeOffset, point.y - this._size - strokeOffset, this._size + (2 * strokeOffset), this._size + (2 * strokeOffset));
 		},
 
-		_moveTowards: function bt_moveTowards2(startPoint, endPoint, slope, intersect) {
+		_moveTowards: function(startPoint, endPoint, slope, intersect) {
 			if (slope === Infinity || slope === - Infinity) {
 				if (startPoint.y === endPoint.y) {
 					return {

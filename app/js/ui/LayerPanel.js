@@ -85,7 +85,8 @@
 					xtype: 'templatecolumn',
 					tpl: '<div style="height:{thumbnailHeight}px; width:{thumbnailWidth}px"><img class="thumbnail" src="{thumbnailData}" /></div>',
 					flex: 1,
-					dataIndex: 'thumbnailData'
+					dataIndex: 'thumbnailData',
+					menuDisabled: true
 				},
 				{
 					xtype: 'actioncolumn',
@@ -102,7 +103,8 @@
 						handler: function(grid, rowIndex, colIndex) {
 							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'merge');
 						}
-					}]
+					}],
+					menuDisabled: true
 				}],
 				selType: 'rowmodel',
 				plugins: [

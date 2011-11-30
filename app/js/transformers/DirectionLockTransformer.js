@@ -13,7 +13,7 @@
 	};
 
 	LTP.DirectionLockTransformer.prototype = {
-		transform: function dlt_transform(lastPoint, currentPoint) {
+		transform: function(lastPoint, currentPoint) {
 			if(lastPoint.equals(currentPoint)) {
 				return currentPoint;
 			}
@@ -29,7 +29,7 @@
 			return currentPoint;
 		},
 
-		overlay: function dtp_overlay(context, point) {
+		overlay: function(context, point) {
 			context.save();
 			context.fillStyle = 'blue';
 
@@ -43,4 +43,11 @@
 			context.restore();
 		}
 	}
+
+	Object.defineProperty(LTP.DirectionLockTransformer.prototype, "transformOnHover", {
+		get: function() {
+			return false;
+		},
+		enumerable: true
+	});
 })();
