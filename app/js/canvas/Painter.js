@@ -116,7 +116,7 @@
 			return this._rightToolState;
 		},
 
-		_doOverlay: function p_doOverlay(point) {
+		_doOverlay: function(point) {
 			var point = point || this._lastOverlayPoint;
 
 			if (point) {

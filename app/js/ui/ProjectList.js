@@ -18,7 +18,8 @@
 				xtype: 'templatecolumn',
 				tpl: '<div style="height:{thumbnailHeight}px; width:{thumbnailWidth}px"><img class="thumbnail" src="{thumbnailData}" /></div>',
 				flex: 1,
-				dataIndex: 'thumbnailData'
+				dataIndex: 'thumbnailData',
+				menuDisabled: true
 			},
 			{
 				header: 'Name',
@@ -29,11 +30,13 @@
 				header: 'Last Saved',
 				xtype: 'datecolumn',
 				dataIndex: 'lastSaved',
+				menuDisabled: true
 			},
 			{
 				xtype: 'actioncolumn',
 				header: 'Delete',
 				width: 50,
+				menuDisabled: true,
 				items: [{
 					icon: '/images/delete.png',
 					handler: function(grid, rowIndex, colIndex) {
@@ -44,12 +47,10 @@
 			this.store = Ext.create('Ext.data.Store', {
 				model: 'LTP.ProjectModel',
 				data: this.projects,
-				sorters: [
-					{ 
-						property: 'lastSaved',
-						direction: 'DESC'
-					}
-				]
+				sorters: [{
+					property: 'lastSaved',
+					direction: 'DESC'
+				}]
 			});
 
 			this.callParent(arguments);
@@ -65,7 +66,7 @@
 				if (buttonId === 'yes') {
 					var record = this.store.getAt(index);
 
-					if(record) {
+					if (record) {
 						var layerStore = record.layers();
 
 						layerStore.each(function(layerRecord) {
@@ -77,7 +78,8 @@
 						this.store.sync();
 					}
 				}
-			}, this);
+			},
+			this);
 		}
 	});
 

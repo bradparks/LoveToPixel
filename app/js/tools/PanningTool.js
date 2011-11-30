@@ -12,8 +12,8 @@
 			var newTopScroll = container.scrollTop - topDelta;
 			var newLeftScroll = container.scrollLeft - leftDelta;
 			
-			container.scrollTop = newTopScroll// -= topDelta;
-			container.scrollLeft = newLeftScroll;// -= leftDelta;
+			container.scrollTop = newTopScroll;
+			container.scrollLeft = newLeftScroll;
 		},
 
 		overlay: function(context, point) {
