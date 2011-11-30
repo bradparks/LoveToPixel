@@ -135,7 +135,9 @@
 			var toBeMerged = this._layers[index];
 			var toBeMergedInto = this._layers[index-1];
 
-			toBeMergedInto.getContext('2d').drawImage(toBeMerged, 0, 0);
+			if(toBeMerged.isVisible) {
+				toBeMergedInto.getContext('2d').drawImage(toBeMerged, 0, 0);
+			}
 			this.deleteLayer(index);
 			this._messageBus.publish('canvasContentChange', toBeMergedInto);
 
