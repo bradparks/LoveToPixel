@@ -68,7 +68,7 @@
 			}
 		},
 
-		addNewLayer: function lm_addNewLayer(name, size) {
+		addNewLayer: function(name, size) {
 			this._layers.push(this._createLayer(name || "new layer " + this._layerCounter++, size));
 			this._activeLayerIndex = this._layers.length - 1;
 			this._updateZIndices();
@@ -110,6 +110,7 @@
 			if (this._activeLayerIndex >= this.count) {
 				this._activeLayerIndex = this.count - 1;
 			}
+			this.setActiveLayer(this._activeLayerIndex);
 
 			this._updateZIndices();
 

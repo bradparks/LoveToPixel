@@ -11,6 +11,7 @@
 
 			this._messageBus.subscribe('canvasContentChange', this._onCanvasContentChange, this);
 			this._messageBus.subscribe('layerLoad', this._onCanvasContentChange, this);
+			this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 		},
 
 		initComponent: function() {
@@ -37,7 +38,7 @@
 					text: 'New From Image'
 				},
 				{
-					text: 'Flatten Image'
+					text: 'Flatten'
 				}]
 			}];
 
@@ -144,10 +145,13 @@
 		_onNewClick: function() {
 			var newLayer = this.layerManager.addNewLayer();
 
-			var layerModel = new Ext.create('LTP.LayerModel');
+			var layerModel = Ext.create('LTP.LayerModel');
 			layerModel.data = newLayer;
 
 			this.viewStore.insert(0, [layerModel]);
+
+			var grid = this.down('#layerGrid');
+			grid.getSelectionModel().select(layerModel, false);
 		},
 
 		_addLayersToStore: function(store, layerManager) {
@@ -162,10 +166,31 @@
 		},
 
 		_onCanvasContentChange: function(canvas) {
-			var record = this.viewStore.getById(canvas.layerId);
+			var record = this._findRecordByCanvas(canvas);
 			if (record) {
 				record.commit();
 			}
+		},
+
+		_onActiveLayerChanged: function(layer) {
+			var record = this._findRecordByCanvas(layer);
+			if (record) {
+				var grid = this.down('#layerGrid');
+				grid.getSelectionModel().select(record, false);
+			}
+		},
+
+		_findRecordByCanvas: function(canvas) {
+			var foundRecord;
+
+			this.viewStore.each(function(record) {
+				if (record.data === canvas) {
+					foundRecord = record;
+					return false;
+				}
+			});
+
+			return foundRecord;
 		},
 
 		_deleteOrMergeAt: function(index, action) {
