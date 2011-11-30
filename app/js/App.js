@@ -97,7 +97,7 @@
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
 			aup: function(shift) {
-				if (!shift) {
+				if (!shift && !!_savedZoomIndex) {
 					_currentZoomIndex = _savedZoomIndex;
 					LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 				}

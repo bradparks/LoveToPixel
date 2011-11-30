@@ -12,8 +12,6 @@
 				return currentPoint;
 			}
 
-			console.log('size: ' + size);
-
 			return p(transform(currentPoint.x, size), transform(currentPoint.y, size));
 		}
 	};

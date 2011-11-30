@@ -56,7 +56,7 @@
 		
 			if(typeof this._callbacks[character] === 'function') {
 				this._callbacks[character].call(this._scope, e.shiftKey);
-			} else if(typeof this._callbacks[_numbersWhenShifted[character].toString()] === 'function') {
+			} else if(_numbersWhenShifted[character] && typeof this._callbacks[_numbersWhenShifted[character].toString()] === 'function') {
 				this._callbacks[_numbersWhenShifted[character].toString()].call(this._scope, true);
 			}
 
