@@ -312,6 +312,7 @@
 
 				if (activeToolState.tool.causesChange) {
 					this._finishUndoRedo(this._lastToolState.tool, currentPoint);
+					this._messageBus.publish('canvasContentChange', this._activeCanvas);
 				}
 			}
 

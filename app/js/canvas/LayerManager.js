@@ -49,9 +49,6 @@
 		},
 
 		setActiveLayer: function(index) {
-			if (index < 0 || index >= this.count) {
-				throw new Error("LayerManager.setActiveLayer: index out of range");
-			}
 
 			this._activeLayerIndex = index;
 
@@ -169,6 +166,18 @@
 			}
 
 			return compositeCanvas;
+		},
+
+		flatten: function() {
+			if(this.count === 0) {
+				return;
+			}
+
+			while(this.count > 1) {
+				this.mergeLayer(this.count - 1);
+			}
+
+			return this.activeLayer;
 		},
 
 		destroy: function() {

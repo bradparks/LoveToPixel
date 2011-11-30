@@ -12,6 +12,7 @@
 			this._messageBus.subscribe('canvasContentChange', this._onCanvasContentChange, this);
 			this._messageBus.subscribe('layerLoad', this._onCanvasContentChange, this);
 			this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
+			this._messageBus.subscribe('layerRemoved', this._onLayerRemoved, this);
 		},
 
 		initComponent: function() {
@@ -38,7 +39,11 @@
 					text: 'New From Image'
 				},
 				{
-					text: 'Flatten'
+					text: 'Flatten',
+					listeners: {
+						click: this._onFlattenClick,
+						scope: this
+					}
 				}]
 			}];
 
@@ -142,6 +147,15 @@
 			}
 		},
 
+		_onFlattenClick: function() {
+			Ext.MessageBox.confirm("Flatten?", "Flatten all layers into one?<br/> This cannot be undone", function(button) {
+				if (button === 'yes') {
+					this.layerManager.flatten();
+				}
+			},
+			this);
+		},
+
 		_onNewClick: function() {
 			var newLayer = this.layerManager.addNewLayer();
 
@@ -180,6 +194,13 @@
 			}
 		},
 
+		_onLayerRemoved: function(layer) {
+			var record = this._findRecordByCanvas(layer);
+			if (record) {
+				this.viewStore.remove(record);
+			}
+		},
+
 		_findRecordByCanvas: function(canvas) {
 			var foundRecord;
 
@@ -200,10 +221,7 @@
 			var msg = Ext.String.format("Really {0} '{1}'? <br/>This cannot be undone.", action, layer.get('layerName'));
 			Ext.MessageBox.confirm(actionCapitalized + " Layer", msg, function(button) {
 				if (button === 'yes') {
-					var result = this.layerManager[action + "LayerByLayer"](layer.data);
-					if (result) {
-						this.viewStore.remove(layer);
-					}
+					this.layerManager[action + "LayerByLayer"](layer.data);
 				}
 			},
 			this);

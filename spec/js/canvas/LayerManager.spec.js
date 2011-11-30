@@ -174,16 +174,6 @@ describe("LayerManager", function() {
 			expect(activeLayer.layerName).not.toEqual(newLayerName);
 			expect(activeLayer.layerName).toEqual(layerManager.InitialLayerName);
 		});
-
-		it("should throw an error if attempt to set active layer outside of range", function() {
-			layerManager.addNewLayer('newLayer');
-
-			var fn = function() {
-				layerManager.setActiveLayer(4);
-			};
-
-			expect(fn).toThrow();
-		});
 	});
 
 	describe("deleting layers", function() {
@@ -316,6 +306,45 @@ describe("LayerManager", function() {
 
 			// expect third pixel to be fully transparent (don't care about rgb values)
 			expect(imageData.data[11]).toEqual(0);
+		});
+	});
+
+	describe("flattening", function() {
+		var size = null;
+		var layerManager = null;
+
+		beforeEach(function() {
+			size = s(30, 40);
+			layerManager = new LTP.LayerManager({
+				size: size
+			});
+		});
+	
+		it("should do nothing if there are no layers", function() {
+			layerManager.deleteLayer(0);
+
+			expect(layerManager.count).toBe(0);
+
+			var flattened = layerManager.flatten();
+			expect(flattened).toBeUndefined();
+
+			expect(layerManager.count).toBe(0);
+		});
+
+		it("should end up with only one layer after a flatten", function() {
+			var layerCount = 3;
+
+			for(var i = 0; i < layerCount; ++i) {
+				layerManager.addNewLayer();
+			}
+
+			// layer manager always creates an initial layer, so adding 1
+			expect(layerManager.count).toEqual(layerCount + 1);
+
+			var flattenedLayer = layerManager.flatten();
+
+			expect(flattenedLayer).not.toBeUndefined();
+			expect(layerManager.count).toBe(1);
 		});
 	});
 
