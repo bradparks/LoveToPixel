@@ -23,4 +23,11 @@
 		enumerable: true
 	});
 
+	Object.defineProperty(LTP.BrushSizeLockTransformer.prototype, "currentPointOnly", {
+		get: function() {
+			return true;
+		},
+		enumerable: true
+	});
+
 })();

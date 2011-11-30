@@ -227,13 +227,16 @@
 			var currentPointNonTransformed = this._getCurrentPoint(e);
 			var currentPoint = this._pointTransformer.transform(currentPointNonTransformed);
 			var lastPoint = toolState.lastPoint || currentPoint;
+			var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
 
 			if (toolState && toolState.down) {
 				if (this._adhocTransformer) {
 					currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint, toolState.tool.size);
+					if(this._adhocTransformer.currentPointOnly) {
+						lastPoint = currentPoint;
+						lastPointNonTransformed = currentPointNonTransformed;
+					}
 				}
-
-				var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
 
 				var canvas = toolState.tool.causesChange ? this._scratch: this._activeCanvas;
 				var color = e.button === 0 ? this.leftColor: this.rightColor;
