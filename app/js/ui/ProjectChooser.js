@@ -1,7 +1,7 @@
 (function() {
 	var _localStorageSizeKey = '__ltp_projectchooser_size__';
 
-	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " + "geared towards those who do \"old school\" pixel art (think 16 bit video games)" + "<ul>" + "<li><a href='https://github.com/city41/LoveToPixel/blob/master/help/QuickHelp.md' target='_blank' " + "id='launchHelpLink'>read the quick help</a> to get started</li></ul>";
+	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " + "geared towards those who do \"old school\" pixel art (think 16 bit video games). <a href='https://github.com/city41/LoveToPixel/blob/master/help/QuickHelp.md' target='_blank' " + "id='launchHelpLink'>Read the quick help</a> to get started";
 
 	function parseSizeString(sizeString) {
 		if (!sizeString) {

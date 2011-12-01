@@ -85,3 +85,9 @@ img.thumbnail {
 	opacity: .2;
 }
 
+.x-grid-row-selected > .x-grid-cell {
+	background-color: #ede459 !important;
+	border-top: 1px solid #ede459 !important;
+	border-bottom: 1px solid #ede459 !important;
+}
+

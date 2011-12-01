@@ -32,12 +32,12 @@
 
 					return true;
 				})(),
-				message: 'Your browser does not fully support Object.defineProperty (if you are using Safari 5.0, upgrading to 5.1 will resolve this)',
+				message: 'Object.defineProperty is missing',
 				resolution: 2
 			},
 			canvas: {
 				available: !! window.HTMLCanvasElement,
-				message: 'Your browser lacks canvas support.',
+				message: 'canvas is missing',
 				resolution: 2
 			},
 			'image-rendering': {
@@ -52,22 +52,22 @@
 					}
 					return hasIt;
 				})(),
-				message: 'Your browser does not support a nearest-neighbor choice for the css image-rendering property, or its support is buggy.',
+				message: 'nearest neighbor for image-rendering is missing',
 				resolution: 1
 			},
 			'FileReader': {
 				available: !! window.FileReader,
-				message: 'Your browser lacks the FileReader API.',
+				message: 'FileReader is missing',
 				resolution: 0
 			},
 			'Internet Explorer': {
 				available: ! LTP.util.platformInfo.isIE,
-				message: 'Currently LTP does not work in any version of Internet Explorer. Support for IE9 is on its way.',
+				message: 'IE is not yet supported',
 				resolution: 2
 			},
 			'Opera': {
 				available: ! LTP.util.platformInfo.isOpera,
-				message: 'LTP does not work in any version of Opera yet. Support is on its way.',
+				message: 'Opera is not yet supported',
 				resolution: 2
 			}
 		};

@@ -20,7 +20,7 @@
 		return info;
 	}
 
-	global = returnGlobal.call(null);
+	var global = returnGlobal.call(null);
 
 	global.LTP = global.LTP || {};
 
@@ -116,7 +116,8 @@
 	Object.defineProperty(LTP.util, "global", {
 		get: function() {
 			return global;
-		}
+		},
+		enumerable: true
 	});
 
 })();

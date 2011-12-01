@@ -1,5 +1,5 @@
 (function() {
-	LTP.version = "0.1.2 alpha";
+	LTP.version = "0.1.3 alpha";
 
 	LTP.s = function(w,h) {
 		return new LTP.Pair(w, h);
