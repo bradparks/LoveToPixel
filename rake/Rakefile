@@ -7,11 +7,23 @@ task :minify do
 	new_index = ''
 
   IO.foreach("../app/#{index_root}.html") do |line|
-    if line =~ /<script.*src="(.*)"/
-      script_names << $1
-    else
-			new_index << line
-		end
+			if line.strip.size > 0
+				if line =~ /<script.*\/ext\//
+					new_index << "\t"
+					new_index << '<script type="text/javascript" src="http://extjs.cachefly.net/ext-4.0.2/ext-all.js"></script>'
+					new_index << "\n"
+				elsif line =~ /<link.*\/ext\//
+					new_index << "\t"
+					new_index << '<link rel="stylesheet" href="http://extjs.cachefly.net/ext-4.0.2/resources/css/ext-all.css" />'
+					new_index << "\n"
+				else
+    			if line =~ /<script.*src="(.*)"/
+    			  script_names << $1
+    			else
+						new_index << line
+					end
+				end
+			end
   end
 
   new_js = ""
