@@ -43,6 +43,8 @@
 
 			this.items = {
 				xtype: 'panel',
+				width: 556,
+				itemId: 'chooserPanel',
 				layout: {
 					type: 'vbox',
 					align: 'stretch'
@@ -202,6 +204,7 @@
 			};
 
 			this.callParent(arguments);
+			this.on('afterrender', this._centerItems, this);
 		},
 
 		_getInitialSizeValue: function() {
@@ -237,6 +240,17 @@
 
 		_onWindowResize: function(width, height) {
 			this.setSize(width, height);
+			this._centerItems();
+		},
+
+		_centerItems: function() {
+			// this is a hack because mobile safari and IE don't honor margin-left/right: auto
+			var width = this.getWidth();
+			var panel = this.down('#chooserPanel');
+			var margin = (width - panel.getWidth()) / 2;
+
+			panel.el.setStyle('margin-left', margin + 'px');
+			panel.el.setStyle('margin-right', margin + 'px');
 		},
 
 		_startNewProject: function() {
