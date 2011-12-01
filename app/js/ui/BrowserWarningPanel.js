@@ -17,13 +17,6 @@
 			var info = LTP.compatibilityInfo();
 			var items = [];
 
-			var missingFeatures = [];
-			for (var prop in info) {
-				if (info.hasOwnProperty(prop) && ! info[prop].available && info[prop].message) {
-					missingFeatures.push(info[prop].message);
-				}
-			}
-
 			if (!info.success) {
 				items.push({
 					xtype: 'container',
@@ -39,8 +32,8 @@
 					xtype: 'container',
 					border: false,
 					margin: 15,
-					html: "love to pixel uses cutting edge browser features. So far only Chrome (on OSX) or Firefox 8 (on all platforms) are fully supported. " +
-					"Your browser is missing these features or its support for them is buggy:<b> " + missingFeatures.join(', ') + "</b>"
+					html: "So far only Chrome (on OSX) or Firefox 8 (on all platforms) are fully supported. " +
+					"Your browser is not supported because: <b>" + info.conclusion + "</b>"
 				});
 			}
 

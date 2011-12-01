@@ -1,12 +1,11 @@
 (function() {
-	var _resolutionMessages = [
-		'You will not be able to use some minor features',
-		'LTP will work but will be problematic',
-		'LTP is completely unusable with this browser'
-	];
-
 	LTP.compatibilityInfo = function() {
 		var info = {
+			desktop: {
+				available: Ext.is.Desktop,
+				message: 'LTP does not work on mobile devices yet',
+				severity: 4
+			},
 			'Object.defineProperty': {
 				available: (function() {
 					if (typeof Object.defineProperty !== 'function') {
@@ -33,12 +32,12 @@
 					return true;
 				})(),
 				message: 'Object.defineProperty is missing',
-				resolution: 2
+				severity: 3
 			},
 			canvas: {
 				available: !! window.HTMLCanvasElement,
 				message: 'canvas is missing',
-				resolution: 2
+				severity: 2
 			},
 			'image-rendering': {
 				available: (function() {
@@ -53,38 +52,43 @@
 					return hasIt;
 				})(),
 				message: 'nearest neighbor for image-rendering is missing',
-				resolution: 1
+				severity: 1
 			},
 			'FileReader': {
 				available: !! window.FileReader,
 				message: 'FileReader is missing',
-				resolution: 0
+				severity: 0
 			},
 			'Internet Explorer': {
 				available: ! LTP.util.platformInfo.isIE,
-				message: 'IE is not yet supported',
-				resolution: 2
+				message: 'IE lacks key needed features',
+				severity: 4
 			},
 			'Opera': {
 				available: ! LTP.util.platformInfo.isOpera,
-				message: 'Opera is not yet supported',
-				resolution: 2
+				message: 'Have not resolved all Opera issues yet',
+				severity: 4
 			}
 		};
 
 		var success = true;
-		var maxResolution = -1;
+		var maxSeverity = - 1;
+		var conclusion;
+
 		for (var prop in info) {
 			if (info.hasOwnProperty(prop)) {
 				success = success && info[prop].available;
-				if(!info[prop].available) {
-					maxResolution = Math.max(maxResolution, info[prop].resolution);
+				if (!info[prop].available) {
+					maxSeverity = Math.max(maxSeverity, info[prop].severity);
+					if (maxSeverity === info[prop].severity) {
+						conclusion = info[prop].message;
+					}
 				}
-					
+
 			}
 		}
 		info.success = success;
-		info.resolution = maxResolution > -1 ? _resolutionMessages[maxResolution] : '';
+		info.conclusion = conclusion;
 
 		return info;
 	};
