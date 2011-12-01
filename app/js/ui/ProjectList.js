@@ -39,6 +39,7 @@
 				menuDisabled: true,
 				items: [{
 					icon: '/images/delete.png',
+					iconCls: 'x-grid-center-icon',
 					handler: function(grid, rowIndex, colIndex) {
 						this.up('panel').deleteAt(rowIndex);
 					}

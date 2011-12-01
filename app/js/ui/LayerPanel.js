@@ -104,6 +104,7 @@
 					{
 						icon: '/images/delete.png',
 						tooltip: 'Delete',
+						iconCls: 'x-grid-center-icon',
 						handler: function(grid, rowIndex, colIndex) {
 							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'delete');
 						}
