@@ -88,21 +88,24 @@
 					items: [{
 						icon: '/images/visible.png',
 						getClass: this._getVisibleIcon,
+						tooltip: 'Toggle visibility',
 						handler: function(grid, rowIndex, colIndex) {
 							this.up('#layerPanel')._toggleVisibilityAt(rowIndex);
 						}
 					},
 					{
-						icon: '/images/delete.png',
+						icon: '/images/merge.png',
+						getClass: this._getMergeIcon,
+						tooltip: 'Merge into layer below',
 						handler: function(grid, rowIndex, colIndex) {
-							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'delete');
+							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'merge');
 						}
 					},
 					{
-						icon: '/images/merge.png',
-						getClass: this._getMergeIcon,
+						icon: '/images/delete.png',
+						tooltip: 'Delete',
 						handler: function(grid, rowIndex, colIndex) {
-							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'merge');
+							this.up('#layerPanel')._deleteOrMergeAt(rowIndex, 'delete');
 						}
 					}],
 					menuDisabled: true

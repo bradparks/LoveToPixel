@@ -3,8 +3,8 @@
 	var _fullSizeZoomIndex = _zoomLevels.indexOf(1);
 	var _savedZoomIndex = undefined;
 	var _currentZoomIndex = _fullSizeZoomIndex;
-	var _gridLevels = [5, 10, 15, 20, 20000];
-	var _currentGridIndex = 4;
+	var _gridLevels = [0, 5, 10, 15, 20];
+	var _currentGridIndex = _gridLevels.indexOf(0);
 	var _overrideActive = false;
 
 	var _lockDirections = [
@@ -214,7 +214,7 @@
 			this.painter = new LTP.Painter(project.size, new LTP.PointTransformer());
 			this._components.push(this.painter);
 
-			this.grid = new LTP.Grid(project.size, 'gray', 20000);
+			this.grid = new LTP.Grid(project.size, 'gray', 0);
 			this._components.push(this.grid);
 
 			Ext.Array.each(this.layerManager.layers, function(layer) {

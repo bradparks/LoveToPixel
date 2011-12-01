@@ -6,7 +6,7 @@
 	
 		this._canvasSize = canvasSize;
 		this._color = color || colors.blue;
-		this._cellSize = cellSize || 5;
+		this._cellSize = cellSize || 0;
 		this._messageBus = messageBus || LTP.GlobalMessageBus;
 
 		this._canvas = LTP.util.canvas(canvasSize);
@@ -23,6 +23,10 @@
 			var context = canvas.getContext('2d');
 
 			context.clearRect(0, 0, canvas.width, canvas.height);
+
+			if(cellSize <= 0) {
+				return;
+			}
 
 			context.save();
 			context.strokeStyle = color;

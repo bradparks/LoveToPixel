@@ -13,10 +13,10 @@ describe("Grid", function() {
 			expect(grid.color).toBe(colors.blue);
 		});
 
-		it("should default to 5 if no cell size given", function() {
+		it("should default to 0 if no cell size given", function() {
 			var grid = new LTP.Grid(s(1,1), colors.red);
 
-			expect(grid.cellSize).toEqual(5);
+			expect(grid.cellSize).toEqual(0);
 		});
 
 		it("should use the passed in color and canvas size", function() {

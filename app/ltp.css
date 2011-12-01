@@ -32,7 +32,6 @@ body, html {
 }
 
 #transparencyBackdropElement {
-	border: 2px solid black;
 	background-image: url(images/transparency.png);
 }
 
