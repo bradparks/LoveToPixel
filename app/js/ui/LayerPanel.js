@@ -10,6 +10,7 @@
 			this._messageBus = config.messageBus || LTP.GlobalMessageBus;
 
 			this._messageBus.subscribe('canvasContentChange', this._onCanvasContentChange, this);
+			this._messageBus.subscribe('newLayerCreated', this._onNewLayerCreated, this);
 			this._messageBus.subscribe('layerLoad', this._onCanvasContentChange, this);
 			this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 			this._messageBus.subscribe('layerRemoved', this._onLayerRemoved, this);
@@ -162,10 +163,8 @@
 			},
 			this);
 		},
-
-		_onNewClick: function() {
-			var newLayer = this.layerManager.addNewLayer();
-
+		
+		_onNewLayerCreated: function(newLayer) {
 			var layerModel = Ext.create('LTP.LayerModel');
 			layerModel.data = newLayer;
 
@@ -173,6 +172,10 @@
 
 			var grid = this.down('#layerGrid');
 			grid.getSelectionModel().select(layerModel, false);
+		},
+
+		_onNewClick: function() {
+			this.layerManager.addNewLayer();
 		},
 
 		_addLayersToStore: function(store, layerManager) {

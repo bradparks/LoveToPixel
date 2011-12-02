@@ -245,12 +245,14 @@
 
 		_centerItems: function() {
 			// this is a hack because mobile safari and IE don't honor margin-left/right: auto
-			var width = this.getWidth();
 			var panel = this.down('#chooserPanel');
-			var margin = (width - panel.getWidth()) / 2;
+			if (this.el && panel && panel.el) {
+				var width = this.getWidth();
+				var margin = (width - panel.getWidth()) / 2;
 
-			panel.el.setStyle('margin-left', margin + 'px');
-			panel.el.setStyle('margin-right', margin + 'px');
+				panel.el.setStyle('margin-left', margin + 'px');
+				panel.el.setStyle('margin-right', margin + 'px');
+			}
 		},
 
 		_startNewProject: function() {

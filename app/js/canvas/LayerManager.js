@@ -175,11 +175,18 @@
 				return;
 			}
 
-			while(this.count > 1) {
-				this.mergeLayer(this.count - 1);
+			var flattened = this.composite();
+			flattened.layerName = this._layers[0].layerName;
+
+			while(this.count > 0) {
+				this.deleteLayer(0);
 			}
 
-			return this.activeLayer;
+			this._layers.push(flattened);
+			this._messageBus.publish("newLayerCreated", flattened);
+			this.setActiveLayer(0);
+
+			return flattened;
 		},
 
 		destroy: function() {
