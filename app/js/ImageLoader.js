@@ -5,7 +5,7 @@
 				this.fromDataUrlToImg(dataUrl, callback, scope);
 			},
 			function(errorMsg) {
-				errorCallback.call(errorMsg, scope);
+				errorCallback.call(scope, errorMsg);
 			}, this);
 		},
 

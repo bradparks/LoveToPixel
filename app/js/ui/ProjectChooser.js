@@ -96,9 +96,6 @@
 					defaults: {
 						margin: 5
 					},
-					style: {
-						borderBottom: '4px solid black',
-					},
 					items: [{
 						xtype: 'textfield',
 						fieldLabel: 'Name',
@@ -153,12 +150,28 @@
 					}]
 				},
 				{
+					xtype: 'ltp.dragdropzone',
+					html: 'or drag an image file here',
+					listeners: {
+						filereceived: this._onFileReceived,
+						scope: this
+					},
+					style: {
+						paddingLeft: '15px',
+						paddingRight: '15px',
+						paddingBottom: '10px',
+						fontStyle: 'italic',
+						backgroundColor: 'white'
+					}
+				},
+				{
 					xtype: 'container',
 					margin: 0,
 					html: '<img src="images/savedProjects.png" alt="saved projects header" />',
 					height: 63,
 					style: {
 						borderBottom: '4px solid black',
+						borderTop: '4px solid black',
 						backgroundColor: '#9E0000'
 					}
 				},
@@ -253,6 +266,31 @@
 				panel.el.setStyle('margin-left', margin + 'px');
 				panel.el.setStyle('margin-right', margin + 'px');
 			}
+		},
+
+		_onFileReceived: function(file) {
+			function onImageLoaded(loadedImage) {
+				var project = {
+					size: s(loadedImage.width, loadedImage.height),
+					name: file.name,
+					isDirty: true,
+					layers: [{
+						layerName: 'Initial Layer',
+						isVisible: true,
+						index: 3,
+						data: loadedImage.src
+					}]
+				};
+
+				this._go(project);
+			}
+
+			function onError(errorMessage) {
+				Ext.MessageBox.alert('Error', errorMessage);
+			}
+
+
+			LTP.ImageLoader.load(file, onImageLoaded, onError, this);
 		},
 
 		_startNewProject: function() {

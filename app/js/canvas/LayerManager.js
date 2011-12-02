@@ -65,6 +65,12 @@
 			}
 		},
 
+		addNewLayerFromImage: function(img) {
+			var newLayer = this.addNewLayer(null, this._size);
+			newLayer.getContext('2d').drawImage(img, 0, 0);
+			this._messageBus.publish('canvasContentChange', newLayer);
+		},
+
 		addNewLayer: function(name, size) {
 			this._layers.push(this._createLayer(name || "new layer " + this._layerCounter++, size));
 			this._activeLayerIndex = this._layers.length - 1;

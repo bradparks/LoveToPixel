@@ -1,7 +1,12 @@
 (function() {
 	Ext.define('LTP.LayerPanel', {
 		extend: 'Ext.panel.Panel',
-		layout: 'fit',
+		layout: {
+			type: 'vbox',
+			align: 'stretch'
+		},
+		height: '100%',
+		width: '100%',
 		itemId: 'layerPanel',
 		border: false,
 
@@ -46,6 +51,21 @@
 			}];
 
 			this.items = [{
+				xtype: 'ltp.dragdropzone',
+				style: {
+					paddingLeft: '10px',
+					paddingTop: '2px',
+					paddingBottom: '2px',
+					backgroundColor: colors.white,
+					fontStyle: 'italic'
+				},
+				html: 'drag image here to create layer from it',
+				listeners: {
+					filereceived: this._onFileReceived,
+					scope: this
+				}
+			},
+			{
 				xtype: 'grid',
 				hideHeaders: true,
 				itemId: 'layerGrid',
@@ -144,6 +164,19 @@
 
 			var grid = this.down('#layerGrid');
 			grid.getSelectionModel().select(grid.store.first());
+		},
+
+		_onFileReceived: function(file) {
+			function onImageLoaded(loadedImage) {
+				this.layerManager.addNewLayerFromImage(loadedImage);
+			}
+
+			function onError(errorMessage) {
+				Ext.MessageBox.alert('Error', errorMessage);
+			}
+
+
+			LTP.ImageLoader.load(file, onImageLoaded, onError, this);
 		},
 
 		_selectionChange: function(selectionModel, selectedRecords, options) {
