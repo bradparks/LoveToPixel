@@ -2,7 +2,7 @@
 	Ext.define('LTP.FlairMessage', {
 		extend: 'Ext.container.Container',
 		alias: 'widget.ltp.flairmessage',
-		width: 200,
+		width: 280,
 		items: {
 			xtype: 'label',
 			text: "Let's pixel!"

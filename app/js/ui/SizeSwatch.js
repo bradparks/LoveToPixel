@@ -2,16 +2,18 @@
 	Ext.define('LTP.SizeSwatch', {
 		extend: 'Ext.container.Container',
 		alias: 'widget.ltp.sizeswatch',
-		width: 20,
-		height: 20,
+		width: 40,
+		height: 40,
+		baseCls: 'sizeSwatch',
 
 		constructor: function(config) {
 			this.callParent(arguments);
 			this.addEvents('click');
-			this.style = {
-				backgroundColor: colors.black,
-				border: (10 - this.size) + 'px solid white'
-			};
+			var size = this.size + 'px';
+			var margin = (this.width/2) - (this.size/2) + 'px';
+
+			this.html = Ext.String.format('<div style="width:{0};height:{0};margin:{1};background-color:black"></div>',
+				size, margin);
 
 			var me = this;
 			this.on('render', function() {

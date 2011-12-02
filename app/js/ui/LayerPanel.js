@@ -37,9 +37,6 @@
 					}
 				},
 				{
-					text: 'New From Image'
-				},
-				{
 					text: 'Flatten',
 					listeners: {
 						click: this._onFlattenClick,

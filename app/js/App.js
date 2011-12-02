@@ -14,7 +14,7 @@
 	var _defaultPalette = [
 	colors.white, colors.black, colors.red, colors.lightGray, colors.blue, colors.green, colors.yellow, colors.orange, colors.purple, colors.gray, colors.brown, '#FF9999', '#33AA11', '#333333', '#88AAFF', '#337722', ];
 
-	var _sizes = [1, 2, 3, 4, 5, 8, 14];
+	var _sizes = [1, 2, 3, 4, 5, 8, 14, 20, 24, 30];
 
 	function _destroyAll(components) {
 		var component;

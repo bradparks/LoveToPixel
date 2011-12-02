@@ -2,8 +2,7 @@
 	Ext.define('LTP.FloatingSizePalette', {
 		extend: 'LTP.FloatingPalette',
 		alias: 'widget.ltp.floatingsizepalette',
-		width: 144,
-		height: 26,
+		width: 41*5,
 
 		defaults: {
 			xtype: 'ltp.sizeswatch'
