@@ -1,5 +1,5 @@
 (function() {
-	var _zoomLevels = [.125, .25, .5, 1, 1.5, 2, 3, 4, 6, 8, 16, 32, 64];
+	var _zoomLevels = [.125, .25, .5, 1, 1.5, 2, 3, 4, 6, 8, 16, 32];
 	var _fullSizeZoomIndex = _zoomLevels.indexOf(1);
 	var _savedZoomIndex = undefined;
 	var _currentZoomIndex = _fullSizeZoomIndex;
@@ -7,6 +7,7 @@
 	var _currentGridIndex = _gridLevels.indexOf(0);
 	var _fillTool = new LTP.FillTool();
 	var _eyeDropperTool = new LTP.EyeDropperTool();
+	var _panningTool = new LTP.PanningTool();
 	var _curOverrideTool;
 
 	var _lockDirections = [
@@ -45,119 +46,198 @@
 
 	var app = {
 		callbacks: {
-			c: function() {
-				if (!LTP.app.floatingColorPalette) {
-					LTP.app.floatingColorPalette = Ext.create('LTP.FloatingColorPalette', {
-						colorManager: LTP.app.colorManager
-					});
-				}
-
-				LTP.app.floatingColorPalette.togglePopup();
+			h: {
+				fn: function() {
+					Ext.create('LTP.HelpWindow', { commands: LTP.app.callbacks }).show();
+				},
+				message: 'Display this help'
 			},
-			b: function() {
-				if (!LTP.app.floatingSizePalette) {
-					LTP.app.floatingSizePalette = Ext.create('LTP.FloatingSizePalette', {
-						sizes: _sizes
-					});
-				}
+			c: {
+				fn: function() {
+					if (!LTP.app.floatingColorPalette) {
+						LTP.app.floatingColorPalette = Ext.create('LTP.FloatingColorPalette', {
+							colorManager: LTP.app.colorManager
+						});
+					}
 
-				LTP.app.floatingSizePalette.togglePopup();
-			},
-			escdown: function() {
-				// TODO: this should be incorporated into the palette
-				if (LTP.app.floatingColorPalette && LTP.app.floatingColorPalette.isPopped) {
 					LTP.app.floatingColorPalette.togglePopup();
-				}
-				if (LTP.app.floatingSizePalette && LTP.app.floatingSizePalette.isPopped) {
+				},
+				message: 'Display the color palette'
+			},
+			b: {
+				fn: function() {
+					if (!LTP.app.floatingSizePalette) {
+						LTP.app.floatingSizePalette = Ext.create('LTP.FloatingSizePalette', {
+							sizes: _sizes
+						});
+					}
+
 					LTP.app.floatingSizePalette.togglePopup();
-				}
+				},
+				message: 'Display the brush palette'
 			},
-			z: function(shift) {
-				var delta = shift ? - 1: 1;
-				_currentZoomIndex += delta;
-				if (_currentZoomIndex >= _zoomLevels.length) {
-					_currentZoomIndex = _zoomLevels.length - 1;
-				}
-				if (_currentZoomIndex < 0) {
-					_currentZoomIndex = 0;
-				}
+			dummy: {
+				fn: function() {},
+				label: '1-9',
+				message: 'Change the left color to the nth color in your color palette',
+				shiftMessage: 'Change the right color to the nth color in your color palette'
+			},
+			escdown: {
+				fn: function() {
+					// TODO: this should be incorporated into the palette
+					if (LTP.app.floatingColorPalette && LTP.app.floatingColorPalette.isPopped) {
+						LTP.app.floatingColorPalette.togglePopup();
+					}
+					if (LTP.app.floatingSizePalette && LTP.app.floatingSizePalette.isPopped) {
+						LTP.app.floatingSizePalette.togglePopup();
+					}
+				},
+				noHelp: true
+			},
+			z: {
+				fn: function(shift) {
+					var delta = shift ? - 1: 1;
+					_currentZoomIndex += delta;
+					if (_currentZoomIndex >= _zoomLevels.length) {
+						_currentZoomIndex = _zoomLevels.length - 1;
+					}
+					if (_currentZoomIndex < 0) {
+						_currentZoomIndex = 0;
+					}
 
-				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
-			},
-			u: function() {
-				LTP.app.painter.undo();
-			},
-			r: function() {
-				LTP.app.painter.redo();
-			},
-			g: function() {
-				_currentGridIndex = (_currentGridIndex + 1) % _gridLevels.length;
-				LTP.app.grid.cellSize = _gridLevels[_currentGridIndex];
-			},
-			i: function() {
-				_resolveOverrideTool(_eyeDropperTool);
-			},
-			k: function() {
-				_resolveOverrideTool(_fillTool);
-			},
-			adown: function(shift) {
-				if (!shift) {
-					_savedZoomIndex = _currentZoomIndex;
-				}
-
-				_currentZoomIndex = _fullSizeZoomIndex;
-				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
-			},
-			aup: function(shift) {
-				if (!shift && !! _savedZoomIndex) {
-					_currentZoomIndex = _savedZoomIndex;
 					LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
-				}
+				},
+				message: 'Zoom in',
+				shiftMessage: 'Zoom out'
 			},
-			s: function() {
-				LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
-				LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
-				LTP.app._currentProject.isDirty = false;
+			u: {
+				fn: function() {
+					LTP.app.painter.undo();
+				},
+				message: 'Undo the last paint operation'
 			},
-			e: function() {
-				var composited = LTP.app.layerManager.composite();
-				window.open(composited.toDataURL('png'), 'savedImage');
+			r: {
+				fn: function() {
+					LTP.app.painter.redo();
+				},
+				message: 'Redo the last paint operation'
 			},
-			d: function() {
-				LTP.app.layerManager.dumpLayers();
+			g: {
+				fn: function() {
+					_currentGridIndex = (_currentGridIndex + 1) % _gridLevels.length;
+					LTP.app.grid.cellSize = _gridLevels[_currentGridIndex];
+				},
+				message: 'Toggle the grid'
 			},
-			spacedown: function() {
-				if (_overrideActive) {
-					LTP.app.painter.popOverrideTool();
-				}
-				LTP.app.painter.pushOverrideTool(new LTP.PanningTool());
-				_overrideActive = true;
+			i: {
+				fn: function() {
+					_resolveOverrideTool(_eyeDropperTool);
+				},
+				message: 'Use the eye dropper tool'
 			},
-			spaceup: function() {
-				LTP.app.painter.popOverrideTool();
-				_overrideActive = false;
+			k: {
+				fn: function() {
+					_resolveOverrideTool(_fillTool);
+				},
+				message: 'Use the fill tool'
 			},
-			controldown: function() {
-				var direction = _lockDirections[_currentLockIndex];
-				_currentLockIndex = (_currentLockIndex + 1) % _lockDirections.length;
+			spacedown: {
+				fn: function() {
+					_resolveOverrideTool(_panningTool);
+				},
+				label: 'space',
+				message: 'Hold to use the pan tool'
+			},
+			spaceup: {
+				fn: function() {
+					if(_curOverrideTool === _panningTool) {
+						LTP.app.painter.popOverrideTool();
+						_curOverrideTool = null;
+					}
+				},
+				noHelp: true
+			},
+			adown: {
+				fn: function(shift) {
+					if (!shift) {
+						_savedZoomIndex = _currentZoomIndex;
+					}
 
-				LTP.app.painter.adhocTransformer = new LTP.DirectionLockTransformer(direction);
-				LTP.GlobalMessageBus.publish('lockChanged', direction);
+					_currentZoomIndex = _fullSizeZoomIndex;
+					LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
+				},
+				label: 'a',
+				message: 'Hold to zoom to 100%, let go to return to your previous zoom',
+				shiftMessage: 'Return to 100% zoom'
 			},
-			controlup: function() {
-				LTP.app.painter.adhocTransformer = null;
-				LTP.GlobalMessageBus.publish('lockChanged', null);
+			aup: {
+				fn: function(shift) {
+					if (!shift && !! _savedZoomIndex) {
+						_currentZoomIndex = _savedZoomIndex;
+						LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
+					}
+				},
+				noHelp: true
 			},
-			altdown: function() {
-				LTP.app.painter.adhocTransformer = new LTP.BrushSizeLockTransformer(20);
-				LTP.GlobalMessageBus.publish('lockChanged', 'brush');
+			s: {
+				fn: function() {
+					LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
+					LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
+					LTP.app._currentProject.isDirty = false;
+				},
+				message: 'Save the project'
 			},
-			altup: function() {
-				LTP.app.painter.adhocTransformer = null;
-				LTP.GlobalMessageBus.publish('lockChanged', null);
+			e: {
+				fn: function() {
+					var composited = LTP.app.layerManager.composite();
+					window.open(composited.toDataURL('png'), 'savedImage');
+				},
+				message: 'Export the project to an image (opens in a new window'
 			},
-			n: function() {
-				window.location = window.location;
+			d: {
+				fn: function() {
+					LTP.app.layerManager.dumpLayers();
+				},
+				noHelp: true
+			},
+			controldown: {
+				fn: function() {
+					var direction = _lockDirections[_currentLockIndex];
+					_currentLockIndex = (_currentLockIndex + 1) % _lockDirections.length;
+
+					LTP.app.painter.adhocTransformer = new LTP.DirectionLockTransformer(direction);
+					LTP.GlobalMessageBus.publish('lockChanged', direction);
+				},
+				label: 'CTRL',
+				message: 'Hold to turn on direction lock. Cycles between vertical and horizontal lock'
+			},
+			controlup: {
+				fn: function() {
+					LTP.app.painter.adhocTransformer = null;
+					LTP.GlobalMessageBus.publish('lockChanged', null);
+				},
+				noHelp: true
+			},
+			altdown: {
+				fn: function() {
+					LTP.app.painter.adhocTransformer = new LTP.BrushSizeLockTransformer(20);
+					LTP.GlobalMessageBus.publish('lockChanged', 'brush');
+				},
+				label: 'ALT',
+				message: 'Hold to lock the brush to the current brush size'
+			},
+			altup: {
+				fn: function() {
+					LTP.app.painter.adhocTransformer = null;
+					LTP.GlobalMessageBus.publish('lockChanged', null);
+				},
+				noHelp: true
+			},
+			n: {
+				fn: function() {
+					window.location = window.location;
+				},
+				message: 'Return to the project chooser'
 			}
 		},
 

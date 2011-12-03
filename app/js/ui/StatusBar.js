@@ -29,6 +29,14 @@
 			},
 			{
 				xtype: 'ltp.currentlock'
+			},
+			{
+				xtype: 'ltp.helplink',
+				listeners: {
+					helprequested: function() {
+						Ext.create('LTP.HelpWindow', { commands: LTP.app.callbacks }).show();
+					}
+				}
 			}
 		]
 	});

@@ -60,10 +60,10 @@
 				e.preventDefault();
 			}
 		
-			if(typeof this._callbacks[character] === 'function') {
-				this._callbacks[character].call(this._scope, e.shiftKey);
-			} else if(_numbersWhenShifted[character] && typeof this._callbacks[_numbersWhenShifted[character].toString()] === 'function') {
-				this._callbacks[_numbersWhenShifted[character].toString()].call(this._scope, true);
+			if(typeof this._callbacks[character] === 'object') {
+				this._callbacks[character].fn.call(this._scope, e.shiftKey);
+			} else if(_numbersWhenShifted[character] && typeof this._callbacks[_numbersWhenShifted[character].toString()] === 'object') {
+				this._callbacks[_numbersWhenShifted[character].toString()].fn.call(this._scope, true);
 			}
 
 			return character !== 'space';
@@ -83,8 +83,8 @@
 			if(!this._downKeys[character]) {
 				var callbackName = character + 'down';
 	
-				if(typeof this._callbacks[callbackName] === 'function') {
-					this._callbacks[callbackName].call(this._scope, e.shiftKey);
+				if(typeof this._callbacks[callbackName] === 'object') {
+					this._callbacks[callbackName].fn.call(this._scope, e.shiftKey);
 				}
 
 				this._downKeys[character] = true;
@@ -105,8 +105,8 @@
 				e.preventDefault();
 			}
 
-			if(typeof this._callbacks[callbackName] === 'function') {
-				this._callbacks[callbackName].call(this._scope, e.shiftKey);
+			if(typeof this._callbacks[callbackName] === 'object') {
+				this._callbacks[callbackName].fn.call(this._scope, e.shiftKey);
 			}
 
 			this._downKeys[character] = false;

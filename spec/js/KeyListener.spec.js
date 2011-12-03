@@ -1,6 +1,5 @@
 describe("KeyListener", function() {
 
-
 	describe("construction", function() {
 		it("should throw if no config is provided", function() {
 			expect(LTP.KeyListener).toThrow(); 
@@ -29,11 +28,13 @@ describe("KeyListener", function() {
 		it("should call the corresponding event handler for a key: keypress", function() {
 			var config = {
 				callbacks : {
-					a: function() {}
+					a: {
+						fn: function() {}
+					}
 				}
 			};
 
-			spyOn(config.callbacks, "a");
+			spyOn(config.callbacks.a, "fn");
 
 			var keyListener = new LTP.KeyListener(config);
 
@@ -44,17 +45,19 @@ describe("KeyListener", function() {
 				keyCode: 65 // a
 			});
 
-			expect(config.callbacks.a).toHaveBeenCalled();
+			expect(config.callbacks.a.fn).toHaveBeenCalled();
 		});
 
 		it("should call the corresponding event handler for a key: keydown", function() {
 			var config = {
 				callbacks: {
-					adown: function() {}
+					adown: {
+						fn: function() {}
+					}
 				}
 			};
 
-			spyOn(config.callbacks, "adown");
+			spyOn(config.callbacks.adown, "fn");
 
 			var keyListener = new LTP.KeyListener(config);
 
@@ -62,17 +65,19 @@ describe("KeyListener", function() {
 				keyCode: 65  // a
 			});
 
-			expect(config.callbacks.adown).toHaveBeenCalled();
+			expect(config.callbacks.adown.fn).toHaveBeenCalled();
 		});
 
 		it("should call the corresponding event handler for a key: keyup", function() {
 			var config = {
 				callbacks: {
-					aup: function() {}
+					aup: {
+						fn: function() {}
+					}
 				}
 			};
 
-			spyOn(config.callbacks, "aup");
+			spyOn(config.callbacks.aup, "fn");
 
 			var keyListener = new LTP.KeyListener(config);
 
@@ -80,7 +85,7 @@ describe("KeyListener", function() {
 				keyCode: "a".charCodeAt(0)
 			});
 
-			expect(config.callbacks.aup).toHaveBeenCalled();
+			expect(config.callbacks.aup.fn).toHaveBeenCalled();
 		});
 		
 	});
