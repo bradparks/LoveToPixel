@@ -56,10 +56,11 @@
 					paddingLeft: '10px',
 					paddingTop: '2px',
 					paddingBottom: '2px',
-					backgroundColor: colors.white,
+					backgroundColor: '#999999',
 					fontStyle: 'italic'
 				},
-				html: 'drag image here to create layer from it',
+				html: 'drag an image here to create a layer',
+				resetColor: '#999999',
 				listeners: {
 					filereceived: this._onFileReceived,
 					scope: this

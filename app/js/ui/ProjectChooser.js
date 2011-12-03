@@ -161,8 +161,8 @@
 						paddingRight: '15px',
 						paddingBottom: '10px',
 						fontStyle: 'italic',
-						backgroundColor: 'white'
-					}
+					},
+					resetColor: colors.white
 				},
 				{
 					xtype: 'container',

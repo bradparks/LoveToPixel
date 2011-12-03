@@ -15,6 +15,15 @@
 		alias: 'widget.ltp.dragdropzone',
 		border: false,
 
+		constructor: function(config) {
+			this.callParent(arguments);
+			
+			Ext.apply(this, config);
+			this.resetColor = this.resetColor || colors.white;
+
+			this.style.backgroundColor = this.resetColor;
+		},
+
 		initComponent: function() {
 			this.callParent(arguments);
 			this.addEvents('filereceived');
@@ -45,7 +54,7 @@
 		_onDragLeave: function(e) {
 			e.preventDefault();
 			e.stopPropagation();
-			this.el.setStyle('background-color', colors.white);
+			this.el.setStyle('background-color', this.resetColor);
 
 			return false;
 		},
@@ -54,7 +63,7 @@
 			if(e && e.browserEvent.dataTransfer && e.browserEvent.dataTransfer.files && e.browserEvent.dataTransfer.files.length) {
 				e.preventDefault();
 				e.stopPropagation();
-				this.el.setStyle('background-color', colors.white);
+				this.el.setStyle('background-color', this.resetColor);
 
 				this.fireEvent('filereceived', e.browserEvent.dataTransfer.files[0]);
 				
