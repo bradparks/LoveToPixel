@@ -7,11 +7,31 @@
 	LTP.BaseTool.prototype = {
 		perform: function(e) {},
 
+		_dropPoint: function(context, point, xOff, yOff) {
+			if(point.x + xOff >= 0 && point.x + xOff < context.canvas.width
+				&& point.y + yOff >= 0 && point.y + yOff < context.canvas.height) {
+				context.fillRect(point.x + xOff, point.y + yOff, 1, 1);
+			}
+		},
+
 		overlay: function(context, point) {
 			context.save();
+			context.globalCompositeOperation = 'lighter';
 
-			context.fillStyle = colors.purple;
-			context.fillRect(point.x, point.y, 1, 1);
+			context.fillStyle = 'rgba(255, 0, 0, .5)';
+			// center
+			this._dropPoint(context, point, 0, 0);
+
+			context.fillStyle = 'rgba(255, 0, 255, .5)';
+			
+			// left
+			this._dropPoint(context, point, -2, 0);
+			// right
+			this._dropPoint(context, point, 2, 0);
+			// top
+			this._dropPoint(context, point, 0, -2);
+			// bottom
+			this._dropPoint(context, point, 0, 2);
 
 			context.restore();
 		}

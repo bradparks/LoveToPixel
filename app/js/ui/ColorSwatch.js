@@ -14,7 +14,6 @@
 				border: '1px solid black',
 				color: colors.invert(config.color)
 			};
-			this.html = config.label;
 
 			var me = this;
 			this.on('render', function() {
@@ -30,7 +29,7 @@
 				});
 
 				me.el.dom.addEventListener('mouseup', function(e) {
-					if(me._mouseIsDown) {
+					if (me._mouseIsDown) {
 						me.fireEvent('click', e);
 					}
 
@@ -45,18 +44,45 @@
 			});
 		},
 
-		setIsCurrentLeft: function(isLeft) {
-			var style = isLeft ? '4px solid black' : '1px solid black';
+		initComponent: function() {
+			this.items = [{
+				xtype: 'container',
+				itemId: 'leftIndicator',
+				width: 4,
+				height: 4,
+				style: {
+					backgroundColor: colors.invert(this.color),
+					'float': 'left'
+				},
+			},
+			{
+				xtype: 'container',
+				itemId: 'rightIndicator',
+				width: 4,
+				height: 4,
+				style: {
+					backgroundColor: colors.invert(this.color),
+					'float': 'right'
+				}
+			}];
 
-			this.el.setStyle('borderLeft', style);
-			this.el.setStyle('borderBottom', style);
+			this.callParent(arguments);
+
+			this.setIsCurrentLeft(false);
+			this.setIsCurrentRight(false);
+		},
+
+		_setCurrent: function(value, side) {
+			var indicator = this.down('#' + side + 'Indicator');
+			indicator.setVisible(value);
+		},
+
+		setIsCurrentLeft: function(isLeft) {
+			this._setCurrent(isLeft, 'left');
 		},
 
 		setIsCurrentRight: function(isRight) {
-			var style = isRight ? '4px solid black' : '1px solid black';
-
-			this.el.setStyle('borderRight', style);
-			this.el.setStyle('borderTop', style);
+			this._setCurrent(isRight, 'right');
 		}
 	});
 

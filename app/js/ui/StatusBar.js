@@ -5,7 +5,10 @@
 		alias: 'widget.ltp.statusbar',
 		items: [
 			{
-				xtype: 'ltp.flairmessage'
+				xtype: 'ltp.flairmessage',
+				style: {
+					paddingLeft: '10px'
+				}
 			},
 			{
 				xtype: 'ltp.currentcolor',

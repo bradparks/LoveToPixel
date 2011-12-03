@@ -5,7 +5,9 @@
 	var _currentZoomIndex = _fullSizeZoomIndex;
 	var _gridLevels = [0, 5, 10, 15, 20];
 	var _currentGridIndex = _gridLevels.indexOf(0);
-	var _overrideActive = false;
+	var _fillTool = new LTP.FillTool();
+	var _eyeDropperTool = new LTP.EyeDropperTool();
+	var _curOverrideTool;
 
 	var _lockDirections = [
 	LTP.DirectionLockTransformer.directions.upDown, LTP.DirectionLockTransformer.directions.leftRight];
@@ -25,6 +27,19 @@
 					component.destroy();
 				}
 			}
+		}
+	}
+
+	function _resolveOverrideTool(tool) {
+		if (_curOverrideTool === tool) {
+			LTP.app.painter.popOverrideTool();
+			_curOverrideTool = null;
+		} else {
+			if ( !! _curOverrideTool) {
+				LTP.app.painter.popOverrideTool();
+			}
+			LTP.app.painter.pushOverrideTool(tool);
+			_curOverrideTool = tool;
 		}
 	}
 
@@ -80,13 +95,10 @@
 				LTP.app.grid.cellSize = _gridLevels[_currentGridIndex];
 			},
 			i: function() {
-				if (_overrideActive) {
-					LTP.app.painter.popOverrideTool();
-					_overrideActive = false;
-				} else {
-					LTP.app.painter.pushOverrideTool(new LTP.EyeDropperTool());
-					_overrideActive = true;
-				}
+				_resolveOverrideTool(_eyeDropperTool);
+			},
+			k: function() {
+				_resolveOverrideTool(_fillTool);
 			},
 			adown: function(shift) {
 				if (!shift) {
@@ -97,7 +109,7 @@
 				LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 			},
 			aup: function(shift) {
-				if (!shift && !!_savedZoomIndex) {
+				if (!shift && !! _savedZoomIndex) {
 					_currentZoomIndex = _savedZoomIndex;
 					LTP.GlobalMessageBus.publish('zoomChanged', _zoomLevels[_currentZoomIndex]);
 				}
@@ -124,14 +136,6 @@
 			spaceup: function() {
 				LTP.app.painter.popOverrideTool();
 				_overrideActive = false;
-			},
-			k: function() {
-				if (_overrideActive) {
-					LTP.app.painter.popOverrideTool();
-				} else {
-					LTP.app.painter.pushOverrideTool(new LTP.FillTool());
-				}
-				_overrideActive = ! _overrideActive;
 			},
 			controldown: function() {
 				var direction = _lockDirections[_currentLockIndex];
@@ -231,6 +235,7 @@
 				var prefix = mouseButton === 0 ? 'left': 'right';
 				LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
 				this.painter.popOverrideTool();
+				_curOverrideTool = null;
 			},
 			this);
 

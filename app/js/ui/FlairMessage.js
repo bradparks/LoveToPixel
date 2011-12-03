@@ -15,7 +15,7 @@
 
 			this._messageBus.subscribe('flairMessage', function(message) {
 				if (message) {
-					this.el.highlight(colors.orange, { duration: 2000 });
+					this.el.highlight('#EDE459', { duration: 2000 });
 					this.down('label').setText(message);
 					Ext.defer(function() {
 						this._resetMessage();
