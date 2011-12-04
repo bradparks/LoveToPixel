@@ -1,6 +1,10 @@
 (function() {
 
 	function _hasDragDrop() {
+		if(!!window.FileReader) {
+			return false;
+		}
+
 		if(!!window.DataTransfer) {
 			return "files" in DataTransfer.prototype;
 		} else {

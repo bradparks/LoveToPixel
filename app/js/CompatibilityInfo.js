@@ -51,22 +51,22 @@
 					}
 					return hasIt;
 				})(),
-				message: 'nearest neighbor for image-rendering is missing',
+				message: 'nearest neighbor for image-rendering is missing (or buggy in the case of Chrome on Windows)',
 				severity: 1
 			},
 			'FileReader': {
 				available: !! window.FileReader,
-				message: 'FileReader is missing',
+				message: 'FileReader is missing (drag and drop operations won\'t be available)',
 				severity: 0
 			},
 			'Internet Explorer': {
-				available: ! LTP.util.platformInfo.isIE,
+				available: !Ext.isIE,
 				message: 'IE lacks key needed features',
 				severity: 4
 			},
 			'Opera': {
 				available: ! LTP.util.platformInfo.isOpera,
-				message: 'Have not resolved all Opera issues yet',
+				message: 'Not all Opera issues have been resolved',
 				severity: 4
 			}
 		};
