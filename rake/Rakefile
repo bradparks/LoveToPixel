@@ -7,10 +7,12 @@ task :minify do
 	new_index = ''
 
   IO.foreach("../app/#{index_root}.html") do |line|
-    if line =~ /<script.*src="(.*)"/
+    if line.index('/ext/').nil? && line =~ /<script.*src="(.*)"/
       script_names << $1
     else
-			new_index << line
+			if(line.strip.size > 0)
+				new_index << line
+			end
 		end
   end
 
