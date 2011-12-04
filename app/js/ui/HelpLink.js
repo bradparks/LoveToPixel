@@ -2,7 +2,11 @@
 	Ext.define('LTP.HelpLink', {
 		extend: 'Ext.container.Container',
 		alias: 'widget.ltp.helplink',
-		html: '<a href="#" id="_helpLink">help</a>',
+
+		constructor: function(config) {
+			this.callParent(arguments);
+			this.html = Ext.String.format('<a href="#" id="_helpLink">{0}</a>', config.linkText || 'help');
+		},
 
 		initComponent: function() {
 			this.callParent(arguments);

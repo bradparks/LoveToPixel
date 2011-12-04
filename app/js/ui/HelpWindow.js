@@ -5,7 +5,7 @@
 	Ext.define('LTP.HelpWindow', {
 		extend: 'Ext.window.Window',
 		alias: 'widget.ltp.helpwindow',
-		title: 'Help',
+		title: 'Key Commands',
 		width: 600,
 
 		constructor: function(config) {
@@ -23,8 +23,6 @@
 		initComponent: function() {
 			var items = [];
 
-			items.push(this._createHelpEntry('Painting', _paintingHelp));
-			//items.push(this._createHelpEntry('Layers', _layerHelp));
 			items.push(this._createKeyCommandHelp());
 
 			this.items = items;
@@ -47,8 +45,8 @@
 
 			return {
 				xtype: 'panel',
-				title: 'Key Commands',
-				items: items
+				items: items,
+				border: false
 			};
 		},
 
@@ -66,11 +64,13 @@
 
 		_createCommandEntry: function(label, message, isShift) {
 			return {
-				xtype: 'panel',
+				xtype: 'container',
 				border: false,
 				layout: 'hbox',
 				defaults: {
-					border: false
+					xtype: 'container',
+					border: false,
+					margin: 1
 				},
 				items: [{
 					width: 100,

@@ -62,7 +62,7 @@
 
 					LTP.app.floatingColorPalette.togglePopup();
 				},
-				message: 'Display the color palette'
+				message: 'Display the color palette. Press again (or ESC) to hide'
 			},
 			b: {
 				fn: function() {
@@ -74,7 +74,7 @@
 
 					LTP.app.floatingSizePalette.togglePopup();
 				},
-				message: 'Display the brush palette'
+				message: 'Display the brush palette. Press again (or ESC) to hide'
 			},
 			dummy: {
 				fn: function() {},
@@ -179,27 +179,6 @@
 				},
 				noHelp: true
 			},
-			s: {
-				fn: function() {
-					LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
-					LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
-					LTP.app._currentProject.isDirty = false;
-				},
-				message: 'Save the project'
-			},
-			e: {
-				fn: function() {
-					var composited = LTP.app.layerManager.composite();
-					window.open(composited.toDataURL('png'), 'savedImage');
-				},
-				message: 'Export the project to an image (opens in a new window'
-			},
-			d: {
-				fn: function() {
-					LTP.app.layerManager.dumpLayers();
-				},
-				noHelp: true
-			},
 			controldown: {
 				fn: function() {
 					var direction = _lockDirections[_currentLockIndex];
@@ -230,6 +209,27 @@
 				fn: function() {
 					LTP.app.painter.adhocTransformer = null;
 					LTP.GlobalMessageBus.publish('lockChanged', null);
+				},
+				noHelp: true
+			},
+			s: {
+				fn: function() {
+					LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
+					LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
+					LTP.app._currentProject.isDirty = false;
+				},
+				message: 'Save the project (to local storage)'
+			},
+			e: {
+				fn: function() {
+					var composited = LTP.app.layerManager.composite();
+					window.open(composited.toDataURL('png'), 'savedImage');
+				},
+				message: 'Export the project to an image (opens in a new window)'
+			},
+			d: {
+				fn: function() {
+					LTP.app.layerManager.dumpLayers();
 				},
 				noHelp: true
 			},

@@ -32,11 +32,22 @@
 			},
 			{
 				xtype: 'ltp.helplink',
+				linkText: 'key commands',
+				style: {
+					marginLeft: '80px'
+				},
 				listeners: {
 					helprequested: function() {
 						Ext.create('LTP.HelpWindow', { commands: LTP.app.callbacks }).show();
 					}
 				}
+			},
+			{
+				xtype: 'container',
+				style: {
+					marginLeft: '30px'
+				},
+				html: '<a href="https://github.com/city41/LoveToPixel/issues/new" target="_blank">Found a bug?</a>'
 			}
 		]
 	});
