@@ -238,6 +238,15 @@
 					window.location = window.location;
 				},
 				message: 'Return to the project chooser'
+			},
+			p: {
+				fn: function() {
+					Ext.create('LTP.Publisher', {
+						layerManager: LTP.app.layerManager,
+						projectName: LTP.app._currentProject.name
+					}).show();
+				},
+				message: 'Publish your project to imgur'
 			}
 		},
 
