@@ -1,7 +1,7 @@
 (function() {
 
 	function _hasDragDrop() {
-		if(!!window.FileReader) {
+		if(!window.FileReader) {
 			return false;
 		}
 
