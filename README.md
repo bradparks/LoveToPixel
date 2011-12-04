@@ -1,5 +1,5 @@
 # LoveToPixel #
-This file last updated: Nov 13, 2011
+This file last updated: Dec 4, 2011
 
 LTP is an experiment to see if I can pull off a full fledged pixel editor using JavaScript and canvas. The measure of success is if LTP ends up being a pixel editor that works so well, is responsive enough, powerful enough and enjoyable enough to use that people would seriously consider using it over a native pixel editor.
 
@@ -7,19 +7,19 @@ LTP is an experiment to see if I can pull off a full fledged pixel editor using 
 I am envisioning LTP being targeted at more advanced users. People who love to create pixel art very efficiently. The interface will almost entirely be just the main drawing window, with a mere sliver of interface at the top showing either the current palette or current brushes (depending on which mode is triggered), and a tiny status bar at the bottom. All other interactions with LTP will be handled through key commands. 
 
 ## The first set of features I'm aiming at: ##
-* really good layer management (status: in place but still haven't surfaced merging, deleting, etc)
-* easily set/change the left and right brushes (status: backend in place, simple front end in place)
+* good layer management (status: in place)
+* easily set/change the left and right brushes (status: in place)
 * grid overlay (status: in place, but isn't useful yet)
 * zoom in/out (status: in place)
 * hold the 'a' key to temporarily zoom to 100% (once you release 'a', it returns to whatever zoom you were at) (status: in place)
-* Save images in an intermediate format (maintain layers primarily) (status: in place with local storage)
-* Save images as pngs (status: in place, in a simple fashion, but then again FileWriter doesn't really exist yet)
+* Save images in an intermediate format (maintain layers primarily) (status: in place)
+* Save images as pngs (status: in place, in a simple fashion)
 * unlimited, or at least very deep, undo/redo (status: in place for paint operations, not yet in place for anything else such as layer edits)
 * A pixel pipeline which allows for things like snap to grid, lock vertical/horizontal, snap to brush size, etc (status: in place)
 * Local storage support (status: in place)
 * Server storage support (status: brainstorming)
 * eye dropper tool (status: in place)
-* paint bucket tool (status: in place, but has issues)
+* paint bucket tool (status: in place)
 
 ## Future Features ##
 * Animation support
@@ -32,8 +32,8 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * History window
 * Full persistence (save undo/redo state, brush state, etc)
 
-# So far... Preview at www.lovetopixel.com #
-I have deployed a preview of an alpha version of LTP to http://www.lovetopixel.com  
+# So far... beta at www.lovetopixel.com #
+I have deployed the current beta version of LTP to http://www.lovetopixel.com  
   
 Here are the key commands for the preview version:
 
@@ -58,22 +58,23 @@ Here are the key commands for the preview version:
 * right click in image -- paint with right tool
 * hold CTRL -- lock painting vertically or horizontally (alternates each time)
 * hold ALT -- lock painting to the size of the brush (see known issues section)
+* p -- publish the image to imgur (and reddit)
 
 
 ## How to use layers ##
 Layers are modeled after most other image apps:
 
 * click 'New' to add a new layer
-* the eye icon indicates if that layer is visible or not
-* double click a layer to edit it (set visibility and change its name)
+* double click the name to change it
 * drag layers around to reorder them
 * the currently selected/highlighted layer is the active one, that is where you will paint into
 * To delete a layer, click the 'X' icon next to it
 * To merge a layer into the layer below it, click the down arrow icon next to it
+* toggle visibility by clicking the layer's eye icon
 
 ## Palette/Color editing ##
 
-This is a bit raw right now, it's my current focus. When the color palette is open (hit 'c'), click on a color to pick it.
+When the color palette is open (hit 'c'), click on a color to pick it.
 Click and hold to edit the color (this works for both left and right clicking, for the left and right colors). The first 9 colors have numbers in them, you can quickly select those colors by hitting
 the corresponding number on your keyboard. The color palette doesn't need to be open to do this. Hold down shift then
 hit a number to select that color for your right tool.  
@@ -88,10 +89,8 @@ Server side saving is in the pipeline. I'd also like to take advantage of FileWr
 # Known Issues #
 There are many. This is early code. Let's see here:
 
-* generally very raw, things work but not necessarily in a polished/slick way.
-* editing a layer in the layer view is a bit iffy when there are only a couple of layers (the UI for editing typically scrolls up out of view, add some more layers to work around this)
-* turning on the brush lock (hold down ALT while painting) is hard coded to 20 pixels
-* **It's ugly!! :)** I'm focusing entirely on functionality for now. I will go back and make the app very pretty right before arriving at 1.0
+* Big initial download. Ext is a big library. I think I may move away from it...
+* Dragging a large image to start a new project (or create a new layer) in Chrome can cause it to "Aww snap" crash.
 
 # License ... #
 I'm not sure what kind of license I'm going to use for LTP ultimately. For now I have chosen GPL 3, but that is (very) likely to change once this project solidifies. See the COPYING file for more info. I also chose to use Ext4, which also locks me into GPL for the moment.
