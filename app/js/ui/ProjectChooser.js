@@ -1,7 +1,12 @@
 (function() {
 	var _localStorageSizeKey = '__ltp_projectchooser_size__';
 
-	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " + "geared towards those who do \"old school\" pixel art (think 16 bit video games). <a href='https://github.com/city41/LoveToPixel/blob/master/help/QuickHelp.md' target='_blank' " + "id='launchHelpLink'>Read the quick help</a> to get started";
+	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " + "geared towards those who do \"old school\" pixel art (think 16 bit video games).";
+
+	if(LTP.firstTimeHere) {
+		_introHtml += "<br/><br/><b>Double click the 'Getting Started' project below to begin</b>";
+		LTP.addTutorialProject();
+	}
 
 	function parseSizeString(sizeString) {
 		if (!sizeString) {

@@ -1,4 +1,6 @@
 (function() {
+	LTP.firstTimeHere = !!!localStorage['ltp-projects'];
+
 	LTP.version = "0.1 beta";
 
 	LTP.s = function(w,h) {
