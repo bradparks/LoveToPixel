@@ -3,10 +3,7 @@
 
 	var _introHtml = "love to pixel is a web based pixel editor. That's a fancy name for a paint program " + "geared towards those who do \"old school\" pixel art (think 16 bit video games).";
 
-	if(LTP.firstTimeHere) {
-		_introHtml += "<br/><br/><b>Double click the 'Getting Started' project below to begin</b>";
-		LTP.addTutorialProject();
-	}
+	_introHtml += '<br/><br/><a href="http://screencast.com/t/IKylk02n9X" target="_blank">This 2 minute screencast</a> is a good way to get started.';
 
 	function parseSizeString(sizeString) {
 		if (!sizeString) {
