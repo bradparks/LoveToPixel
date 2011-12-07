@@ -34,6 +34,8 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 
 # So far... beta at www.lovetopixel.com #
 I have deployed the current beta version of LTP to http://www.lovetopixel.com  
+
+A screencast to get you started is here: http://screencast.com/t/IKylk02n9X
   
 Here are the key commands for the preview version:
 
