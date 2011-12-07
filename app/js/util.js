@@ -78,10 +78,10 @@
 
 		setImageRendering: function(element) {
 			var rendering = 'optimizeSpeed';
-			if (this.platformInfo.isOSX && this.platformInfo.isChrome) {
+			if (this.platformInfo.isChrome) {
 				rendering = '-webkit-optimize-contrast';
 			}
-			if (this.platformInfo.isFirefox) {
+			else if (this.platformInfo.isFirefox) {
 				rendering = '-moz-crisp-edges';
 			}
 

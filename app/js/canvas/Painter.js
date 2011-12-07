@@ -38,10 +38,12 @@
 
 		this._overlay = LTP.util.canvas(this._size, {
 			position: 'absolute',
+			cursor: 'none',
 			top: 0,
 			left: 0
 		});
 		this._scratch = LTP.util.canvas(this._size, {
+			cursor: 'none',
 			position: 'absolute',
 			top: 0,
 			left: 0
