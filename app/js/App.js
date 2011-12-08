@@ -31,7 +31,9 @@
 				fn: function() {
 					if (!LTP.app.floatingColorPalette) {
 						LTP.app.floatingColorPalette = Ext.create('LTP.FloatingColorPalette', {
-							colorManager: LTP.app.colorManager
+							colorManager: LTP.app.colorManager,
+							initialLeftColor: LTP.app.painter.leftColor,
+							initialRightColor: LTP.app.painter.rightColor
 						});
 					}
 
@@ -104,22 +106,37 @@
 				message: 'Toggle the grid'
 			},
 			i: {
-				fn: function() {
-					LTP.app.painter.leftTool = _eyeDropperTool;
+				fn: function(shift) {
+					if(shift) {
+						LTP.app.painter.rightTool = _eyeDropperTool;
+					} else {
+						LTP.app.painter.leftTool = _eyeDropperTool;
+					}
 				},
-				message: 'Use the eye dropper tool'
+				message: 'Set the left tool to the eye dropper',
+				shiftMessage: 'Set the right tool to the eye dropper'
 			},
 			k: {
-				fn: function() {
-					LTP.app.painter.leftTool = _fillTool;
+				fn: function(shift) {
+					if(shift) {
+						LTP.app.painter.rightTool = _fillTool;
+					} else {
+						LTP.app.painter.leftTool = _fillTool;
+					}
 				},
-				message: 'Use the fill tool'
+				message: 'Set the left tool to the paint bucket',
+				shiftMessage: 'Set the right tool to the paint bucket'
 			},
 			d: {
-				fn: function() {
-					LTP.app.painter.leftTool = _brushTool;
+				fn: function(shift) {
+					if(shift) {
+						LTP.app.painter.rightTool = _brushTool;
+					} else {
+						LTP.app.painter.leftTool = _brushTool;
+					}
 				},
-				message: 'Use the brush tool'
+				message: 'Set the left tool to the brush tool',
+				shiftMessage: 'Set the right tool to the brush tool'
 			},
 			//spacedown: {
 				//fn: function() {

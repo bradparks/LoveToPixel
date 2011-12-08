@@ -43,7 +43,7 @@
 				}
 				hexString += hex;
 			}
-			return hexString;
+			return hexString.toUpperCase();
 		},
 
 		fromHexToArray: function(hexColorString, options) {

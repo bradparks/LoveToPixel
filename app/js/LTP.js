@@ -38,7 +38,6 @@
 		'newLayerCreated',
 		'activeLayerChanged',
 		'lockChanged',
-		'cursorDisplayChangeRequest',
 		'flairMessage',
 		'canvasContentChange',
 		'paletteContentChange',

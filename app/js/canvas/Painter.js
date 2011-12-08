@@ -18,7 +18,6 @@
 		this._messageBus.subscribe('rightColorSelected', this._onRightColorSelected, this);
 		this._messageBus.subscribe('leftSizeSelected', this._onLeftSizeSelected, this);
 		this._messageBus.subscribe('rightSizeSelected', this._onRightSizeSelected, this);
-		this._messageBus.subscribe('cursorDisplayChangeRequest', this._onCursorDisplayChangeRequest, this);
 
 		this._leftToolState = {
 			down: false,
@@ -79,7 +78,9 @@
 		},
 
 		_setCursor: function(cursorString) {
-			this._overlay.style.cursor = cursorString;
+			if(this._overlay) {
+				this._overlay.style.cursor = cursorString;
+			}
 		},
 
 		_getToolStateForButton: function(button) {
@@ -101,6 +102,7 @@
 
 				this._lastOverlayPoint = point;
 			}
+			this._setCursor(toolState.tool.cursor);
 
 			this._messageBus.publish('canvasMouseCoordinatesChanged', point);
 		},
@@ -388,10 +390,6 @@
 
 		_onRightSizeSelected: function(size) {
 			this._rightToolState.size = size;
-		},
-
-		_onCursorDisplayChangeRequest: function p_onCursorDisplayChangeRequest(cursorDisplay) {
-			this._overlay.style.cursor = cursorDisplay;
 		}
 	};
 

@@ -70,10 +70,14 @@
 		extend: 'LTP.FloatingPalette',
 		alias: 'widget.ltp.floatingcolorpalette',
 
-		constructor: function() {
+		constructor: function(initialLeftColor, initialRightColor) {
 			this.callParent(arguments);
+			this.initialLeftColor = initialLeftColor;
+			this.initialRightColor = initialRightColor;
+
 			this.messageBus.subscribe('leftColorSelected', this._onLeftColorSelected, this);
 			this.messageBus.subscribe('rightColorSelected', this._onRightColorSelected, this);
+
 		},
 
 		dockedItems: [{
@@ -117,6 +121,8 @@
 
 			Ext.getBody().on('mousedown', _onMouseDown, this);
 			this.callParent(arguments);
+			this._onLeftColorSelected(this.initialLeftColor);
+			this._onRightColorSelected(this.initialRightColor);
 		},
 
 		addColor: function() {
@@ -132,15 +138,15 @@
 			this.colorManager.addColor(colors.white);
 		},
 
-		_onLeftColorSelected: function(color, index) {
+		_onLeftColorSelected: function(color) {
 			Ext.Array.each(this.items.items, function(item) {
-				item.setIsCurrentLeft(item.index === index);
+				item.setIsCurrentLeft(item.color === color);
 			});
 		},
 
-		_onRightColorSelected: function(color, index) {
+		_onRightColorSelected: function(color) {
 			Ext.Array.each(this.items.items, function(item) {
-				item.setIsCurrentRight(item.index === index);
+				item.setIsCurrentRight(item.color === color);
 			});
 		}
 	});

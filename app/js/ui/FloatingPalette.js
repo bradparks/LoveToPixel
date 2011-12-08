@@ -21,11 +21,8 @@
 
 		togglePopup: function() {
 			if(!this.isPopped) {
-				this.messageBus.publish('cursorDisplayChangeRequest', '');
-
 				this.showAt(_mouseX - this.width / 2, _mouseY);
 			} else {
-				this.messageBus.publish('cursorDisplayChangeRequest', 'none');
 				this.hide();
 			}
 			this.isPopped = !this.isPopped;
