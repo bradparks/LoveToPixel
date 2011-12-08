@@ -7,7 +7,9 @@ describe("Painter", function() {
 		'leftColorSelected',
 		'rightColorSelected',
 		'canvasMouseCoordinatesChanged',
-		'cursorDisplayChangeRequest'
+		'cursorDisplayChangeRequest',
+		'leftSizeSelected',
+		'rightSizeSelected'
 	];
 
 	var mockSize = p(10,10);
@@ -46,14 +48,14 @@ describe("Painter", function() {
 			expect(overlay.height).toEqual(height);
 		});
 
-		it("should default to 5 pixel black/white if constructed without tools specified", function() {
+		it("should default to 8 pixel black/white if constructed without tools specified", function() {
 			var painter = new LTP.Painter(s(3,3), mockPointTransformer);
 
-			expect(painter.leftColor).toBe(colors.black);
-			expect(painter.leftTool.size).toBe(5);
+			expect(painter._leftToolState.color).toBe(colors.black);
+			expect(painter._leftToolState.size).toBe(8);
 
-			expect(painter.rightColor).toBe(colors.white);
-			expect(painter.rightTool.size).toBe(5);
+			expect(painter._rightToolState.color).toBe(colors.white);
+			expect(painter._rightToolState.size).toBe(8);
 		});
 
 		it("should take in the left and right tools", function() {
@@ -127,32 +129,6 @@ describe("Painter", function() {
 
 			expect(e.preventDefault).toHaveBeenCalled();
 			expect(e.stopPropagation).toHaveBeenCalled();
-		});
-	});
-
-	describe("tool management", function() {
-		it("should properly handle an override tool", function() {
-			var painter = new LTP.Painter(s(20, 20), mockPointTransformer);
-
-			var leftTool = { id: 'leftTool' };
-			var rightTool = { id: 'rightTool' };
-			var overrideTool = { id: 'overrideTool' };
-
-			painter.leftTool = leftTool;
-			expect(painter.leftTool).toEqual(leftTool);
-
-			painter.rightTool = rightTool;
-			expect(painter.rightTool).toEqual(rightTool);
-
-			painter.pushOverrideTool(overrideTool);
-
-			expect(painter.leftTool).toEqual(overrideTool);
-			expect(painter.rightTool).toEqual(overrideTool);
-
-			painter.popOverrideTool();
-
-			expect(painter.leftTool).toEqual(leftTool);
-			expect(painter.rightTool).toEqual(rightTool);
 		});
 	});
 

@@ -8,7 +8,7 @@
 	var _fillTool = new LTP.FillTool();
 	var _eyeDropperTool = new LTP.EyeDropperTool();
 	var _panningTool = new LTP.PanningTool();
-	var _curOverrideTool;
+	var _brushTool = new LTP.BrushTool();
 
 	var _lockDirections = [
 	LTP.DirectionLockTransformer.directions.upDown, LTP.DirectionLockTransformer.directions.leftRight];
@@ -18,31 +18,6 @@
 	colors.white, colors.black, colors.red, colors.lightGray, colors.blue, colors.green, colors.yellow, colors.orange, colors.purple, colors.gray, colors.brown, '#FF9999', '#33AA11', '#333333', '#88AAFF', '#337722', ];
 
 	var _sizes = [1, 2, 3, 4, 5, 8, 14, 20, 24, 30];
-
-	function _destroyAll(components) {
-		var component;
-		if (components) {
-			for (var i = 0, len = components.length; i < len; ++i) {
-				component = components[i];
-				if (typeof component.destroy === 'function') {
-					component.destroy();
-				}
-			}
-		}
-	}
-
-	function _resolveOverrideTool(tool) {
-		if (_curOverrideTool === tool) {
-			LTP.app.painter.popOverrideTool();
-			_curOverrideTool = null;
-		} else {
-			if ( !! _curOverrideTool) {
-				LTP.app.painter.popOverrideTool();
-			}
-			LTP.app.painter.pushOverrideTool(tool);
-			_curOverrideTool = tool;
-		}
-	}
 
 	var app = {
 		callbacks: {
@@ -76,7 +51,7 @@
 				},
 				message: 'Display the brush palette. Press again (or ESC) to hide'
 			},
-			dummy: {
+			dummy: { // just here to get 1-9 into the help window
 				fn: function() {},
 				label: '1-9',
 				message: 'Change the left color to the nth color in your color palette',
@@ -111,16 +86,15 @@
 				shiftMessage: 'Zoom out'
 			},
 			u: {
-				fn: function() {
-					LTP.app.painter.undo();
+				fn: function(shift) {
+					if(shift) {
+						LTP.app.painter.redo();
+					} else {
+						LTP.app.painter.undo();
+					}
 				},
-				message: 'Undo the last paint operation'
-			},
-			r: {
-				fn: function() {
-					LTP.app.painter.redo();
-				},
-				message: 'Redo the last paint operation'
+				message: 'Undo the last paint operation',
+				shiftMessage: 'Redo the last undone operation'
 			},
 			g: {
 				fn: function() {
@@ -131,32 +105,38 @@
 			},
 			i: {
 				fn: function() {
-					_resolveOverrideTool(_eyeDropperTool);
+					LTP.app.painter.leftTool = _eyeDropperTool;
 				},
 				message: 'Use the eye dropper tool'
 			},
 			k: {
 				fn: function() {
-					_resolveOverrideTool(_fillTool);
+					LTP.app.painter.leftTool = _fillTool;
 				},
 				message: 'Use the fill tool'
 			},
-			spacedown: {
+			d: {
 				fn: function() {
-					_resolveOverrideTool(_panningTool);
+					LTP.app.painter.leftTool = _brushTool;
 				},
-				label: 'space',
-				message: 'Hold to use the pan tool'
+				message: 'Use the brush tool'
 			},
-			spaceup: {
-				fn: function() {
-					if(_curOverrideTool === _panningTool) {
-						LTP.app.painter.popOverrideTool();
-						_curOverrideTool = null;
-					}
-				},
-				noHelp: true
-			},
+			//spacedown: {
+				//fn: function() {
+					//_resolveOverrideTool(_panningTool);
+				//},
+				//label: 'space',
+				//message: 'Hold to use the pan tool'
+			//},
+			//spaceup: {
+				//fn: function() {
+					//if(_curOverrideTool === _panningTool) {
+						//LTP.app.painter.popOverrideTool();
+						//_curOverrideTool = null;
+					//}
+				//},
+				//noHelp: true
+			//},
 			adown: {
 				fn: function(shift) {
 					if (!shift) {
@@ -199,7 +179,7 @@
 			},
 			altdown: {
 				fn: function() {
-					LTP.app.painter.adhocTransformer = new LTP.BrushSizeLockTransformer(20);
+					LTP.app.painter.adhocTransformer = new LTP.BrushSizeLockTransformer();
 					LTP.GlobalMessageBus.publish('lockChanged', 'brush');
 				},
 				label: 'ALT',
@@ -227,7 +207,7 @@
 				},
 				message: 'Export the project to an image (opens in a new window)'
 			},
-			d: {
+			'[': {
 				fn: function() {
 					LTP.app.layerManager.dumpLayers();
 				},
@@ -235,7 +215,7 @@
 			},
 			n: {
 				fn: function() {
-					window.location = window.location;
+					window.location.reload();
 				},
 				message: 'Return to the project chooser'
 			},
@@ -291,24 +271,16 @@
 				renderTo: 'layerPanelElement'
 			});
 
-			_destroyAll(this._components);
-			this._components = [];
-
 			this.colorManager = new LTP.ColorManager();
 			this.colorManager.setColorsFromString(project.palette, _defaultPalette);
 
 			this.layerManager = new LTP.LayerManager(project);
 
-			this._components.push(this.layerManager);
-
 			this.container = new LTP.Container(project.size, document.getElementById('containerElement'));
-			this._components.push(this.container);
 
 			this.painter = new LTP.Painter(project.size, new LTP.PointTransformer());
-			this._components.push(this.painter);
 
 			this.grid = new LTP.Grid(project.size, 'gray', 0);
-			this._components.push(this.grid);
 
 			Ext.Array.each(this.layerManager.layers, function(layer) {
 				this.container.addLayer(layer)
@@ -323,18 +295,6 @@
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor, mouseButton) {
 				var prefix = mouseButton === 0 ? 'left': 'right';
 				LTP.GlobalMessageBus.publish(prefix + 'ColorSelected', hexColor);
-				this.painter.popOverrideTool();
-				_curOverrideTool = null;
-			},
-			this);
-
-			LTP.GlobalMessageBus.subscribe('leftSizeSelected', function(size) {
-				this.painter.leftTool = new LTP.BrushTool(size);
-			},
-			this);
-
-			LTP.GlobalMessageBus.subscribe('rightSizeSelected', function(size) {
-				this.painter.rightTool = new LTP.BrushTool(size);
 			},
 			this);
 
@@ -348,7 +308,6 @@
 			}
 
 			this.keyListener = new LTP.KeyListener(this);
-			this._components.push(this.keyListener);
 
 			//TODO: these publishings need to go away
 			LTP.GlobalMessageBus.publish('activeLayerChanged', this.layerManager.activeLayer);

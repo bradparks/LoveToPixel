@@ -2,29 +2,24 @@
 	var _causesChange = true;
 	var _cursor = 'none';
 
-	LTP.BrushTool = function(size) {
-		if (!size) {
-			throw new Error("BrushTool: size must be specified");
-		}
-		this._size = size;
-
+	LTP.BrushTool = function() {
 		LTP.BaseTool.call(this, _causesChange, _cursor);
 	};
 
 	LTP.BrushTool.prototype = new LTP.BaseTool();
 
-	LTP.BrushTool.prototype.overlay = function(context, point) {
+	LTP.BrushTool.prototype.overlay = function(context, point, size) {
 		context.save();
 		var color = 'rgba(255, 0, 0, .5)';
 		context.globalCompositeOperation = 'lighter';
 
-		if (this._size < 3) {
+		if (size < 3) {
 			context.fillStyle = color;
-			this._placePoint(context, point);
+			this._placePoint(context, point, size);
 		} else {
 			context.strokeStyle = color;
 			context.lineWidth = 1;
-			this._placePoint(context, point, {
+			this._placePoint(context, point, size, {
 				stroke: true
 			});
 		}
@@ -32,7 +27,7 @@
 		context.restore();
 	};
 
-	LTP.BrushTool.prototype.getBoundsAt = function(point) {
+	LTP.BrushTool.prototype.getBoundsAt = function(point, size) {
 		// if x or y are negative, then outside of the canvas and should return an empty bounds
 		if (point.x < 0 || point.y < 0) {
 			return r(0, 0, 0, 0);
@@ -40,11 +35,11 @@
 
 		// if the point is close enough to the edge that the brush doesn't
 		// fit, then need to clip it to the bounds of the canvas
-		var x = Math.max(0, point.x - this._size);
-		var y = Math.max(0, point.y - this._size);
+		var x = Math.max(0, point.x - size);
+		var y = Math.max(0, point.y - size);
 
-		var width = point.x >= this._size ? this._size: point.x;
-		var height = point.y >= this._size ? this._size: point.y;
+		var width = point.x >= size ? size : point.x;
+		var height = point.y >= size ? size: point.y;
 
 		return r(x, y, width, height);
 	};
@@ -58,7 +53,7 @@
 		context.fillStyle = e.color;
 
 		if (startPoint.equals(endPoint)) {
-			this._placePoint(context, startPoint);
+			this._placePoint(context, startPoint, e.size);
 		} else {
 			if (startPoint.x > endPoint.x) {
 				var temp = startPoint;
@@ -72,21 +67,21 @@
 
 			var arrived = false;
 			while (!arrived) {
-				this._placePoint(context, startPoint);
+				this._placePoint(context, startPoint, e.size);
 				var result = this._moveTowards(startPoint, endPoint, slope, intersect);
 				arrived = result.arrived;
 				startPoint = result.point;
 			}
 		}
-		this._placePoint(context, endPoint);
+		this._placePoint(context, endPoint, e.size);
 		context.restore();
 	};
 
-	LTP.BrushTool.prototype._placePoint = function(context, point, options) {
+	LTP.BrushTool.prototype._placePoint = function(context, point, size, options) {
 		var method = options && options.stroke ? context.strokeRect: context.fillRect;
 		var strokeOffset = options && options.stroke ? 0.5: 0;
 
-		method.call(context, point.x - this._size - strokeOffset, point.y - this._size - strokeOffset, this._size + (2 * strokeOffset), this._size + (2 * strokeOffset));
+		method.call(context, point.x - size - strokeOffset, point.y - size - strokeOffset, size + (2 * strokeOffset), size + (2 * strokeOffset));
 	};
 
 	LTP.BrushTool.prototype._moveTowards = function(startPoint, endPoint, slope, intersect) {
@@ -133,11 +128,5 @@
 			point: result
 		}
 	};
-
-	Object.defineProperty(LTP.BrushTool.prototype, "size", {
-		get: function() {
-			return this._size;
-		}
-	});
 })();
 

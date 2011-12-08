@@ -1,20 +1,8 @@
 describe("BrushTool", function() {
 	describe("construction", function() {
-		it("should throw an error if no size specified", function() {
-			expect(LTP.BrushTool).toThrow();
-		});
-
 		it("should report it causes change", function() {
 			var brush = new LTP.BrushTool(3);
 			expect(brush.causesChange).toBe(true);
-		});
-
-		it("should have working getters", function() {
-			var size = 8;
-
-			var brush = new LTP.BrushTool(size);
-
-			expect(brush.size).toEqual(size);
 		});
 
 		it("should have a cursor of none", function() {
@@ -31,8 +19,9 @@ describe("BrushTool", function() {
 			canvas.width = canvasWidth;
 			canvas.height = canvasHeight;
 			var context = canvas.getContext('2d');
+			var brushSize = canvasWidth - 1;
 
-			var brush = new LTP.BrushTool(canvasWidth - 1);
+			var brush = new LTP.BrushTool();
 			
 			var point = p(2,2);
 			brush.perform({
@@ -43,7 +32,8 @@ describe("BrushTool", function() {
 				lastPointNonTransformed: point,
 				currentPointNonTransformed: point,
 				containerElement: {},
-				color: colors.red
+				color: colors.red,
+				size: brushSize
 			});
 
 			// [r][r][b]
@@ -82,10 +72,10 @@ describe("BrushTool", function() {
 	describe("getBoundsAt", function() {
 		it("should return the bounds", function() {
 			var size = 4;
-			var brush = new LTP.BrushTool(size);
+			var brush = new LTP.BrushTool();
 
 			var x = 10, y = 20;
-			var bounds = brush.getBoundsAt(p(x, y));
+			var bounds = brush.getBoundsAt(p(x, y), size);
 
 			expect(bounds.x).toEqual(x - size);
 			expect(bounds.y).toEqual(y - size);
