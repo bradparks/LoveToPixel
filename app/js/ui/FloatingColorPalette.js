@@ -2,6 +2,7 @@
 
 	// TODO: all of this mouse handling stuff generally works, but it's messy
 	// and hard to follow
+	// this whole file needs a good refactoring
 
 	var _picker;
 	var _currentSwatch;
@@ -148,6 +149,16 @@
 			Ext.Array.each(this.items.items, function(item) {
 				item.setIsCurrentRight(item.color === color);
 			});
+		},
+
+		togglePopup: function() {
+			this.callParent(arguments);
+			if (!this.isPopped) {
+				if (_picker) {
+					_picker.hidePicker();
+					_picker = null;
+				}
+			}
 		}
 	});
 })();
