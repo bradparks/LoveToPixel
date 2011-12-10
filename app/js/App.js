@@ -328,8 +328,10 @@
 
 			//TODO: these publishings need to go away
 			LTP.GlobalMessageBus.publish('activeLayerChanged', this.layerManager.activeLayer);
-			LTP.GlobalMessageBus.publish('leftColorSelected', this.painter.leftColor);
 			LTP.GlobalMessageBus.publish('rightColorSelected', this.painter.rightColor);
+			// have to set left last, so painter stays on left. Again these publishes need to go
+			// away altogether, so putting up with this ugliness for now
+			LTP.GlobalMessageBus.publish('leftColorSelected', this.painter.leftColor);
 
 			this._addCloseWarningHook();
 

@@ -10,7 +10,7 @@
 
 	LTP.BrushTool.prototype.overlay = function(context, point, size) {
 		context.save();
-		var color = 'rgba(255, 0, 0, .5)';
+		var color = this.overlayColor || 'rgba(255, 0, 0, .5)';
 		context.globalCompositeOperation = 'lighter';
 
 		if (size < 3) {
@@ -26,22 +26,8 @@
 
 		context.restore();
 	};
-
-	LTP.BrushTool.prototype.getBoundsAt = function(point, size) {
-		// if x or y are negative, then outside of the canvas and should return an empty bounds
-		if (point.x < 0 || point.y < 0) {
-			return r(0, 0, 0, 0);
-		}
-
-		// if the point is close enough to the edge that the brush doesn't
-		// fit, then need to clip it to the bounds of the canvas
-		var x = Math.max(0, point.x - size);
-		var y = Math.max(0, point.y - size);
-
-		var width = point.x >= size ? size : point.x;
-		var height = point.y >= size ? size: point.y;
-
-		return r(x, y, width, height);
+	LTP.BrushTool.prototype.getBoundsAt = function(point, brushSize, canvasSize) {
+		return r(point.x - brushSize, point.y - brushSize, brushSize, brushSize).clipInside(r(0, 0, canvasSize.width, canvasSize.height));
 	};
 
 	LTP.BrushTool.prototype.perform = function(e) {

@@ -48,7 +48,7 @@
 		}
 	};
 
-	LTP.FillTool.prototype.getBoundsAt = function(point, context) {
+	LTP.FillTool.prototype.getBoundsAt = function() {
 		return this._lastBoundingBox || r(0, 0, 0, 0);
 	};
 

@@ -18,11 +18,11 @@
 			context.save();
 			context.globalCompositeOperation = 'lighter';
 
-			context.fillStyle = 'rgba(255, 0, 0, .5)';
+			context.fillStyle = this.overlayColor || 'rgba(255, 0, 0, .5)';
 			// center
 			this._dropPoint(context, point, 0, 0);
 
-			context.fillStyle = 'rgba(255, 0, 255, .5)';
+			context.fillStyle = this.overlayColor || 'rgba(255, 0, 255, .5)';
 			
 			// left
 			this._dropPoint(context, point, -2, 0);

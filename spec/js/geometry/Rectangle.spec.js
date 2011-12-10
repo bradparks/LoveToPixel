@@ -23,19 +23,7 @@ describe("Rectangle", function() {
 			expect(rect3.height).toBe(0);
 		});
 
-		it("should throw if given negative parameters", function() {
-			var negX = function() {
-				new LTP.Rectangle(-3);
-			};
-
-			expect(negX).toThrow();
-
-			var negY = function() {
-				new LTP.Rectangle(4, -6);
-			};
-
-			expect(negY).toThrow();
-
+		it("should throw if given negative size parameters", function() {
 			var negW = function() {
 				new LTP.Rectangle(4, 7, -9);
 			};
@@ -146,6 +134,33 @@ describe("Rectangle", function() {
 			};
 
 			expect(rect.equals(obj)).toBe(true);
+		});
+	});
+
+	describe("clipInside", function() {
+		it("should return empty if completely outside the other rectangle", function() {
+			var myRect = r(3, 3, 10, 20);
+			var otherRect = r(100, 100, 20, 40);
+
+			var clip = myRect.clipInside(otherRect);
+
+			expect(clip.width).toBe(0);
+			expect(clip.height).toBe(0);
+
+			myRect = r(400, 400, 20, 10);
+			clip = myRect.clipInside(otherRect);
+
+			expect(clip.width).toBe(0);
+			expect(clip.height).toBe(0);
+		});
+
+		it("should return equivalent to itself if completely inside the other rectangle", function() {
+			var myRect = r(3, 5, 20, 40);
+			var otherRect = r(0, 0, 200, 300);
+
+			var clip = myRect.clipInside(otherRect);
+
+			expect(myRect.equals(clip)).toBe(true);
 		});
 	});
 });

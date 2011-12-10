@@ -5,17 +5,34 @@
 		this._width = width || 0;
 		this._height = height || 0;
 
-		if(this._x < 0 || this._y < 0 || this._width < 0 || this._height < 0) {
-			throw new Error("Rectangle: negative values not allowed");
+		if(this._width < 0 || this._height < 0) {
+			throw new Error("Rectangle: negative sizes are not allowed");
 		}
 	};
 
 	LTP.Rectangle.prototype = {
-		equals: function r_equals(other) {
+		equals: function(other) {
 			if(other) {
 				return other === this || (other.x === this._x && other.y === this._y && other.width === this._width && other.height === this._height);
 			} else {
 				return false;
+			}
+		},
+
+		clipInside: function(outerRect) {
+			var left = Math.max(this.x, outerRect.x);
+			var right = Math.min(this.x + this.width, outerRect.x + outerRect.width);
+
+			var top = Math.max(this.y, outerRect.y);
+			var bottom = Math.min(this.y + this.height, outerRect.y + outerRect.height);
+
+			var width = right - left;
+			var height = bottom - top;
+
+			if(width > 0 && height > 0) {
+				return r(left, top, width, height);
+			} else {
+				return r(0, 0, 0, 0);
 			}
 		}
 	};

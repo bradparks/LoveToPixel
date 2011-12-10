@@ -73,9 +73,10 @@ describe("BrushTool", function() {
 		it("should return the bounds", function() {
 			var size = 4;
 			var brush = new LTP.BrushTool();
+			var canvasSize = r(0, 0, 200, 200);
 
 			var x = 10, y = 20;
-			var bounds = brush.getBoundsAt(p(x, y), size);
+			var bounds = brush.getBoundsAt(p(x, y), size, canvasSize);
 
 			expect(bounds.x).toEqual(x - size);
 			expect(bounds.y).toEqual(y - size);
@@ -85,10 +86,11 @@ describe("BrushTool", function() {
 
 		it("should clip the bounds", function() {
 			var size = 10;
-			var brush = new LTP.BrushTool(size);
+			var brush = new LTP.BrushTool();
+			var canvasSize = r(0, 0, 200, 200);
 
 			var x = 3, y = 4;
-			var bounds = brush.getBoundsAt(p(x, y));
+			var bounds = brush.getBoundsAt(p(x, y), size, canvasSize);
 
 			expect(bounds.x).toEqual(0);
 			expect(bounds.y).toEqual(0);
@@ -99,15 +101,17 @@ describe("BrushTool", function() {
 		it("should return an empty bounds if x or y are negative", function() {
 			var emptyRect = new LTP.Rectangle();
 
-			var brush = new LTP.BrushTool(4);
+			var size = 4;
+			var brush = new LTP.BrushTool();
+			var canvasSize = r(0, 0, 200, 200);
 
-			var bounds = brush.getBoundsAt(p(-3, 20));
+			var bounds = brush.getBoundsAt(p(-3, 20), size, canvasSize);
 			expect(bounds.equals(emptyRect)).toBe(true);
 
-			bounds = brush.getBoundsAt(p(40, -10));
+			bounds = brush.getBoundsAt(p(40, -10), size, canvasSize);
 			expect(bounds.equals(emptyRect)).toBe(true);
 
-			bounds = brush.getBoundsAt(p(-20, -30));
+			bounds = brush.getBoundsAt(p(-20, -30), size, canvasSize);
 			expect(bounds.equals(emptyRect)).toBe(true);
 		});
 	});
