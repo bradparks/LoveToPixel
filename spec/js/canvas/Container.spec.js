@@ -108,24 +108,6 @@ describe("Container", function() {
 				expect(overlay.style.zIndex > grid.style.zIndex).toBe(true);
 			});
 		});
-
-		describe("setting scratch", function() {
-			it("should set the scratch's zindex to one above its layer", function() {
-				var layerZindex = 10;
-				var layer = document.createElement('canvas');
-				layer.style.zIndex = layerZindex;
-
-				var scratch = document.createElement('canvas');
-				
-				container.scratch = scratch;
-				container.addLayer(layer);
-
-				mb.publish('activeLayerChanged', layer);
-
-				expect(scratch.style.zIndex).toEqual((layerZindex + 1).toString());
-			});
-		});
 	});
-
 });
 

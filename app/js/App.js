@@ -9,6 +9,7 @@
 	var _eyeDropperTool = new LTP.EyeDropperTool();
 	var _panningTool = new LTP.PanningTool();
 	var _brushTool = new LTP.BrushTool();
+	var _eraserTool = new LTP.EraserTool();
 
 	var _lockDirections = [
 	LTP.DirectionLockTransformer.directions.upDown, LTP.DirectionLockTransformer.directions.leftRight];
@@ -138,6 +139,17 @@
 				message: 'Set the left tool to the brush tool',
 				shiftMessage: 'Set the right tool to the brush tool'
 			},
+			e: {
+				fn: function(shift) {
+					if(shift) {
+						LTP.app.painter.rightTool = _eraserTool;
+					} else {
+						LTP.app.painter.leftTool = _eraserTool;
+					}
+				},
+				message: 'Set the left tool to the eraser',
+				shiftMessage: 'Set the right tool to the eraser'
+			},
 			//spacedown: {
 				//fn: function() {
 					//_resolveOverrideTool(_panningTool);
@@ -210,19 +222,18 @@
 				noHelp: true
 			},
 			s: {
-				fn: function() {
-					LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
-					LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
-					LTP.app._currentProject.isDirty = false;
+				fn: function(shift) {
+					if(shift) {
+						var composited = LTP.app.layerManager.composite();
+						window.open(composited.toDataURL('png'), 'savedImage');
+					} else {
+						LTP.app.projectPersister.saveProject(LTP.app._currentProject, LTP.app.layerManager.layers, LTP.app.colorManager.getColorsAsString());
+						LTP.GlobalMessageBus.publish('flairMessage', 'Project Saved');
+						LTP.app._currentProject.isDirty = false;
+					}
 				},
-				message: 'Save the project (to local storage)'
-			},
-			e: {
-				fn: function() {
-					var composited = LTP.app.layerManager.composite();
-					window.open(composited.toDataURL('png'), 'savedImage');
-				},
-				message: 'Export the project to an image (opens in a new window)'
+				message: 'Save the project (to local storage)',
+				shiftMessage: 'Export the project to an image (opens in a new window)'
 			},
 			'[': {
 				fn: function() {
@@ -307,7 +318,6 @@
 			this.painter.activeCanvas = this.layerManager.activeLayer;
 			this.container.overlay = this.painter.overlay;
 			this.container.grid = this.grid.canvas;
-			this.container.scratch = this.painter.scratch;
 
 			LTP.GlobalMessageBus.subscribe('colorSampled', function(rgbColor, hexColor, mouseButton) {
 				var prefix = mouseButton === 0 ? 'left': 'right';

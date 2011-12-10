@@ -24,6 +24,10 @@
 	LTP.util.global.sr = LTP.pr = LTP.util.global.pr = LTP.sr;
 	LTP.util.global.r = LTP.r;
 
+	LTP.util.global.cdump = function(canvas) {
+		window.open(canvas.toDataURL('png'), canvas.layerName || 'dumped');
+	};
+
 	LTP.GlobalMessages = [
 		'colorSampled',
 		'zoomChanged',

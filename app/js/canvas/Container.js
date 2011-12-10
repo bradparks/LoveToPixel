@@ -21,7 +21,6 @@
 
 		this._messageBus.subscribe('zoomChanged', this._onZoomChanged, this);
 		this._messageBus.subscribe('newLayerCreated', this._onNewLayerCreated, this);
-		this._messageBus.subscribe('activeLayerChanged', this._onActiveLayerChanged, this);
 		this._messageBus.subscribe('layerRemoved', this._onLayerRemoved, this);
 		this._messageBus.subscribe('noLayersInProject', this._onNoLayersInProject, this);
 
@@ -135,27 +134,10 @@
 			this._backdrop = backdrop;
 		},
 
-
-		_setScratchForLayer: function(layer) {
-			var layerFound = false;
-			for (var i = 0; i < this._layers.length; ++i) {
-				if (this._layers[i] === layer) {
-					layerFound = true;
-					break;
-				}
-			}
-
-			if (layerFound) {
-				var layerZindex = parseInt(layer.style.zIndex, 10);
-				this._scratch.style.zIndex = layerZindex + 1;
-			}
-		},
-
 		destroy: function() {
 			this._layers = null;
 			this._messageBus.unsubscribe('zoomChanged', this._onZoomChanged);
 			this._messageBus.unsubscribe('newLayerCreated', this._onNewLayerCreated);
-			this._messageBus.unsubscribe('activeLayerChanged', this._onActiveLayerChanged);
 			this._messageBus.unsubscribe('layerDeleted', this._onLayerRemoved);
 			this._messageBus.unsubscribe('noLayersInProject', this._onNoLayersInProject);
 			this._messageBus = null;
@@ -178,10 +160,6 @@
 
 		_onNoLayersInProject: function() {
 			this._backdrop.style.display = 'none';
-		},
-
-		_onActiveLayerChanged: function(layer) {
-			this._setScratchForLayer(layer);
 		},
 
 		_onMouseMove: function(e) {
@@ -207,13 +185,6 @@
 		set: function(grid) {
 			this.addLayer(grid);
 			grid.style.zIndex = gridIndex;
-		}
-	});
-
-	Object.defineProperty(LTP.Container.prototype, "scratch", {
-		set: function(scratch) {
-			this._scratch = scratch;
-			this.addLayer(scratch);
 		}
 	});
 })();

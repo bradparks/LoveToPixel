@@ -15,12 +15,15 @@
 
 		if (size < 3) {
 			context.fillStyle = color;
-			this._placePoint(context, point, size);
+			this._placePoint(context, point, size, {
+				overlay: true
+			});
 		} else {
 			context.strokeStyle = color;
 			context.lineWidth = 1;
 			this._placePoint(context, point, size, {
-				stroke: true
+				stroke: true,
+				overlay: true
 			});
 		}
 
@@ -64,10 +67,15 @@
 	};
 
 	LTP.BrushTool.prototype._placePoint = function(context, point, size, options) {
-		var method = options && options.stroke ? context.strokeRect: context.fillRect;
+		var method = options && options.stroke ? context.strokeRect: options && options.overlay ? context.fillRect : this._performRect;
 		var strokeOffset = options && options.stroke ? 0.5: 0;
 
 		method.call(context, point.x - size - strokeOffset, point.y - size - strokeOffset, size + (2 * strokeOffset), size + (2 * strokeOffset));
+	};
+
+	LTP.BrushTool.prototype._performRect = function() {
+		// this method gets called with a context as the scope
+		this.fillRect.apply(this, arguments);
 	};
 
 	LTP.BrushTool.prototype._moveTowards = function(startPoint, endPoint, slope, intersect) {

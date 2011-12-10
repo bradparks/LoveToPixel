@@ -149,14 +149,15 @@
 			var lastPointNonTransformed = toolState.lastPointNonTransformed || currentPointNonTransformed;
 			var lastPoint = toolState.lastPoint || currentPoint;
 
-			if (options && options.currentOnly) {
+			if (this._adhocTransformer) {
+				currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint, toolState.size);
+			}
+
+			if (options && options.currentOnly || this._adhocTransformer && this._adhocTransformer.currentPointOnly) {
 				lastPointNonTransformed = currentPointNonTransformed;
 				lastPoint = currentPoint;
 			}
 
-			if (this._adhocTransformer) {
-				currentPoint = this._adhocTransformer.transform(lastPoint, currentPoint, toolState.size);
-			}
 
 			return {
 				currentPoint: currentPoint,
@@ -168,11 +169,6 @@
 
 		_paint: function(toolState, pointInfo, button) {
 			var canvas = this._activeCanvas;
-
-			if (toolState.tool.causesChange) {
-				this._pruneUndoRedoStates();
-				canvas = this._scratch;
-			}
 
 			toolState.tool.perform({
 				canvas: canvas,
@@ -192,12 +188,8 @@
 			toolState.lastPointNonTransformed = pointInfo.currentPointNonTransformed;
 
 			if (toolState.tool.causesChange) {
-				if (!this._currentBoundingBox) {
-					this._currentBoundingBox = new LTP.BoundingBoxBuilder(toolState.tool.getBoundsAt(pointInfo.currentPoint, toolState.size, this._size));
-				} else {
-					this._currentBoundingBox.append(toolState.tool.getBoundsAt(pointInfo.currentPoint, toolState.size, this._size));
-					this._currentBoundingBox.append(toolState.tool.getBoundsAt(pointInfo.lastPoint, toolState.size, this._size));
-				}
+				this._currentBoundingBox.append(toolState.tool.getBoundsAt(pointInfo.currentPoint, toolState.size, this._size));
+				this._currentBoundingBox.append(toolState.tool.getBoundsAt(pointInfo.lastPoint, toolState.size, this._size));
 			}
 		},
 
@@ -213,6 +205,11 @@
 					currentOnly: true
 				});
 				toolState.down = true;
+
+				if(toolState.tool.causesChange) {
+					this._startUndoRedo(toolState, pointInfo);
+				}
+
 				this._paint(toolState, pointInfo, e.button);
 				delete toolState.tool.overlayColor;
 			}
@@ -244,6 +241,7 @@
 			}
 
 			toolState.down = false;
+			this._messageBus.publish('canvasContentChange', this._activeCanvas);
 		},
 
 		_onMouseUp: function(e) {
@@ -277,6 +275,14 @@
 			this._currentUndoredoStateIndex = this._undoRedoStates.length - 1;
 		},
 
+		_startUndoRedo: function(toolState, pointInfo) {
+			this._pruneUndoRedoStates();
+			this._clear(this._scratch);
+			this._scratch.getContext('2d').drawImage(this._activeCanvas, 0, 0);
+
+			this._currentBoundingBox = new LTP.BoundingBoxBuilder(toolState.tool.getBoundsAt(pointInfo.currentPoint, toolState.size, this._size));
+		},
+
 		_finishUndoRedo: function(tool, point, size) {
 			this._currentBoundingBox.append(tool.getBoundsAt(point, size, this._size));
 
@@ -285,16 +291,15 @@
 			if (boundingBox.hasArea) {
 				this._undoRedoStates.push({
 					boundingBox: boundingBox,
-					undoClip: this._createClip(this._activeCanvas, boundingBox),
-					redoClip: this._createClip(this._scratch, boundingBox),
+					undoClip: this._createClip(this._scratch, boundingBox),
+					redoClip: this._createClip(this._activeCanvas, boundingBox),
 					canvas: this._activeCanvas
 				});
 
 				this._currentUndoRedoStateIndex = this._undoRedoStates.length - 1;
 			}
 
-			this._applyClip(this._activeCanvas, this._scratch, this._entireBoundingBox);
-			this._clear(this._scratch);
+			this._currentBoundingBox = null;
 		},
 
 		_onContextMenu: function(e) {
@@ -318,14 +323,14 @@
 		_applyClip: function(destination, source, boundingBox, clearFirst) {
 			var destContext = destination.getContext('2d');
 
-			if (typeof source.getContext === 'function') {
-				if (clearFirst) {
+			//if (typeof source.getContext === 'function') {
+				//if (clearFirst) {
 					destContext.clearRect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
-				}
+				//}
 				destContext.drawImage(source, boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
-			} else {
-				destContext.putImageData(source, boundingBox.x, boundingBox.y);
-			}
+			//} else {
+			//	destContext.putImageData(source, boundingBox.x, boundingBox.y);
+			//}
 		},
 
 		undo: function() {
@@ -380,13 +385,6 @@
 	Object.defineProperty(LTP.Painter.prototype, "overlay", {
 		get: function() {
 			return this._overlay;
-		},
-		enumerable: true
-	});
-
-	Object.defineProperty(LTP.Painter.prototype, "scratch", {
-		get: function() {
-			return this._scratch;
 		},
 		enumerable: true
 	});
