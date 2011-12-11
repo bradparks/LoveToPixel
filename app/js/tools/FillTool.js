@@ -32,19 +32,13 @@
 	};
 
 	LTP.FillTool.prototype.perform = function(e) {
-		if (e.imageCanvas.width !== e.context.canvas.width || e.imageCanvas.height !== e.context.canvas.height) {
-			throw new Error("FillTool.perform: source and dest canvases need to be the same size");
-		}
-
-		var sourceContext = e.imageCanvas.getContext('2d');
-
-		var sampledColor = this._sampleColorAt(sourceContext, e.currentPoint);
+		var sampledColor = this._sampleColorAt(e.context, e.currentPoint);
 		var targetColor = colors.fromHexToArray(e.color, {
 			includeAlpha: true
 		});
 
 		if (!this._areSame(sampledColor, targetColor)) {
-			this._fill(sourceContext, e.context, e.currentPoint, sampledColor, targetColor);
+			this._fill(e.context, e.currentPoint, sampledColor, targetColor);
 		}
 	};
 
@@ -52,25 +46,19 @@
 		return this._lastBoundingBox || r(0, 0, 0, 0);
 	};
 
-	LTP.FillTool.prototype._fill = function(sourceContext, destContext, start, sampledColor, newColor) {
-		var imageData = sourceContext.getImageData(0, 0, sourceContext.canvas.width, sourceContext.canvas.height);
-		var destData = destContext.getImageData(0, 0, destContext.canvas.width, destContext.canvas.height);
+	LTP.FillTool.prototype._fill = function(destContext, start, sampledColor, newColor) {
+		var imageData = destContext.getImageData(0, 0, destContext.canvas.width, destContext.canvas.height);
 
 		var boundingBoxBuilder = new LTP.BoundingBoxBuilder();
 
 		function colorPixel(pixelIndex) {
-			destData.data[pixelIndex] = newColor[0];
-			destData.data[pixelIndex + 1] = newColor[1];
-			destData.data[pixelIndex + 2] = newColor[2];
-			destData.data[pixelIndex + 3] = newColor[3];
+			imageData.data[pixelIndex] = newColor[0];
+			imageData.data[pixelIndex + 1] = newColor[1];
+			imageData.data[pixelIndex + 2] = newColor[2];
+			imageData.data[pixelIndex + 3] = newColor[3];
 		}
 
 		function isSampledColor(pixelIndex) {
-			// if we've written to destData at this location we need to return false
-			if (destData.data[pixelIndex + 3] !== 0) {
-				return false;
-			}
-
 			var r = imageData.data[pixelIndex];
 			var g = imageData.data[pixelIndex + 1];
 			var b = imageData.data[pixelIndex + 2];
@@ -128,7 +116,7 @@
 				pixelPos += canvasWidth * 4;
 			}
 		}
-		destContext.putImageData(destData, 0, 0);
+		destContext.putImageData(imageData, 0, 0);
 		this._lastBoundingBox = boundingBoxBuilder.boundingBox;
 	};
 })();
