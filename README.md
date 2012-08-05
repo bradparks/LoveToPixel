@@ -39,7 +39,7 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * History window
 * Full persistence (save undo/redo state, brush state, etc)
 
-# So far... beta at www.lovetopixel.com #
+# So far... beta availabe at ... #
 I have deployed the current beta version of LTP to http://mattgreer.org/media/loveToPixel/index.html
 
 A screencast to get you started is here: http://screencast.com/t/IKylk02n9X
