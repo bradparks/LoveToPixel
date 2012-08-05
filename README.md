@@ -1,7 +1,14 @@
 # LoveToPixel #
-This file last updated: Dec 4, 2011
+This file last updated: Aug 4, 2012
 
 LTP is an experiment to see if I can pull off a full fledged pixel editor using JavaScript and canvas. The measure of success is if LTP ends up being a pixel editor that works so well, is responsive enough, powerful enough and enjoyable enough to use that people would seriously consider using it over a native pixel editor.
+
+# Game breaking bug in Chrome :( #
+
+Chrome used to support -webkit-optimize-contrast in OSX, now it doesn't. A bug for this has been filed here:
+http://code.google.com/p/chromium/issues/detail?id=106662  
+  
+LoveToPixel relies on this feature quite a bit, without it zooming in Chrome will be blurry and the app will become unresponsive (since Chrome is now doing a much more expensive zooming algorithm). The real fix is to not rely on this feature of browsers and implement zooming manually. I've just not done it, and don't see it happening anytime soon. If you want to play with LTP, Firefox is the best browser to use now.
 
 # Design Goals #
 I am envisioning LTP being targeted at more advanced users. People who love to create pixel art very efficiently. The interface will almost entirely be just the main drawing window, with a mere sliver of interface at the top showing either the current palette or current brushes (depending on which mode is triggered), and a tiny status bar at the bottom. All other interactions with LTP will be handled through key commands. 
@@ -33,7 +40,7 @@ I am envisioning LTP being targeted at more advanced users. People who love to c
 * Full persistence (save undo/redo state, brush state, etc)
 
 # So far... beta at www.lovetopixel.com #
-I have deployed the current beta version of LTP to http://www.lovetopixel.com  
+I have deployed the current beta version of LTP to http://mattgreer.org/media/loveToPixel/index.html
 
 A screencast to get you started is here: http://screencast.com/t/IKylk02n9X
   
